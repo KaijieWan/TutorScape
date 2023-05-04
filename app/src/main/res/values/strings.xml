@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name"><u>TutorScape</u></string>
+    <string name="login_button">Log In</string>
+    <string name="forgot_pass">Forgot Password</string>
+    <string name="Register">Don\'t have an account? <b>Sign Up</b></string>
+    <string name="enter_email">Enter Email</string>
+    <string name="enter_pass">Enter Password</string>
+</resources>

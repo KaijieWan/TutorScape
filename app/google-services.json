@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "879503631225",
+    "project_id": "tutorscape-509ea",
+    "storage_bucket": "tutorscape-509ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:879503631225:android:76647e34476c741d0dc5a8",
+        "android_client_info": {
+          "package_name": "com.example.tutorscape"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "879503631225-brk0ecsbi72e0610412qni7h1eluu859.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcHZ8KdSBOT6pB4cj-9VKw_U2_3QpNJNQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "879503631225-brk0ecsbi72e0610412qni7h1eluu859.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
