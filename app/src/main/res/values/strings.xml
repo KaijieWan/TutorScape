@@ -5,4 +5,8 @@
     <string name="Register">Don\'t have an account? <b>Sign Up</b></string>
     <string name="enter_email">Enter Email</string>
     <string name="enter_pass">Enter Password</string>
+    <string name="register_text">Just one step to start exploring the education world</string>
+    <string name="enter_name">Enter Full Name</string>
+    <string name="enter_age">Enter Age</string>
+    <string name="enter_mobile">Enter Mobile</string>
 </resources>
