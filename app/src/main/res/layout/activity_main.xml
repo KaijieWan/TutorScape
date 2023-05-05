@@ -34,7 +34,7 @@
         app:srcCompat="@drawable/education_icon_128___" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/techBlue"
@@ -48,7 +48,7 @@
         app:layout_constraintVertical_bias="0.754" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/forgetPass"
         android:layout_width="113dp"
         android:layout_height="18dp"
         android:fontFamily="@font/ubuntu"
@@ -63,7 +63,7 @@
         app:layout_constraintVertical_bias="0.792" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Register"
@@ -79,7 +79,7 @@
     <EditText
         android:id="@+id/editTextTextEmailAddress2"
         android:layout_width="300dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:background="@drawable/rounded_text_background"
         android:ems="10"
         android:paddingStart="10dp"
@@ -97,7 +97,7 @@
     <EditText
         android:id="@+id/editTextTextPassword"
         android:layout_width="300dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:background="@drawable/rounded_text_background"
         android:ems="10"
         android:paddingStart="10dp"
