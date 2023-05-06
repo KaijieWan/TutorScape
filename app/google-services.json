@@ -7,6 +7,43 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:879503631225:android:7641084172aba48c0dc5a8",
+        "android_client_info": {
+          "package_name": "com.android.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "879503631225-sllfntabrjhrlbgiv5ujf34go2j2ai83.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.application",
+            "certificate_hash": "764fbd71b756c3a07d422f4e2e208fe5479cfb83"
+          }
+        },
+        {
+          "client_id": "879503631225-brk0ecsbi72e0610412qni7h1eluu859.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcHZ8KdSBOT6pB4cj-9VKw_U2_3QpNJNQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "879503631225-brk0ecsbi72e0610412qni7h1eluu859.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:879503631225:android:76647e34476c741d0dc5a8",
         "android_client_info": {
           "package_name": "com.example.tutorscape"
