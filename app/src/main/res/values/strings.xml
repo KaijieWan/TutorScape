@@ -7,7 +7,7 @@
     <string name="enter_pass">Enter Password</string>
     <string name="register_text">Just one step to start exploring the education world</string>
     <string name="enter_name">Enter Full Name</string>
-    <string name="enter_DOB">Enter Date of Birth</string>
+    <string name="enter_DOB">Enter Date of Birth (DD/MM/YY)</string>
     <string name="enter_mobile">Enter Mobile</string>
     <string name="register_button">Register</string>
     <string name="existing_login">Already have an account? <u><b>Log In</b></u></string>

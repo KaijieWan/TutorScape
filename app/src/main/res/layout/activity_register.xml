@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegisterActivity"
-    android:background="@drawable/TutorScapeMain">
+    android:background="@drawable/tutorscape_main">
 
     <EditText
         android:id="@+id/editTextTextEmailAddress"
@@ -23,6 +23,7 @@
         android:paddingEnd="10dp"
         android:textColorHint="@color/techBlue"
         android:textSize="16sp"
+        android:textColor="@color/techBlue"
         app:layout_constraintVertical_bias="0.529" />
 
     <EditText
@@ -37,11 +38,12 @@
         android:fontFamily="@font/ubuntu"
         android:hint="@string/enter_name"
         android:inputType="text"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ  "
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:textColorHint="@color/techBlue"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textColor="@color/techBlue"/>
 
     <EditText
         android:id="@+id/enterDOB"
@@ -58,7 +60,8 @@
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:textColorHint="@color/techBlue"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:textColor="@color/techBlue"/>
 
     <EditText
         android:id="@+id/enterMobile"
@@ -75,7 +78,8 @@
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:textColorHint="@color/techBlue"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:textColor="@color/techBlue"/>
 
     <EditText
         android:id="@+id/enterPass"
@@ -88,11 +92,12 @@
         android:ems="10"
         android:fontFamily="@font/ubuntu"
         android:hint="@string/enter_pass"
-        android:inputType="date"
+        android:inputType="textPassword"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:textColorHint="@color/techBlue"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:textColor="@color/techBlue"/>
 
     <Button
         android:id="@+id/register_button"
@@ -103,6 +108,7 @@
         android:fontFamily="@font/ubuntu"
         android:text="@string/register_button"
         android:textSize="16sp"
+        android:textColor="@color/white"
         android:layout_marginStart="57dp"
         android:layout_marginTop="630dp"/>
 
@@ -153,4 +159,14 @@
         android:textAlignment="center"
         android:textColor="@color/darkBlue"
         android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="310dp"
+        android:layout_marginTop="500dp"
+        app:srcCompat="@drawable/calender_icon" />
+
 </RelativeLayout>
