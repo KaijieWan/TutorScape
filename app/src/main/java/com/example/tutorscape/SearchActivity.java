@@ -12,6 +12,9 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 
 import com.example.tutorscape.databinding.ActivitySearchBinding;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -37,5 +40,12 @@ public class SearchActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        //FirebaseDatabase.getInstance().getReference().child("Updates").child("Fees").setValue("Mindwork tuition has raised fees by $5");
+        //HashMap<String, Object> map = new HashMap<>();
+        //map.put("Name", "Wan Kai Jie");
+        //map.put("Email", "kaijie@gmail.com");
+
+        //FirebaseDatabase.getInstance().getReference().child("Account").child("random").updateChildren(map);
     }
 }
