@@ -35,6 +35,7 @@ import java.util.Objects;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText enterDOB;
+    private static String dateOfBirth;
     private Button register;
     private TextView exist_login;
     private EditText email;
@@ -58,7 +59,11 @@ public class RegisterActivity extends AppCompatActivity {
         password = findViewById(R.id.enterPass);
 
         auth = FirebaseAuth.getInstance();
-        rootRef = FirebaseDatabase.getInstance().getReference();
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        //FirebaseDatabase.getInstance().setPersistenceCacheSizeBytes(10000000);
+
+        rootRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference();
+        Log.d("RegisterActivity", "database reference: " + rootRef);
         enterDOB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,52 +80,15 @@ public class RegisterActivity extends AppCompatActivity {
                 String txt_name = name.getText().toString();
                 String txt_mobile = mobile.getText().toString();
 
-                if(TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
+                if(TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_name) || TextUtils.isEmpty(txt_mobile)){
                     Toast.makeText(RegisterActivity.this, "Empty credentials", Toast.LENGTH_SHORT).show();
                 }
                 else if(txt_password.length() < 6){
                     Toast.makeText(RegisterActivity.this, "Password too short!", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    registerUser(txt_email, txt_password, txt_name, txt_mobile);
+                    registerUser(txt_email, txt_password, txt_name, txt_mobile, dateOfBirth);
                 }
-            }
-
-            private void registerUser(String email, String password, String name, String mobile) {
-                auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-                        HashMap<String, Object> map = new HashMap<>();
-                        map.put("name", name);
-                        map.put("email", email);
-                        map.put("mobile", mobile);
-                        map.put("id", auth.getCurrentUser().getUid());
-
-                        rootRef.child("Users").child(auth.getCurrentUser().getUid()).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Log.d("RegisterActivity", "setValue onComplete");
-                                if(task.isSuccessful()){
-                                    Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(RegisterActivity.this, NewActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
-                                    Log.d("RegisterActivity", "Starting SearchActivity");
-                                    finish();
-                                }
-                                else{
-                                    Log.d("RegisterActivity", "setValue failed: " + task.getException().getMessage());
-                                }
-                            }
-                        });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("RegisterActivity", "Registration failed", e);
-                        Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
         });
 
@@ -160,8 +128,47 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             // Set the text of the enter age field to the selected date
+            dateOfBirth = String.format(Locale.getDefault(), "%d/%d/%d", dayOfMonth, month + 1, year);
             EditText enterAge = getActivity().findViewById(R.id.enterDOB);
-            enterAge.setText(String.format(Locale.getDefault(), "%d/%d/%d", dayOfMonth, month + 1, year));
+            enterAge.setText(dateOfBirth);
         }
+    }
+
+    private void registerUser(String email, String password, String name, String mobile, String DOB) {
+        auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("name", name);
+                map.put("email", email);
+                map.put("mobile", mobile);
+                map.put("Date of Birth", DOB);
+                map.put("id", auth.getCurrentUser().getUid());
+
+                rootRef.child("Users").child(auth.getCurrentUser().getUid()).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Log.d("RegisterActivity", "setValue onComplete");
+                        if(task.isSuccessful()){
+                            Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(RegisterActivity.this, NewActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            Log.d("RegisterActivity", "Starting SearchActivity");
+                            finish();
+                        }
+                        else{
+                            Log.d("RegisterActivity", "setValue failed: " + task.getException().getMessage());
+                        }
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("RegisterActivity", "Registration failed", e);
+                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
