@@ -4,8 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/display"
     tools:context=".RegisterActivity"
     android:background="@drawable/tutorscape_main">
+
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:indeterminate="true"
+        android:max="100"
+        android:backgroundTint="@color/white"
+        android:indeterminateTint="#1a09d6"
+        android:layout_marginTop="-12dp"
+        android:layout_alignParentStart="true" />
+
+    <!-- TextView with transparent background -->
+    <TextView
+        android:id="@+id/progressText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progressbar"
+        android:layout_centerHorizontal="true"
+        android:text="@string/progress_text"
+        android:textSize="16sp"
+        android:fontFamily="@font/ubuntu"/>
 
     <EditText
         android:id="@+id/editTextTextEmailAddress"

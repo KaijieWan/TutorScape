@@ -13,6 +13,7 @@
     <string name="existing_login">Already have an account? <u><b>Log In</b></u></string>
     <string name="exist_account_text"><b>Enter your email, we\'ll send you a link to change to a new password</b></string>
     <string name="send_link_pass">Send link</string>
+    <string name="progress_text"><b>Please Wait...</b></string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="large_text">
         Nothing here yet

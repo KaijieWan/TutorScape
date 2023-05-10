@@ -7,14 +7,18 @@ import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +49,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private DatabaseReference rootRef;
+    ProgressBar progressBar;
+    TextView progressText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +63,8 @@ public class RegisterActivity extends AppCompatActivity {
         name = findViewById(R.id.editTextName);
         mobile = findViewById(R.id.enterMobile);
         password = findViewById(R.id.enterPass);
+        progressBar = findViewById(R.id.progressbar);
+        progressText = findViewById(R.id.progressText);
 
         auth = FirebaseAuth.getInstance();
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
@@ -64,6 +72,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         rootRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference();
         Log.d("RegisterActivity", "database reference: " + rootRef);
+
+        progressBar.setVisibility(View.GONE);
+        progressText.setVisibility(View.GONE);
+
         enterDOB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,6 +147,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser(String email, String password, String name, String mobile, String DOB) {
+        progressBar.setVisibility(View.VISIBLE);
+        progressText.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
@@ -148,6 +164,9 @@ public class RegisterActivity extends AppCompatActivity {
                 rootRef.child("Users").child(auth.getCurrentUser().getUid()).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        progressBar.setVisibility(View.GONE);
+                        progressText.setVisibility(View.GONE);
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         Log.d("RegisterActivity", "setValue onComplete");
                         if(task.isSuccessful()){
                             Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
