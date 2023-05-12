@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     Toast.makeText(MainActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MainActivity.this, NewActivity.class);
+                    Intent intent = new Intent(MainActivity.this, randomActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     Log.d("MainActivity", "Starting SearchActivity");
@@ -141,14 +140,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
+    /*@Override
     protected void onStart(){
         super.onStart();
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
-            startActivity(new Intent(MainActivity.this, NewActivity.class));;
+            startActivity(new Intent(MainActivity.this, SearchActivity.class));;
             finish();
         }
-    }
-
+    }*/
 }

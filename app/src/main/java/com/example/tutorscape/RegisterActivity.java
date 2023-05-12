@@ -7,7 +7,6 @@ import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,7 +17,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +32,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -170,7 +167,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Log.d("RegisterActivity", "setValue onComplete");
                         if(task.isSuccessful()){
                             Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(RegisterActivity.this, NewActivity.class);
+                            Intent intent = new Intent(RegisterActivity.this, SearchActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                             Log.d("RegisterActivity", "Starting SearchActivity");
