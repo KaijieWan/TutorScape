@@ -22,5 +22,7 @@ public class SearchActivity extends AppCompatActivity {
         appBarLayout = findViewById(R.id.bottom);
         frameLayout = findViewById(R.id.fragment_container);
         tab = findViewById(R.id.top_navigation);
+
+
     }
 }

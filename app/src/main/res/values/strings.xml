@@ -15,6 +15,8 @@
     <string name="send_link_pass">Send link</string>
     <string name="progress_text"><b>Please Wait...</b></string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="search_title"><b>Search</b></string>
+    <string name="map_title"><b>Map</b></string>
     <string name="large_text">
         Nothing here yet
     </string>
