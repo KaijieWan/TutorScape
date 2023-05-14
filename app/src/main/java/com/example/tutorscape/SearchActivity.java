@@ -1,28 +1,43 @@
 package com.example.tutorscape;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
-import android.widget.FrameLayout;
+import android.view.MenuItem;
 
-import com.google.android.material.appbar.AppBarLayout;
+import com.example.tutorscape.Fragments.MapFragment;
+import com.example.tutorscape.Fragments.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.navigation.NavigationBarView;
 
 public class SearchActivity extends AppCompatActivity {
-    private AppBarLayout appBarLayout;
-    private FrameLayout frameLayout;
-    private TabLayout tab;
+    private BottomNavigationView bottomNavigationView;
+    private Fragment selectorFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        appBarLayout = findViewById(R.id.bottom);
-        frameLayout = findViewById(R.id.fragment_container);
-        tab = findViewById(R.id.top_navigation);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if(id == R.id.nav_search){
+                    selectorFragment = new SearchFragment();
+                }
+                else if(id == R.id.nav_map){
+                    selectorFragment = new MapFragment();
+                }
+                if(selectorFragment != null){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectorFragment).commit();
+                }
+                return true;
+            }
+        });
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SearchFragment()).commit();
     }
 }

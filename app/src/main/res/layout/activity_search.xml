@@ -1,41 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/tutorscape_main"
-    tools:context=".SearchActivity">
+    tools:context=".SearchActivity"
+    android:background="@drawable/tutorscape_main">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fragment_container"
-        android:layout_above="@+id/bottom"/>
+        android:layout_height="wrap_content">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/bottom"
-        android:layout_alignParentTop="true">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/fragment_container"
+            android:layout_above="@+id/bottom"/>
 
-        <com.google.android.material.tabs.TabLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/top_navigation"
-            android:backgroundTint="@color/cyan"
-            app:itemIconTint="@color/selector"
-            app:labelVisibilityMode="labeled"
-            android:background="?android:attr/windowBackground"
-            app:menu="@menu/top_menu" />
+            android:id="@+id/bottom">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_gravity="bottom"
-            android:background="@color/techBlue"/>
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/bottom_navigation"
+                android:background="@color/cyan"
+                app:itemIconTint="@color/selector"
+                app:itemTextColor="@color/nav_icon_text"
+                app:itemTextAppearanceActive="@style/BottomNavigationViewTextAppearanceActive"
+                app:itemTextAppearanceInactive="@style/BottomNavigationViewTextAppearanceInactive"
+                app:labelVisibilityMode="labeled"
+                app:menu="@menu/top_menu"/>
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_gravity="bottom"
+                android:background="@color/techBlue"/>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </FrameLayout>
 
 </RelativeLayout>
+
+
