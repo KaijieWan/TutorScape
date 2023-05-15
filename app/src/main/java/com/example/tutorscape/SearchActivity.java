@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.tutorscape.Fragments.MapFragment;
@@ -28,12 +29,16 @@ public class SearchActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 if(id == R.id.nav_search){
                     selectorFragment = new SearchFragment();
+                    Log.d("SearchActivity", "SearchFragment selected");
                 }
                 else if(id == R.id.nav_map){
                     selectorFragment = new MapFragment();
+                    Log.d("SearchActivity", "MapFragment selected");
                 }
                 if(selectorFragment != null){
+                    Log.d("Fragment Lifecycle", "Setting selectorFragment");
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectorFragment).commit();
+                    Log.d("Fragment Lifecycle", "Fragment transaction committed");
                 }
                 return true;
             }
