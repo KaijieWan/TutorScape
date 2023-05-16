@@ -7,4 +7,7 @@
     <style name="BottomNavigationViewTextAppearanceInactive">
         <item name="android:textSize">16sp</item>
     </style>
+    <style name="ToolbarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:fontFamily">@font/ubuntu</item>
+    </style>
 </resources>
