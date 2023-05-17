@@ -5,12 +5,40 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.SearchFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- One recyclerView with multiple view types -
+     Will be including the name of tuition centre and only the relevant searched info
+      in the search result: same done for every view types-->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/search_fragment"
-        android:layout_centerInParent="true"
-        android:textSize="25dp"/>
+        android:id="@+id/bar">
+        
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_search_bar"/>
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:id="@+id/search_bar"
+                android:background="@android:color/transparent"
+                android:hint="@string/search_bar_text"
+                android:layout_marginStart="10dp"/>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>    
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recycle_view"
+        android:layout_below="@+id/bar"/>
 
 </RelativeLayout>

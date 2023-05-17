@@ -25,6 +25,7 @@
     <string name="title_activity_change_password">ChangePassword</string>
     <string name="notifications"><b>Notifications</b></string>
     <string name="updates"><b>Updates</b></string>
+    <string name="search_bar_text">Search...</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
