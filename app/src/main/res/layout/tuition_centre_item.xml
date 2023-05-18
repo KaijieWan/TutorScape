@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <ImageView
+        android:layout_width="1000dp"
+        android:layout_height="50dp"
+        android:id="@+id/image_name"
+        android:src="@mipmap/ic_launcher"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image_name"
+        android:layout_marginStart="5dp"
+        android:orientation="vertical"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_name"
+            android:text="@string/TC_item_name"
+            android:textStyle="normal"
+            android:textColor="@color/techBlue"
+            android:fontFamily="@font/ubuntu"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_address"
+            android:text="@string/TC_item_address"
+            android:textStyle="bold"
+            android:textColor="@color/techBlue"
+            android:fontFamily="@font/ubuntu"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_postal"
+            android:text="@string/TC_item_postal"
+            android:textStyle="bold"
+            android:textColor="@color/techBlue"
+            android:fontFamily="@font/ubuntu"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_contact"
+            android:text="@string/TC_item_contact"
+            android:textStyle="bold"
+            android:textColor="@color/techBlue"
+            android:fontFamily="@font/ubuntu"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_website"
+            android:text="@string/TC_item_website"
+            android:textStyle="bold"
+            android:textColor="@color/techBlue"
+            android:fontFamily="@font/ubuntu"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/TC_item_Rating"
+            android:textStyle="bold"
+            android:textColor="@color/techBlue"
+            android:id="@+id/rating_num"
+            android:fontFamily="@font/ubuntu"/>
+
+        <RatingBar
+            android:id="@+id/rating_bar"
+            style="@style/MyRatingBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:stepSize="0.1"
+            android:contentDescription="Rating: out of no. of stars"/>
+
+    </LinearLayout>
+</RelativeLayout>

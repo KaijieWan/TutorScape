@@ -10,4 +10,10 @@
     <style name="ToolbarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:fontFamily">@font/ubuntu</item>
     </style>
+
+    <style name="MyRatingBarStyle" parent="Widget.AppCompat.RatingBar">
+        <item name="android:scaleX">0.6</item>
+        <item name="android:scaleY">0.6</item>
+    </style>
+
 </resources>
