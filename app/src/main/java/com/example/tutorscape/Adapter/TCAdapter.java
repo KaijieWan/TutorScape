@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tutorscape.Model.TuitionCentre;
 import com.example.tutorscape.R;
+import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
@@ -38,8 +40,32 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TuitionCentre TC = mTC.get(position);
+
         holder.tuitionName.setText(TC.getName());
-        //
+        holder.tuitionAddr.setText(TC.getAddress());
+        holder.tuitionPostal.setText(TC.getPostal());
+        holder.tuitionContactNo.setText(TC.getContactNo());
+        holder.tuitionWebsite.setText(TC.getWebsite());
+        holder.tuitionRatingNum.setText(TC.getRating_num());
+
+        float rating_float = Float.parseFloat(TC.getRating_num());
+        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+        holder.tuitionRatingBar.setRating(Float.parseFloat(decimalFormat.format(rating_float)));
+
+        Picasso.get().load(TC.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(holder.tuitionImage);
+
+
+        // Bind data to the item view
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the item click event
+                // You can access the clicked item's position or data to perform the necessary actions
+
+                // Redirect to another page or view based on the selected item
+            }
+        });
     }
 
     @Override
@@ -49,7 +75,7 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView imageName;
+        public ImageView tuitionImage;
         public TextView tuitionName;
         public TextView tuitionAddr;
         public TextView tuitionPostal;
@@ -61,12 +87,17 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageName = itemView.findViewById(R.id.image_name);
+            tuitionImage = itemView.findViewById(R.id.image_name);
             tuitionName = itemView.findViewById(R.id.tuition_name);
-            //Continue assigning the view ids to the attributes
+            tuitionAddr = itemView.findViewById(R.id.tuition_address);
+            tuitionPostal = itemView.findViewById(R.id.tuition_postal);
+            tuitionContactNo = itemView.findViewById(R.id.tuition_contact);
+            tuitionWebsite = itemView.findViewById(R.id.tuition_website);
+            tuitionRatingNum = itemView.findViewById(R.id.rating_num);
+            tuitionRatingBar = itemView.findViewById(R.id.rating_bar);
         }
     }
 
-    ;
+
 
 }
