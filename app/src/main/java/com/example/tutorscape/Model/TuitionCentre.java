@@ -5,11 +5,11 @@ import java.util.ArrayList;
 public class TuitionCentre {
     private String id;
     private String name;
-    private ArrayList<String> levels = new ArrayList<String>();
-    private ArrayList<String> exams = new ArrayList<String>();
-    private ArrayList<String> subjects = new ArrayList<String>();
+    private String levels;
+    private String exams;
+    private String subjects;
     //Refers to tuition format: could have multiple (1-to-1, online, group...)
-    private ArrayList<String> type = new ArrayList<String>();
+    private String type;
     private String postal;
     private String address;
     private String contactNo;
@@ -22,7 +22,7 @@ public class TuitionCentre {
     public TuitionCentre() {
     }
 
-    public TuitionCentre(String id, String name, ArrayList<String> levels, ArrayList<String> exams, ArrayList<String> subjects, ArrayList<String> type,
+    public TuitionCentre(String id, String name, String levels, String exams, String subjects, String type,
                          String postal, String address, String contactNo, String email, String operatingHrs, String imageUrl, String website, String rating_num) {
         this.id = id;
         this.name = name;
@@ -56,35 +56,35 @@ public class TuitionCentre {
         this.name = name;
     }
 
-    public ArrayList<String> getLevels() {
+    public String getLevels() {
         return levels;
     }
 
-    public void setLevels(ArrayList<String> levels) {
+    public void setLevels(String levels) {
         this.levels = levels;
     }
 
-    public ArrayList<String> getExams() {
+    public String getExams() {
         return exams;
     }
 
-    public void setExams(ArrayList<String> exams) {
+    public void setExams(String exams) {
         this.exams = exams;
     }
 
-    public ArrayList<String> getSubjects() {
+    public String getSubjects() {
         return subjects;
     }
 
-    public void setSubjects(ArrayList<String> subjects) {
+    public void setSubjects(String subjects) {
         this.subjects = subjects;
     }
 
-    public ArrayList<String> getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(ArrayList<String> type) {
+    public void setType(String type) {
         this.type = type;
     }
 

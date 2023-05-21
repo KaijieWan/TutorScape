@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="65dp"
+    android:layout_marginBottom="80dp"
+    android:background="@drawable/tutorscape_main"
     tools:context=".Fragments.SearchFragment">
 
     <!-- One recyclerView with multiple view types -
@@ -15,7 +18,8 @@
         
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
+            android:background="@drawable/tutorscape_main"
             android:id="@+id/toolbar">
 
             <ImageView
@@ -27,7 +31,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:id="@+id/search_bar"
-                android:background="@android:color/transparent"
                 android:hint="@string/search_bar_text"
                 android:layout_marginStart="10dp"/>
 

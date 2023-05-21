@@ -24,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -54,25 +55,53 @@ public class SearchFragment extends Fragment {
         recyclerView.setAdapter(tcAdapter);
 
         search_bar = view.findViewById(R.id.search_bar);
+
+        readTC();
+
         return view;
     }
 
     private void readTC() {
-
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("TuitionCentre");
+        DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("TuitionCentre");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("SearchFragment", "onDataChange called");
                 if(TextUtils.isEmpty(search_bar.getText().toString())){
                     mTC.clear();
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                         TuitionCentre tuitionCentre = snapshot.getValue(TuitionCentre.class);
                         mTC.add(tuitionCentre);
+
+                        Log.d("TuitionCentre", "Name: " + tuitionCentre.getName());
+                        Log.d("TuitionCentre", "Address: " + tuitionCentre.getAddress());
+                        Log.d("TuitionCentre", "Postal: " + tuitionCentre.getPostal());
+                        Log.d("TuitionCentre", "Contact: " + tuitionCentre.getContactNo());
+                        Log.d("TuitionCentre", "Website: " + tuitionCentre.getWebsite());
                     }
                     tcAdapter.notifyDataSetChanged();
                 }
             }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("SearchFragment", "Database error: " + error.getMessage());
+            }
+        });
+        Log.d("SearchFragment", "Database Reference: " + ref.toString());
+    }
 
+    private void searchTC (String s) {
+        Query query = FirebaseDatabase.getInstance().getReference().child("TuitionCentre").orderByChild("name").startAt(s).endAt(s + "\uf8ff");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mTC.clear();
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    TuitionCentre tuitionCentre = snapshot.getValue(TuitionCentre.class);
+                    mTC.add(tuitionCentre);
+                }
+                tcAdapter.notifyDataSetChanged();
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

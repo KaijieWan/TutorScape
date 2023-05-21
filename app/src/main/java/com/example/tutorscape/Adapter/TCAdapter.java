@@ -1,6 +1,11 @@
 package com.example.tutorscape.Adapter;
 
 import android.content.Context;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,12 +46,29 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TuitionCentre TC = mTC.get(position);
 
+        String address_msg = mContext.getString(R.string.address_msg, TC.getAddress());
+        String postal_msg = mContext.getString(R.string.postal_msg, TC.getPostal());
+        String contact_msg = mContext.getString(R.string.contact_msg, TC.getContactNo());
+        String website_msg = mContext.getString(R.string.website_msg, TC.getWebsite());
+        String rating_msg = mContext.getString(R.string.rating_msg, TC.getRating_num());
+
+        SpannableString address_span = new SpannableString(address_msg);
+        address_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableString postal_span = new SpannableString(postal_msg);
+        postal_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableString contact_span = new SpannableString(contact_msg);
+        contact_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableString website_span = new SpannableString(website_msg);
+        website_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableString rating_span = new SpannableString(rating_msg);
+        rating_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
         holder.tuitionName.setText(TC.getName());
-        holder.tuitionAddr.setText(TC.getAddress());
-        holder.tuitionPostal.setText(TC.getPostal());
-        holder.tuitionContactNo.setText(TC.getContactNo());
-        holder.tuitionWebsite.setText(TC.getWebsite());
-        holder.tuitionRatingNum.setText(TC.getRating_num());
+        holder.tuitionAddr.setText(address_span);
+        holder.tuitionPostal.setText(postal_span);
+        holder.tuitionContactNo.setText(contact_span);
+        holder.tuitionWebsite.setText(website_span);
+        holder.tuitionRatingNum.setText(rating_span);
 
         float rating_float = Float.parseFloat(TC.getRating_num());
         DecimalFormat decimalFormat = new DecimalFormat("#0.00");
@@ -57,7 +79,7 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
 
         // Bind data to the item view
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        /*holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Handle the item click event
@@ -65,7 +87,7 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
 
                 // Redirect to another page or view based on the selected item
             }
-        });
+        });*/
     }
 
     @Override
@@ -88,7 +110,10 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
             super(itemView);
 
             tuitionImage = itemView.findViewById(R.id.image_name);
+
             tuitionName = itemView.findViewById(R.id.tuition_name);
+            tuitionName.setPaintFlags(tuitionName.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
             tuitionAddr = itemView.findViewById(R.id.tuition_address);
             tuitionPostal = itemView.findViewById(R.id.tuition_postal);
             tuitionContactNo = itemView.findViewById(R.id.tuition_contact);
@@ -97,7 +122,4 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
             tuitionRatingBar = itemView.findViewById(R.id.rating_bar);
         }
     }
-
-
-
 }

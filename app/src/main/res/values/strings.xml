@@ -27,13 +27,19 @@
     <string name="updates"><b>Updates</b></string>
     <string name="search_bar_text">Search…</string>
     
-    <string name="TC_item_name"><u>tuition centre name</u></string>
+    <string name="TC_item_name">tuition centre name</string>
     <string name="TC_item_address">tuition centre address</string>
     <string name="TC_item_postal">tuition centre postal code</string>
     <string name="TC_item_contact">tuition centre contact number</string>
     <string name="TC_item_website">tuition centre website</string>
     <string name="TC_item_Rating">tuition centre rating (num)</string>
-    
+
+    <string name="address_msg"><b>Address</b>: %s</string>
+    <string name="postal_msg"><b>Postal</b>: %s</string>
+    <string name="contact_msg"><b>Contact</b>: %s</string>
+    <string name="website_msg"><b>Website</b>: %s</string>
+    <string name="rating_msg"><b>Rating</b>: %s</string>
+
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 

@@ -5,8 +5,8 @@
     android:padding="10dp">
 
     <ImageView
-        android:layout_width="1000dp"
-        android:layout_height="50dp"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
         android:id="@+id/image_name"
         android:src="@mipmap/ic_launcher"/>
 
@@ -23,8 +23,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tuition_name"
             android:text="@string/TC_item_name"
-            android:textStyle="normal"
-            android:textColor="@color/techBlue"
+            android:textColor="@color/black"
             android:fontFamily="@font/ubuntu"/>
 
         <TextView
@@ -32,8 +31,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tuition_address"
             android:text="@string/TC_item_address"
-            android:textStyle="bold"
-            android:textColor="@color/techBlue"
+            android:textColor="@color/black"
             android:fontFamily="@font/ubuntu"/>
 
         <TextView
@@ -41,8 +39,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tuition_postal"
             android:text="@string/TC_item_postal"
-            android:textStyle="bold"
-            android:textColor="@color/techBlue"
+            android:textColor="@color/black"
             android:fontFamily="@font/ubuntu"/>
 
         <TextView
@@ -50,8 +47,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tuition_contact"
             android:text="@string/TC_item_contact"
-            android:textStyle="bold"
-            android:textColor="@color/techBlue"
+            android:textColor="@color/black"
             android:fontFamily="@font/ubuntu"/>
 
         <TextView
@@ -59,16 +55,14 @@
             android:layout_height="wrap_content"
             android:id="@+id/tuition_website"
             android:text="@string/TC_item_website"
-            android:textStyle="bold"
-            android:textColor="@color/techBlue"
+            android:textColor="@color/black"
             android:fontFamily="@font/ubuntu"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/TC_item_Rating"
-            android:textStyle="bold"
-            android:textColor="@color/techBlue"
+            android:textColor="@color/black"
             android:id="@+id/rating_num"
             android:fontFamily="@font/ubuntu"/>
 
@@ -77,7 +71,9 @@
             style="@style/MyRatingBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="-50dp"
             android:stepSize="0.01"
+            android:progressTint="@color/yellow"
             android:contentDescription="Rating: out of no. of stars"/>
 
     </LinearLayout>
