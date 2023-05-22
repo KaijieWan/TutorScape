@@ -9,7 +9,9 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SearchFragment extends Fragment {
     private RecyclerView recyclerView;
@@ -58,6 +61,23 @@ public class SearchFragment extends Fragment {
 
         readTC();
 
+        search_bar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchTC(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         return view;
     }
 
@@ -72,12 +92,6 @@ public class SearchFragment extends Fragment {
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                         TuitionCentre tuitionCentre = snapshot.getValue(TuitionCentre.class);
                         mTC.add(tuitionCentre);
-
-                        Log.d("TuitionCentre", "Name: " + tuitionCentre.getName());
-                        Log.d("TuitionCentre", "Address: " + tuitionCentre.getAddress());
-                        Log.d("TuitionCentre", "Postal: " + tuitionCentre.getPostal());
-                        Log.d("TuitionCentre", "Contact: " + tuitionCentre.getContactNo());
-                        Log.d("TuitionCentre", "Website: " + tuitionCentre.getWebsite());
                     }
                     tcAdapter.notifyDataSetChanged();
                 }
@@ -91,21 +105,39 @@ public class SearchFragment extends Fragment {
     }
 
     private void searchTC (String s) {
-        Query query = FirebaseDatabase.getInstance().getReference().child("TuitionCentre").orderByChild("name").startAt(s).endAt(s + "\uf8ff");
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mTC.clear();
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    TuitionCentre tuitionCentre = snapshot.getValue(TuitionCentre.class);
-                    mTC.add(tuitionCentre);
-                }
-                tcAdapter.notifyDataSetChanged();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+        mTC.clear();
+        List<Query> queries = new ArrayList<>();
 
-            }
-        });
+        Query query_name = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("TuitionCentre")
+                .orderByChild("name").startAt(s).endAt(s + "\uf8ff");
+        queries.add(query_name);
+
+        Query query_address = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("TuitionCentre")
+                .orderByChild("address").startAt(s).endAt(s + "\uf8ff");
+        queries.add(query_address);
+
+        final int expectedQueryCount = queries.size();
+        final AtomicInteger completedQueryCount = new AtomicInteger(0);
+
+        for(Query query : queries){
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        TuitionCentre tuitionCentre = snapshot.getValue(TuitionCentre.class);
+                        mTC.add(tuitionCentre);
+                    }
+                    if(completedQueryCount.incrementAndGet() == expectedQueryCount){
+                        tcAdapter.notifyDataSetChanged();
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
     }
 }
