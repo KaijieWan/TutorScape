@@ -21,7 +21,9 @@ import com.example.tutorscape.R;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
 

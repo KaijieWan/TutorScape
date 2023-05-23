@@ -30,7 +30,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SearchFragment extends Fragment {
@@ -69,7 +71,11 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                searchTC(s.toString());
+                if (TextUtils.isEmpty(s)) {
+                    readTC();
+                } else {
+                    searchTC(s.toString());
+                }
             }
 
             @Override
@@ -106,14 +112,20 @@ public class SearchFragment extends Fragment {
 
     private void searchTC (String s) {
         mTC.clear();
+        //Set<TuitionCentre> tuitionCentres = new HashSet<>();
+        Set<String> uniqueIds = new HashSet<>();
+
         List<Query> queries = new ArrayList<>();
 
+        String startValue = s.substring(0, 1).toUpperCase() + s.substring(1);
+        String endValue = startValue + "\uf8ff";
+
         Query query_name = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("TuitionCentre")
-                .orderByChild("name").startAt(s).endAt(s + "\uf8ff");
+                .orderByChild("name").startAt(startValue).endAt(endValue);
         queries.add(query_name);
 
         Query query_address = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("TuitionCentre")
-                .orderByChild("address").startAt(s).endAt(s + "\uf8ff");
+                .orderByChild("address").startAt(startValue).endAt(endValue);
         queries.add(query_address);
 
         final int expectedQueryCount = queries.size();
@@ -123,12 +135,17 @@ public class SearchFragment extends Fragment {
             query.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        TuitionCentre tuitionCentre = snapshot.getValue(TuitionCentre.class);
-                        mTC.add(tuitionCentre);
+                        String TCID = snapshot.getKey();
+                        if(!uniqueIds.contains(TCID)){
+                            uniqueIds.add(TCID);
+                            TuitionCentre tuitionCentre = snapshot.getValue(TuitionCentre.class);
+                            mTC.add(tuitionCentre);
+                            //tuitionCentres.add(tuitionCentre);
+                        }
                     }
                     if(completedQueryCount.incrementAndGet() == expectedQueryCount){
+                        //mTC.addAll(tuitionCentres);
                         tcAdapter.notifyDataSetChanged();
                     }
                 }
@@ -140,4 +157,5 @@ public class SearchFragment extends Fragment {
         }
 
     }
+
 }
