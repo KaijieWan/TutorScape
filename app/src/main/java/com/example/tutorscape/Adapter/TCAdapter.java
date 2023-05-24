@@ -48,7 +48,7 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TuitionCentre TC = mTC.get(position);
 
-        String address_msg = mContext.getString(R.string.address_msg, TC.getAddress());
+        String address_msg = mContext.getString(R.string.address_msg, capitalizeAfterSpace(TC.getAddress()));
         String postal_msg = mContext.getString(R.string.postal_msg, TC.getPostal());
         String contact_msg = mContext.getString(R.string.contact_msg, TC.getContactNo());
         String website_msg = mContext.getString(R.string.website_msg, TC.getWebsite());
@@ -65,7 +65,7 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
         SpannableString rating_span = new SpannableString(rating_msg);
         rating_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        holder.tuitionName.setText(TC.getName());
+        holder.tuitionName.setText(capitalizeAfterSpace(TC.getName()));
         holder.tuitionAddr.setText(address_span);
         holder.tuitionPostal.setText(postal_span);
         holder.tuitionContactNo.setText(contact_span);
@@ -123,5 +123,25 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
             tuitionRatingNum = itemView.findViewById(R.id.rating_num);
             tuitionRatingBar = itemView.findViewById(R.id.rating_bar);
         }
+    }
+
+    public String capitalizeAfterSpace(String input) {
+        StringBuilder output = new StringBuilder();
+
+        boolean capitalizeNext = true;
+        for (char c : input.toCharArray()) {
+            if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+                output.append(c);
+            } else {
+                if (capitalizeNext) {
+                    c = Character.toUpperCase(c);
+                    capitalizeNext = false;
+                }
+                output.append(c);
+            }
+        }
+
+        return output.toString();
     }
 }

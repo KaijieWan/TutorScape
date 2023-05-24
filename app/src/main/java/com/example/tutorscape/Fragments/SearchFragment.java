@@ -74,7 +74,7 @@ public class SearchFragment extends Fragment {
                 if (TextUtils.isEmpty(s)) {
                     readTC();
                 } else {
-                    searchTC(s.toString());
+                    searchTC2(s.toString());
                 }
             }
 
@@ -117,16 +117,35 @@ public class SearchFragment extends Fragment {
 
         List<Query> queries = new ArrayList<>();
 
-        String startValue = s.substring(0, 1).toUpperCase() + s.substring(1);
+        String startValue = s.toLowerCase();
         String endValue = startValue + "\uf8ff";
 
+        //Query by name
         Query query_name = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("TuitionCentre")
                 .orderByChild("name").startAt(startValue).endAt(endValue);
         queries.add(query_name);
 
+        //Query by address
         Query query_address = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("TuitionCentre")
                 .orderByChild("address").startAt(startValue).endAt(endValue);
         queries.add(query_address);
+
+        //Query by exams
+        Query query_exams = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("TuitionCentre")
+                .orderByChild("exams").startAt(startValue).endAt(endValue);
+        queries.add(query_exams);
+
+        //Query by subjects
+        Query query_subjects = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("TuitionCentre")
+                .orderByChild("subjects").startAt(startValue).endAt(endValue);
+        queries.add(query_subjects);
+
+        //Query by levels
+        Query query_levels = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("TuitionCentre")
+                .orderByChild("levels").startAt(startValue).endAt(endValue);
+        queries.add(query_levels);
+
+        //Query by type (have to settle search through whole string first)
 
         final int expectedQueryCount = queries.size();
         final AtomicInteger completedQueryCount = new AtomicInteger(0);
@@ -155,7 +174,46 @@ public class SearchFragment extends Fragment {
                 }
             });
         }
+    }
 
+    private void searchTC2(String s) {
+        mTC.clear();
+        Set<String> uniqueIds = new HashSet<>();
+
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("TuitionCentre");
+
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String TCID = snapshot.getKey();
+                    if (!uniqueIds.contains(TCID)) {
+                        uniqueIds.add(TCID);
+                        TuitionCentre tuitionCentre = snapshot.getValue(TuitionCentre.class);
+
+                        // Perform substring search on relevant attributes
+                        if (substringSearch(tuitionCentre.getName(), s)
+                                || substringSearch(tuitionCentre.getAddress(), s)
+                                || substringSearch(tuitionCentre.getExams(), s)
+                                || substringSearch(tuitionCentre.getLevels(), s)
+                                || substringSearch(tuitionCentre.getSubjects(), s)) {
+                            mTC.add(tuitionCentre);
+                        }
+                    }
+                }
+                // Update the adapter with the filtered data
+                tcAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error
+            }
+        });
+    }
+
+    private boolean substringSearch(String attribute, String substring) {
+        return attribute.toLowerCase().contains(substring.toLowerCase());
     }
 
 }
