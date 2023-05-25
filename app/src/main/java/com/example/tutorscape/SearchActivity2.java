@@ -49,6 +49,14 @@ public class SearchActivity2 extends AppCompatActivity {
                     navController.navigate(R.id.SearchFragment);
                     return true;
                 }
+                if (item.getItemId() == R.id.nav_updates) {
+                    navController.navigate(R.id.UpdatesFragment);
+                    return true;
+                }
+                if (item.getItemId() == R.id.nav_notif) {
+                    navController.navigate(R.id.NotifFragment);
+                    return true;
+                }
                 return false;
             }
         });

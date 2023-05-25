@@ -6,13 +6,26 @@
         android:icon="@drawable/ic_search"
         android:title="@string/search_title"
         android:visible="true"
-        android:enabled="true"/>
+        android:enabled="true" />
 
     <item
         android:id="@+id/nav_map"
         android:icon="@drawable/ic_map"
         android:title="@string/map_title"
         android:visible="true"
+        android:enabled="true" />
+
+    <item
+        android:id="@+id/nav_updates"
+        android:icon="@drawable/ic_updates"
+        android:title="@string/updates_title"
+        android:visible="true"
         android:enabled="true"/>
 
+    <item
+        android:id="@+id/nav_notif"
+        android:icon="@drawable/ic_notifications"
+        android:title="@string/notif_title"
+        android:visible="true"
+        android:enabled="true"/>
 </menu>

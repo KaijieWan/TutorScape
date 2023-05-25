@@ -18,15 +18,15 @@
     <string name="title_activity_search">SearchActivity</string>
     <string name="search_title"><b>Search</b></string>
     <string name="map_title"><b>Map</b></string>
+    <string name="updates_title"><b>Updates</b></string>
+    <string name="notif_title"><b>Notif.</b></string>
     <string name="large_text">
         Nothing here yet
     </string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_change_password">ChangePassword</string>
-    <string name="notifications"><b>Notifications</b></string>
-    <string name="updates"><b>Updates</b></string>
     <string name="search_bar_text">Search…</string>
-    
+
     <string name="TC_item_name">tuition centre name</string>
     <string name="TC_item_address">tuition centre address</string>
     <string name="TC_item_postal">tuition centre postal code</string>
@@ -82,4 +82,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="search_fragment">Search Fragment</string>
     <string name="map_fragment">Map Fragment</string>
+    <string name="updates_fragment">Updates Fragment</string>
+    <string name="notif_fragment">Notifications Fragment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

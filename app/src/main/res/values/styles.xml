@@ -16,4 +16,9 @@
         <item name="android:scaleY">0.6</item>
     </style>
 
+    <style name="CustomBottomNavItemText" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/ubuntu</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

@@ -14,6 +14,14 @@
         <action
             android:id="@+id/action_SearchFragment_to_MapFragment"
             app:destination="@id/MapFragment" />
+
+        <action
+            android:id="@+id/action_SearchFragment_to_UpdatesFragment"
+            app:destination="@id/UpdatesFragment" />
+
+        <action
+            android:id="@+id/action_SearchFragment_to_NotifFragment"
+            app:destination="@id/NotifFragment" />
     </fragment>
     <fragment
         android:id="@+id/MapFragment"
@@ -24,5 +32,49 @@
         <action
             android:id="@+id/action_MapFragment_to_SearchFragment"
             app:destination="@id/SearchFragment" />
+
+        <action
+            android:id="@+id/action_MapFragment_to_UpdatesFragment"
+            app:destination="@id/UpdatesFragment" />
+
+        <action
+            android:id="@+id/action_MapFragment_to_NotifFragment"
+            app:destination="@id/NotifFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/UpdatesFragment"
+        android:name="com.example.tutorscape.Fragments.UpdatesFragment"
+        android:label="@string/updates_fragment"
+        tools:layout="@layout/fragment_updates">
+
+        <action
+            android:id="@+id/action_UpdatesFragment_to_SearchFragment"
+            app:destination="@id/SearchFragment" />
+
+        <action
+            android:id="@+id/action_UpdatesFragment_to_MapFragment"
+            app:destination="@id/MapFragment" />
+
+        <action
+            android:id="@+id/action_UpdatesFragment_to_NotifFragment"
+            app:destination="@id/NotifFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/NotifFragment"
+        android:name="com.example.tutorscape.Fragments.NotifFragment"
+        android:label="@string/notif_fragment"
+        tools:layout="@layout/fragment_notif">
+
+        <action
+            android:id="@+id/action_NotifFragment_to_SearchFragment"
+            app:destination="@id/SearchFragment" />
+
+        <action
+            android:id="@+id/action_NotifFragment_to_MapFragment"
+            app:destination="@id/MapFragment" />
+
+        <action
+            android:id="@+id/action_NotifFragment_to_UpdatesFragment"
+            app:destination="@id/UpdatesFragment" />
     </fragment>
 </navigation>
