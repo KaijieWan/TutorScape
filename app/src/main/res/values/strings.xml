@@ -20,12 +20,11 @@
     <string name="map_title"><b>Map</b></string>
     <string name="updates_title"><b>Updates</b></string>
     <string name="notif_title"><b>Notif.</b></string>
-    <string name="large_text">
-        Nothing here yet
-    </string>
+    <string name="update_text"><b>Latest Updates</b></string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_change_password">ChangePassword</string>
     <string name="search_bar_text">Search…</string>
+    <string name="filter_bar_text">Search for Tuition Centre…</string>
 
     <string name="TC_item_name">tuition centre name</string>
     <string name="TC_item_address">tuition centre address</string>
@@ -33,6 +32,8 @@
     <string name="TC_item_contact">tuition centre contact number</string>
     <string name="TC_item_website">tuition centre website</string>
     <string name="TC_item_Rating">tuition centre rating (num)</string>
+
+    <string name="updates_item_info">tuition centre update</string>
 
     <string name="address_msg"><b>Address</b>: %s</string>
     <string name="postal_msg"><b>Postal</b>: %s</string>
@@ -42,6 +43,7 @@
 
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="large_text">large text</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

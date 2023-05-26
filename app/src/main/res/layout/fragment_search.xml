@@ -8,9 +8,7 @@
     android:background="@drawable/tutorscape_main"
     tools:context=".Fragments.SearchFragment">
 
-    <!-- One recyclerView with multiple view types -
-     Will be including the name of tuition centre and only the relevant searched info
-      in the search result: same done for every view types-->
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
