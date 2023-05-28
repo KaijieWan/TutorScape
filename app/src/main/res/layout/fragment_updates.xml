@@ -52,7 +52,7 @@
             <AutoCompleteTextView
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:id="@+id/search_bar"
+                android:id="@+id/update_search_bar"
                 android:hint="@string/filter_bar_text"
                 android:layout_marginStart="10dp"/>
 
@@ -74,7 +74,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"/>
+                android:layout_margin="5dp"
+                android:id="@+id/recycler_view_updates"/>
 
 
         </LinearLayout>

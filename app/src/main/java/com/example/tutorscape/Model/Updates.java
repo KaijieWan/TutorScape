@@ -9,10 +9,11 @@ public class Updates {
     public Updates() {
     }
 
-    public Updates(String updateID, String imageUrl, String updateText) {
+    public Updates(String updateID, String imageUrl, String updateText, String updateName) {
         this.updateID = updateID;
         this.imageUrl = imageUrl;
         this.updateText = updateText;
+        this.updateName = updateName;
     }
 
     public String getUpdateID() {
