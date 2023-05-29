@@ -49,6 +49,9 @@ public class UpdatesAdapter extends RecyclerView.Adapter<UpdatesAdapter.ViewHold
         holder.textTitle.setText(title_span);
 
         holder.textUpdate.setText(update.getUpdateText());
+
+        String date_trimmed = update.getDate().substring(0,8);
+        holder.updateDate.setText(date_trimmed);
     }
 
     @Override
@@ -61,6 +64,8 @@ public class UpdatesAdapter extends RecyclerView.Adapter<UpdatesAdapter.ViewHold
         public ImageView imageUpdate;
         public TextView textTitle;
         public TextView textUpdate;
+        public ImageView updaterFilter;
+        public TextView updateDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -71,6 +76,8 @@ public class UpdatesAdapter extends RecyclerView.Adapter<UpdatesAdapter.ViewHold
             textTitle.setPaintFlags(textTitle.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
             textUpdate = itemView.findViewById(R.id.update_info);
+            updaterFilter = itemView.findViewById(R.id.filter_icon);
+            updateDate = itemView.findViewById(R.id.update_date);
         }
     }
 }

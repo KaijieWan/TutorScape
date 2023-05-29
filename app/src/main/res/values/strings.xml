@@ -34,6 +34,9 @@
     <string name="TC_item_Rating">tuition centre rating (num)</string>
 
     <string name="updates_item_info">tuition centre update</string>
+    <string name="updatesFilter_option1">Newest to Oldest</string>
+    <string name="updatesFilter_option2">Oldest to Newest</string>
+    <string name="updates_item_date">update date</string>
 
     <string name="address_msg"><b>Address</b>: %s</string>
     <string name="postal_msg"><b>Postal</b>: %s</string>

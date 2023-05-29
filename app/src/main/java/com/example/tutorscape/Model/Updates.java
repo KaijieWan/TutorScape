@@ -5,15 +5,17 @@ public class Updates {
     private String imageUrl;
     private String updateText;
     private String updateName;
+    private String date;
 
     public Updates() {
     }
 
-    public Updates(String updateID, String imageUrl, String updateText, String updateName) {
+    public Updates(String updateID, String imageUrl, String updateText, String updateName, String date) {
         this.updateID = updateID;
         this.imageUrl = imageUrl;
         this.updateText = updateText;
         this.updateName = updateName;
+        this.date = date;
     }
 
     public String getUpdateID() {
@@ -46,5 +48,13 @@ public class Updates {
 
     public void setUpdateName(String updateName) {
         this.updateName = updateName;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

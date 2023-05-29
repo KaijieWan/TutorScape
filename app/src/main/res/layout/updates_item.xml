@@ -26,6 +26,16 @@
             android:text="@string/TC_item_name"
             android:layout_margin="5dp"
             android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/update_date"
+            android:fontFamily="@font/ubuntu"
+            android:textColor="@color/red"
+            android:text="@string/updates_item_date"
+            android:padding="5dp"
+            android:textStyle="bold"/>
         
         <TextView
             android:layout_width="wrap_content"
