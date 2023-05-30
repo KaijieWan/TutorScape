@@ -65,6 +65,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center"
+        android:id="@+id/click_redirect"
         android:layout_below="@+id/appBarLayout">
 
         <LinearLayout
@@ -72,8 +74,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:clickable="true"
-            android:onClick="onContainerClick"
-            android:layout_marginStart="20dp">
+            android:onClick="onReviewClick"
+            android:layout_marginStart="50dp">
 
             <ImageView
                 android:layout_width="50dp"
@@ -83,49 +85,261 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Add Review"
+                android:text="@string/add_review_click"
                 android:textColor="@color/white"
                 android:textStyle="bold"
+                android:fontFamily="@font/ubuntu"
                 android:layout_weight="1"
                 android:layout_marginVertical="15dp" />
 
         </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:clickable="true"
-        android:onClick="onContainerClick"
-        android:layout_marginStart="20dp">
-
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/icons8_book_reading_96"/>
-
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add To Favourites"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:layout_weight="1"
-            android:layout_marginVertical="15dp"/>
+            android:orientation="horizontal"
+            android:clickable="true"
+            android:onClick="onFavouritesClick"
+            android:layout_marginStart="20dp">
 
-    </LinearLayout>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/fav_emptyIcon"
+                android:src="@drawable/icons8_book_reading_100"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/add_favourites_click"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:fontFamily="@font/ubuntu"
+                android:layout_weight="1"
+                android:layout_marginVertical="15dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_text_background"
+        android:id="@+id/TC_fullInfo"
+        android:background="@drawable/rounded_cyan_text_background"
         android:orientation="vertical"
-        android:layout_margin="5dp">
+        android:layout_margin="5dp"
+        android:layout_below="@id/click_redirect">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:src="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_name"
+            android:text="@string/TC_item_name"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_address"
+            android:text="@string/TC_item_address"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_postal"
+            android:text="@string/TC_item_postal"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_contact"
+            android:text="@string/TC_item_contact"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_website"
+            android:text="@string/TC_item_website"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/TC_levels"
+            android:textColor="@color/black"
+            android:id="@+id/tuition_levels"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_subjects"
+            android:text="@string/TC_subjects"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_exams"
+            android:text="@string/TC_exams"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_type"
+            android:text="@string/TC_type"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_operatingHrs"
+            android:text="@string/TC_operatingHrs"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/TC_reviewInfo"
+        android:background="@drawable/rounded_cyan_text_background"
+        android:orientation="vertical"
+        android:layout_margin="5dp"
+        android:layout_below="@id/TC_fullInfo">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_review_header"
+            android:text="@string/TC_review_header"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_review_title"
+            android:text="@string/TC_review_title"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RatingBar
+                android:id="@+id/rating_bar"
+                style="@style/MyRatingBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="-38dp"
+                android:stepSize="0.01"
+                android:progressTint="@color/yellow"
+                android:contentDescription="Rating: out of no. of stars"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/TC_item_Rating"
+                android:textColor="@color/black"
+                android:id="@+id/rating_num"
+                android:fontFamily="@font/ubuntu"
+                android:textStyle="bold"
+                android:layout_marginStart="-35dp"
+                android:layout_marginTop="15dp"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="% (5 star)"
+                android:id="@+id/five_star_percentage"
+                android:layout_alignParentStart="true" />
+
+            <ProgressBar
+                android:id="@+id/ratingBar1"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="100"
+                android:paddingBottom="7dp"
+                android:layout_toEndOf="@id/five_star_percentage"
+                android:progress="0"
+                android:progressDrawable="@drawable/custom_progressbar" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                android:layout_toRightOf="@id/ratingBar1"/>
+
+        </RelativeLayout>
+
+
+
+        <ProgressBar
+            android:id="@+id/ratingBar2"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:max="100"
+            android:layout_gravity="center"
+            android:paddingBottom="7dp"
+            android:progress="0"
+            android:progressDrawable="@drawable/custom_progressbar" />
+
+    </LinearLayout>
 
 </RelativeLayout>

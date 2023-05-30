@@ -32,6 +32,14 @@
     <string name="TC_item_contact">tuition centre contact number</string>
     <string name="TC_item_website">tuition centre website</string>
     <string name="TC_item_Rating">tuition centre rating (num)</string>
+    <string name="TC_levels">tuition centre levels</string>
+    <string name="TC_subjects">tuition centre subjects</string>
+    <string name="TC_exams">tuition centre exams</string>
+    <string name="TC_type">tuition centre type</string>
+    <string name="TC_operatingHrs">tuition centre operating hours</string>
+
+    <string name="TC_review_header">Reviews</string>
+    <string name="TC_review_title">Overall Rating for this Tuition Centre (Location):</string>
 
     <string name="updates_item_info">tuition centre update</string>
     <string name="updatesFilter_option1">Newest to Oldest</string>
@@ -43,6 +51,9 @@
     <string name="contact_msg"><b>Contact</b>: %s</string>
     <string name="website_msg"><b>Website</b>: %s</string>
     <string name="rating_msg"><b>Rating</b>: %s</string>
+
+    <string name="add_review_click">Add Review</string>
+    <string name="add_favourites_click">Add To Favourites</string>
 
     <string name="next">Next</string>
     <string name="previous">Previous</string>
