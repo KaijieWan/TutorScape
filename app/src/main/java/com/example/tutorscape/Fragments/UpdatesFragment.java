@@ -189,7 +189,7 @@ public class UpdatesFragment extends Fragment {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("SearchFragment", "onDataChange called");
+                Log.d("UpdatesFragment", "onDataChange called");
                 if(TextUtils.isEmpty(search_bar.getText().toString())){
                     updatesList.clear();
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
@@ -201,7 +201,7 @@ public class UpdatesFragment extends Fragment {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("SearchFragment", "Database error: " + error.getMessage());
+                Log.e("UpdatesFragment", "Database error: " + error.getMessage());
             }
         });
         Log.d("SearchFragment", "Database Reference: " + ref.toString());

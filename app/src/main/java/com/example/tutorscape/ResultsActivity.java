@@ -14,6 +14,7 @@ public class ResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
+        //Progress/rating bar logic and display is implemented here instead of in the adapter class
         //ProgressBar progressBar1 = findViewById(R.id.progressBar1);
         //ProgressBar progressBar2 = findViewById(R.id.progressBar2);
 
