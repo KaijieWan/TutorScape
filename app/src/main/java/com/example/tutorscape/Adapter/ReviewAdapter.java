@@ -26,12 +26,10 @@ import java.util.List;
 public class ReviewAdapter extends  RecyclerView.Adapter<ReviewAdapter.ViewHolder>{
     private Context mContext;
     private List<Review> mReviews;
-    private String tuitionCentreID;
 
-    public ReviewAdapter(Context mContext, List<Review> mReviews, String tuitionCentreID) {
+    public ReviewAdapter(Context mContext, List<Review> mReviews) {
         this.mContext = mContext;
         this.mReviews = mReviews;
-        this.tuitionCentreID = tuitionCentreID;
     }
 
     @NonNull
@@ -46,46 +44,36 @@ public class ReviewAdapter extends  RecyclerView.Adapter<ReviewAdapter.ViewHolde
 
         Review review = mReviews.get(position);
 
-        if(review.getTCID().equals(tuitionCentreID)){
-            //implement the set text methods here
-            DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
-                    .getReference("Users/" + review.getUID() + "/name");
-            ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String name = snapshot.getValue(String.class);
-                    holder.user_name.setText(name);
-                }
+        //implement the set text methods here
+        DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference("Users/" + review.getUID() + "/name");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String name = snapshot.getValue(String.class);
+                holder.user_name.setText(name);
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
-            holder.review_date.setText(review.getReview_date());
-            holder.subjects_enrolled.setText(review.getSubjects_enrolled());
+            }
+        });
+        holder.review_date.setText(review.getReview_date());
+        holder.subjects_enrolled.setText(review.getSubjects_enrolled());
 
-            float rating_float = Float.parseFloat(review.getRating_num());
-            DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-            holder.rating_bar.setRating(Float.parseFloat(decimalFormat.format(rating_float)));
+        float rating_float = Float.parseFloat(review.getRating_num());
+        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+        holder.rating_bar.setRating(Float.parseFloat(decimalFormat.format(rating_float)));
 
-            holder.review_text.setText(review.getReview_text());
-        }
-        else{
-            holder.itemView.setVisibility(View.GONE);
-        }
-
+        holder.review_text.setText(review.getReview_text());
     }
+
+
 
     @Override
     public int getItemCount() {
-        int count  = 0;
-        for(Review review : mReviews){
-            if(review.getTCID().equals(tuitionCentreID)){
-                count++;
-            }
-        }
-        return count;
+        return mReviews.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

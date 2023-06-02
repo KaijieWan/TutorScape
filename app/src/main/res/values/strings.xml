@@ -53,6 +53,12 @@
     <string name="website_msg"><b>Website</b>: %s</string>
     <string name="rating_msg"><b>Rating</b>: %s</string>
 
+    <string name="levels_msg"><b>Levels</b>: %s</string>
+    <string name="subjects_msg"><b>Subjects</b>: %s</string>
+    <string name="exams_msg"><b>Exams</b>: %s</string>
+    <string name="type_msg"><b>Type</b>: %s</string>
+    <string name="opHrs_msg"><b>Operating Hours</b>: %s</string>
+
     <string name="add_review_click">Add Review</string>
     <string name="add_favourites_click">Add To Favourites</string>
     <string name="five_star">5</string>
