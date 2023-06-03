@@ -125,14 +125,13 @@ public class ResultsActivity extends AppCompatActivity {
                     TuitionCentre tuitionCentre = snapshot.getValue(TuitionCentre.class);
                     Picasso.get().load(tuitionCentre.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(tuitionImage);
 
-                    //Create individual functions that help to upper-case the relevant lower-cased attribute values (levels, subjects, exams)
                     String address_msg = getString(R.string.address_msg, capitalizeAfterSpace(tuitionCentre.getAddress()));
                     String postal_msg = getString(R.string.postal_msg, tuitionCentre.getPostal());
                     String contact_msg = getString(R.string.contact_msg, tuitionCentre.getContactNo());
                     String website_msg = getString(R.string.website_msg, tuitionCentre.getWebsite());
-                    String levels_msg = getString(R.string.levels_msg, tuitionCentre.getLevels());
-                    String subjects_msg = getString(R.string.subjects_msg, tuitionCentre.getSubjects());
-                    String exams_msg = getString(R.string.exams_msg, tuitionCentre.getExams());
+                    String levels_msg = getString(R.string.levels_msg, extractAndStitch(tuitionCentre.getLevels()));
+                    String subjects_msg = getString(R.string.subjects_msg, extractAndStitch_subjects(tuitionCentre.getSubjects()));
+                    String exams_msg = getString(R.string.exams_msg, extractAndStitch(tuitionCentre.getExams()));
                     String type_msg = getString(R.string.type_msg, tuitionCentre.getType());
                     String opHrs_msg = getString(R.string.opHrs_msg, tuitionCentre.getOperatingHrs());
 
@@ -175,7 +174,11 @@ public class ResultsActivity extends AppCompatActivity {
                     rating_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     tuitionRatingNum.setText(rating_span);
 
-                    //Create a function to calculate the percentages for the reviews to set the progress bars
+                    int totalReviews = reviewsList.size();
+                    for(Review review : reviewsList){
+                        //Continue implementing the calculation/setting of percentages for the reviews
+                    }
+
                 }
             }
 
@@ -184,9 +187,6 @@ public class ResultsActivity extends AppCompatActivity {
 
             }
         });
-        //Progress/rating bar logic and display is implemented here instead of in the adapter class
-        //ProgressBar progressBar1 = findViewById(R.id.progressBar1);
-        //ProgressBar progressBar2 = findViewById(R.id.progressBar2);
 
         // Update progress for each rating
         int rating1 = 4;
@@ -246,5 +246,75 @@ public class ResultsActivity extends AppCompatActivity {
         }
 
         return output.toString();
+    }
+
+    public String extractAndStitch_subjects(String input) {
+        String[] words = input.split(",\\s+");
+        StringBuilder stitchedString = new StringBuilder();
+
+        for (String word : words) {
+            if (word.length()<=4) {
+                String substring = word.toUpperCase();
+                stitchedString.append(substring).append(", ");
+            } else {
+                if(word.contains(" ")){
+                    String[] words1 = word.split("\\s+");
+                    for(String word1 : words1){
+                        String substring1;
+                        if(word1.length()<=4){
+                            substring1 = word1.toUpperCase();
+                        }
+                        else{
+                            substring1 = word1.substring(0,1).toUpperCase() + word1.substring(1);
+                        }
+
+                        stitchedString.append(substring1).append(" ");
+                    }
+                    stitchedString.deleteCharAt(stitchedString.length()-1);
+                }
+                else{
+                    String substring2 = word.substring(0,1).toUpperCase() + word.substring(1);
+                    stitchedString.append(substring2);
+                }
+                stitchedString.append(", ");
+            }
+        }
+
+        return stitchedString.deleteCharAt(stitchedString.length()-2).toString().trim();
+    }
+
+    public String extractAndStitch(String input) {
+        String[] words = input.split(",\\s+");
+        StringBuilder stitchedString = new StringBuilder();
+
+        for (String word : words) {
+            if (word.length()<=5) {
+                String substring = word.toUpperCase();
+                stitchedString.append(substring).append(", ");
+            } else {
+                if(word.contains(" ")){
+                    String[] words1 = word.split("\\s+");
+                    for(String word1 : words1){
+                        String substring1;
+                        if(word1.length()<=5){
+                            substring1 = word1.toUpperCase();
+                        }
+                        else{
+                            substring1 = word1.substring(0,1).toUpperCase() + word1.substring(1);
+                        }
+
+                        stitchedString.append(substring1).append(" ");
+                    }
+                    stitchedString.deleteCharAt(stitchedString.length()-1);
+                }
+                else{
+                    String substring2 = word.substring(0,1).toUpperCase() + word.substring(1);
+                    stitchedString.append(substring2);
+                }
+                stitchedString.append(", ");
+            }
+        }
+
+        return stitchedString.deleteCharAt(stitchedString.length()-2).toString().trim();
     }
 }

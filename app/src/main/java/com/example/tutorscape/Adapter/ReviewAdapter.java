@@ -63,8 +63,7 @@ public class ReviewAdapter extends  RecyclerView.Adapter<ReviewAdapter.ViewHolde
         holder.subjects_enrolled.setText(review.getSubjects_enrolled());
 
         float rating_float = Float.parseFloat(review.getRating_num());
-        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-        holder.rating_bar.setRating(Float.parseFloat(decimalFormat.format(rating_float)));
+        holder.rating_bar.setRating(rating_float);
 
         holder.review_text.setText(review.getReview_text());
     }
