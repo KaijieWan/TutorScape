@@ -1,6 +1,7 @@
 package com.example.tutorscape.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.Spannable;
@@ -9,6 +10,7 @@ import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tutorscape.Model.TuitionCentre;
 import com.example.tutorscape.R;
+import com.example.tutorscape.ResultsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -30,6 +33,7 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
     private Context mContext;
     private  List<TuitionCentre> mTC;
     private boolean isFragment;
+    private AdapterView.OnItemClickListener itemClickListener;
 
     public TCAdapter(Context mContext, List<TuitionCentre> mTC, boolean isFragment) {
         this.mContext = mContext;
@@ -81,15 +85,16 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
 
         // Bind data to the item view
 
-        /*holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Handle the item click event
-                // You can access the clicked item's position or data to perform the necessary actions
-
+                Intent intent = new Intent(mContext, ResultsActivity.class);
+                intent.putExtra("tuitionCentreId", TC.getId());
                 // Redirect to another page or view based on the selected item
+                mContext.startActivity(intent);
             }
-        });*/
+        });
     }
 
     @Override
@@ -143,5 +148,9 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
         }
 
         return output.toString();
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(String tuitionCentreId);
     }
 }

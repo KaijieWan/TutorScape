@@ -59,6 +59,8 @@
     <string name="type_msg"><b>Type</b>: %s</string>
     <string name="opHrs_msg"><b>Operating Hours</b>: %s</string>
 
+    <string name="percentage_placeholder">%d %%</string>
+
     <string name="add_review_click">Add Review</string>
     <string name="add_favourites_click">Add To Favourites</string>
     <string name="five_star">5</string>

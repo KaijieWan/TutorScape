@@ -71,8 +71,13 @@ public class ResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
+        //Receive bundle info
         context = this;
-        tuitionCentreId = getIntent().getStringExtra("tuitionCentreId");
+        Bundle intent = getIntent().getExtras();
+        if(intent != null){
+            tuitionCentreId = intent.getString("tuitionCentreId");
+        }
+
 
         recyclerViewReviews = findViewById(R.id.recycler_view_TCReviews);
         recyclerViewReviews.setHasFixedSize(true);
@@ -166,18 +171,6 @@ public class ResultsActivity extends AppCompatActivity {
                     tuitionOperatingHrs.setText(opHrs_span);
 
                     //Setting of views related to reviews portion
-                    float rating_float = Float.parseFloat(tuitionCentre.getRating_num());
-                    DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-                    tuitionRatingBar.setRating(Float.parseFloat(decimalFormat.format(rating_float)));
-                    String rating_msg = getString(R.string.rating_msg, tuitionCentre.getRating_num());
-                    SpannableString rating_span = new SpannableString(rating_msg);
-                    rating_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    tuitionRatingNum.setText(rating_span);
-
-                    int totalReviews = reviewsList.size();
-                    for(Review review : reviewsList){
-                        //Continue implementing the calculation/setting of percentages for the reviews
-                    }
 
                 }
             }
@@ -187,25 +180,17 @@ public class ResultsActivity extends AppCompatActivity {
 
             }
         });
-
-        // Update progress for each rating
-        int rating1 = 4;
-        int rating2 = 2;
-
-        int maxRating = 5;  // maximum rating value
-
-        int progress1 = (rating1 * 100) / maxRating;
-        int progress2 = (rating2 * 100) / maxRating;
-
-        //progressBar1.setProgress(progress1);
-        //progressBar2.setProgress(progress2);
     }
 
     private void filterReviews() {
+        Log.d("filterReviews", "called");
         DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("Reviews");
+        Log.d("filterReviews", ref.toString());
+        Log.d("filterReviews", tuitionCentreId);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("filterReviews", tuitionCentreId);
                 reviewsList.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Review review = snapshot.getValue(Review.class);
@@ -213,6 +198,48 @@ public class ResultsActivity extends AppCompatActivity {
                         reviewsList.add(review);
                     }
                 }
+                Log.d("Reviews", reviewsList.toString());
+                int totalReviews = reviewsList.size();
+                int rating5 = 0, rating4 = 0, rating3 = 0, rating2 = 0, rating1 = 0;
+                for(Review review : reviewsList){
+                    //Continue implementing the calculation/setting of percentages for the reviews
+                    switch (review.getRating_num()) {
+                        case "1" -> rating1++;
+                        case "2" -> rating2++;
+                        case "3" -> rating3++;
+                        case "4" -> rating4++;
+                        case "5" -> rating5++;
+                        default -> {
+                        }
+                    }
+                }
+                int progress5 = (rating5 * 100) / totalReviews;
+                int progress4 = (rating4 * 100) / totalReviews;
+                int progress3 = (rating3 * 100) / totalReviews;
+                int progress2 = (rating2 * 100) / totalReviews;
+                int progress1 = (rating1 * 100) / totalReviews;
+
+                percentage5.setText(getString(R.string.percentage_placeholder, progress5));
+                percentage4.setText(getString(R.string.percentage_placeholder, progress4));
+                percentage3.setText(getString(R.string.percentage_placeholder, progress3));
+                percentage2.setText(getString(R.string.percentage_placeholder, progress2));
+                percentage1.setText(getString(R.string.percentage_placeholder, progress1));
+
+                progressBar5.setProgress(progress5, true);
+                progressBar4.setProgress(progress4, true);
+                progressBar3.setProgress(progress3, true);
+                progressBar2.setProgress(progress2, true);
+                progressBar1.setProgress(progress1, true);
+
+                int totalWeighted_rating = (rating5 * 5) + (rating4 * 4) + (rating3 * 3) + (rating2 * 2) + rating1;
+                float rating_float = (float) totalWeighted_rating / totalReviews;
+                DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+                tuitionRatingBar.setRating(Float.parseFloat(decimalFormat.format(rating_float)));
+                String rating_msg = getString(R.string.rating_msg, decimalFormat.format(rating_float));
+                SpannableString rating_span = new SpannableString(rating_msg);
+                rating_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tuitionRatingNum.setText(rating_span);
+                Log.d("Reviews", reviewsList.toString());
                 reviewAdapter.notifyDataSetChanged();
             }
             @Override
