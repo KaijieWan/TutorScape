@@ -69,6 +69,8 @@
     <string name="two_star">2</string>
     <string name="one_star">1</string>
     <string name="percentage_review">Percentage</string>
+    <string name="noReviews_placeholder">total number of reviews</string>
+    <string name="totalNo_reviews">%s reviews</string>
 
     <string name="next">Next</string>
     <string name="previous">Previous</string>

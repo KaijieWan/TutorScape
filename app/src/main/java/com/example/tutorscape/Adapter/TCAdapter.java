@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tutorscape.Model.Review;
 import com.example.tutorscape.Model.TuitionCentre;
 import com.example.tutorscape.R;
 import com.example.tutorscape.ResultsActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -33,6 +40,7 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
     private Context mContext;
     private  List<TuitionCentre> mTC;
     private boolean isFragment;
+    private List<Review> reviewsList;
     private AdapterView.OnItemClickListener itemClickListener;
 
     public TCAdapter(Context mContext, List<TuitionCentre> mTC, boolean isFragment) {
@@ -56,7 +64,6 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
         String postal_msg = mContext.getString(R.string.postal_msg, TC.getPostal());
         String contact_msg = mContext.getString(R.string.contact_msg, TC.getContactNo());
         String website_msg = mContext.getString(R.string.website_msg, TC.getWebsite());
-        String rating_msg = mContext.getString(R.string.rating_msg, TC.getRating_num());
 
         SpannableString address_span = new SpannableString(address_msg);
         address_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -66,20 +73,56 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
         contact_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         SpannableString website_span = new SpannableString(website_msg);
         website_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableString rating_span = new SpannableString(rating_msg);
-        rating_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         holder.tuitionName.setText(capitalizeAfterSpace(TC.getName()));
         holder.tuitionAddr.setText(address_span);
         holder.tuitionPostal.setText(postal_span);
         holder.tuitionContactNo.setText(contact_span);
         holder.tuitionWebsite.setText(website_span);
-        holder.tuitionRatingNum.setText(rating_span);
 
-        float rating_float = Float.parseFloat(TC.getRating_num());
-        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-        holder.tuitionRatingBar.setRating(Float.parseFloat(decimalFormat.format(rating_float)));
+        reviewsList = new ArrayList<>();
+        //Review views
+        String tuitionCentreId = TC.getId();
+        DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("Reviews");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                reviewsList.clear();
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Review review = snapshot.getValue(Review.class);
+                    if(review.getTCID().equals(tuitionCentreId)){
+                        reviewsList.add(review);
+                    }
+                }
+                int totalReviews = reviewsList.size();
+                int rating5 = 0, rating4 = 0, rating3 = 0, rating2 = 0, rating1 = 0;
+                for(Review review : reviewsList){
+                    switch (review.getRating_num()) {
+                        case "1" -> rating1++;
+                        case "2" -> rating2++;
+                        case "3" -> rating3++;
+                        case "4" -> rating4++;
+                        case "5" -> rating5++;
+                        default -> {
+                        }
+                    }
+                }
+                int totalWeighted_rating = (rating5 * 5) + (rating4 * 4) + (rating3 * 3) + (rating2 * 2) + rating1;
+                float rating_float = (float) totalWeighted_rating / totalReviews;
+                DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+                holder.tuitionRatingBar.setRating(Float.parseFloat(decimalFormat.format(rating_float)));
 
+                String rating_msg = mContext.getString(R.string.rating_msg, decimalFormat.format(rating_float));
+                SpannableString rating_span = new SpannableString(rating_msg);
+                rating_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                holder.tuitionRatingNum.setText(rating_span);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         Picasso.get().load(TC.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(holder.tuitionImage);
 
 

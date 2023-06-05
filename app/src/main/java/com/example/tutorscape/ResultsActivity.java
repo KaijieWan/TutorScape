@@ -66,6 +66,7 @@ public class ResultsActivity extends AppCompatActivity {
     private TextView percentage2;
     private ProgressBar progressBar1;
     private TextView percentage1;
+    private TextView totalNoReviews;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +119,8 @@ public class ResultsActivity extends AppCompatActivity {
         percentage2 = findViewById(R.id.two_star_percentage);
         progressBar1 = findViewById(R.id.ratingBar1);
         percentage1 = findViewById(R.id.one_star_percentage);
+
+        totalNoReviews = findViewById(R.id.totalNo_reviews);
 
         //Implement the data retrieval for rest of the views and set the views with the data
         DatabaseReference TCref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
@@ -202,7 +205,6 @@ public class ResultsActivity extends AppCompatActivity {
                 int totalReviews = reviewsList.size();
                 int rating5 = 0, rating4 = 0, rating3 = 0, rating2 = 0, rating1 = 0;
                 for(Review review : reviewsList){
-                    //Continue implementing the calculation/setting of percentages for the reviews
                     switch (review.getRating_num()) {
                         case "1" -> rating1++;
                         case "2" -> rating2++;
@@ -239,6 +241,11 @@ public class ResultsActivity extends AppCompatActivity {
                 SpannableString rating_span = new SpannableString(rating_msg);
                 rating_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 tuitionRatingNum.setText(rating_span);
+
+                String noReviews_msg = getString(R.string.totalNo_reviews, String.valueOf(totalReviews));
+                SpannableString noReviews_span = new SpannableString(noReviews_msg);
+                totalNoReviews.setText(noReviews_span);
+
                 Log.d("Reviews", reviewsList.toString());
                 reviewAdapter.notifyDataSetChanged();
             }

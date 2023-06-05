@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_white_text_background"
         android:orientation="vertical"
-        android:layout_margin="5dp">
+        android:layout_marginBottom="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,21 +62,24 @@
             android:contentDescription="Rating: out of no. of stars"/>
 
         <LinearLayout
-            android:layout_width="350dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rectangular_text_background"
             android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:padding="5dp">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:text="User's review"
                 android:textColor="@color/black"
                 android:id="@+id/user_review"
                 android:fontFamily="@font/ubuntu"
-                android:paddingStart="15dp"
-                android:paddingEnd="10dp"/>
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"/>
 
         </LinearLayout>
 
