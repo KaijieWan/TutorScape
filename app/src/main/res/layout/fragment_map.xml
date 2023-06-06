@@ -7,18 +7,11 @@
     android:layout_marginBottom="80dp"
     tools:context=".Fragments.MapFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/map_fragment"
-        android:textSize="25dp"
-        android:layout_centerInParent="true"/>
-
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="450dp"
+        android:layout_alignParentBottom="true"
         android:contentDescription="Map"/>
 
 </RelativeLayout>
