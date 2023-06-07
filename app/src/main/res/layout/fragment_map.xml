@@ -14,4 +14,14 @@
         android:layout_alignParentBottom="true"
         android:contentDescription="Map"/>
 
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mapSearch"
+        android:layout_margin="10dp"
+        android:queryHint="Search..."
+        android:iconifiedByDefault="false"
+        android:elevation="5dp"
+        android:background="@drawable/rounded_text_holo_purple"/>
+
 </RelativeLayout>
