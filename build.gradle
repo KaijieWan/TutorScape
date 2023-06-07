@@ -5,7 +5,10 @@ buildscript {
         google()  // Google's Maven repository
 
         mavenCentral()  // Maven Central repository
-
+        //maven {url "https://repo.osgeo.org/repository/geotools-releases/"}
+        //maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        //maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        //maven { url "https://jitpack.io" }
     }
     dependencies {
         //...
@@ -19,6 +22,8 @@ plugins {
     id 'com.android.application' version '8.0.1' apply false
     id 'com.android.library' version '8.0.1' apply false
 }
+
+
 
 /*allprojects {
     //...
