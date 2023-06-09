@@ -1,5 +1,12 @@
 package com.example.tutorscape.Fragments;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
@@ -22,11 +29,14 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.example.tutorscape.R;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -45,8 +55,7 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
     private GoogleMap myMap;
     private SearchView mapSearch;
     private Map<String, String> postalRadius;
-    private String minPostalCode;
-    private String maxPostalCode;
+    private Marker markerFixed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,7 +92,7 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
                     }
 
                     Address address = addressList.get(0);
-                    /*String country = address.getCountryName();
+                    String country = address.getCountryName();
                     String state = address.getAdminArea();
                     String city = address.getLocality();
 
@@ -101,9 +110,99 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
                     }
                     else{
                         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-                    }*/
+                    }
+                }
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return view;
+    }
 
-                    double [] bounds = calculateBounds(address.getLatitude(), address.getLongitude(), 5);
+    @Override
+    public void onMapsSdkInitialized(@NonNull MapsInitializer.Renderer renderer) {
+        //println(it.name)
+        Log.d("TAG", "onMapsSdkInitialized: ");
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(@NonNull GoogleMap googleMap) {
+                myMap = googleMap;
+
+                LatLng singapore = new LatLng(1.290270, 103.851959);
+                //myMap.addMarker(new MarkerOptions().position(singapore).title("Singapore"));
+                myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(singapore, 10));
+
+                DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("TuitionCentre");
+                Geocoder geocoder = new Geocoder(getContext());
+                MarkerOptions markerOptions = new MarkerOptions();
+                Drawable defaultMarkerDrawable = getResources().getDrawable(R.drawable.ic_map_marker_blue, getContext().getTheme());
+                Drawable blueMarkerDrawable = defaultMarkerDrawable.mutate();
+                blueMarkerDrawable.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
+                BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(drawableToBitmap(blueMarkerDrawable), 95, 95, false));
+                markerOptions.icon(markerIcon);
+                ref.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        List <Address> addressList1 = null;
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                            TuitionCentre tuitionCentre = snapshot.getValue(TuitionCentre.class);
+                            try {
+                                addressList1 = geocoder.getFromLocationName(tuitionCentre.getPostal(), 1);
+                                Address address1 = addressList1.get(0);
+                                LatLng latLng = new LatLng(address1.getLatitude(), address1.getLongitude());
+                                markerFixed = myMap.addMarker(markerOptions.position(latLng).title(tuitionCentre.getName()));
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+            }
+        });
+    }
+
+    private Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(
+                drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(),
+                Bitmap.Config.ARGB_8888
+        );
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    public static double[] calculateBounds(double centerLat, double centerLon, double radius) {
+        double latRadian = Math.toRadians(centerLat);
+
+        // Calculate the latitude boundaries
+        double deltaLat = radius / EARTH_RADIUS;
+        double minLat = Math.toDegrees(latRadian - deltaLat);
+        double maxLat = Math.toDegrees(latRadian + deltaLat);
+
+        // Calculate the longitude boundaries
+        double deltaLon = radius / (EARTH_RADIUS * Math.cos(latRadian));
+        double minLon = Math.toDegrees(centerLon - deltaLon);
+        double maxLon = Math.toDegrees(centerLon + deltaLon);
+
+        return new double[] { minLat, maxLat, minLon, maxLon };
+    }
+                    /*double [] bounds = calculateBounds(address.getLatitude(), address.getLongitude(), 5);
                     Log.d("address.getLongitude", String.valueOf(address.getLongitude()));
                     double minLat = bounds[0];
                     double maxLat = bounds[1];
@@ -168,48 +267,5 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
                         public void onCancelled(@NonNull DatabaseError error) {
 
                         }
-                    });
-                }
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        return view;
-    }
-
-    @Override
-    public void onMapsSdkInitialized(@NonNull MapsInitializer.Renderer renderer) {
-        //println(it.name)
-        Log.d("TAG", "onMapsSdkInitialized: ");
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(@NonNull GoogleMap googleMap) {
-                Log.d("OnMapReady", "called");
-                myMap = googleMap;
-
-                LatLng singapore = new LatLng(1.290270, 103.851959);
-                //myMap.addMarker(new MarkerOptions().position(singapore).title("Singapore"));
-                myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(singapore, 10));
-            }
-        });
-    }
-
-    public static double[] calculateBounds(double centerLat, double centerLon, double radius) {
-        double latRadian = Math.toRadians(centerLat);
-
-        // Calculate the latitude boundaries
-        double deltaLat = radius / EARTH_RADIUS;
-        double minLat = Math.toDegrees(latRadian - deltaLat);
-        double maxLat = Math.toDegrees(latRadian + deltaLat);
-
-        // Calculate the longitude boundaries
-        double deltaLon = radius / (EARTH_RADIUS * Math.cos(latRadian));
-        double minLon = Math.toDegrees(centerLon - deltaLon);
-        double maxLon = Math.toDegrees(centerLon + deltaLon);
-
-        return new double[] { minLat, maxLat, minLon, maxLon };
-    }
+                    }); */
 }
