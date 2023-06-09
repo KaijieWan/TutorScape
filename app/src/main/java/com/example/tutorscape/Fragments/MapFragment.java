@@ -20,7 +20,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.TextView;
 
+import com.example.tutorscape.Adapter.CustomInfoWindowAdapter;
 import com.example.tutorscape.Model.TuitionCentre;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,7 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapFragment extends Fragment implements OnMapsSdkInitializedCallback {
+public class MapFragment extends Fragment implements OnMapsSdkInitializedCallback, GoogleMap.OnMarkerClickListener {
     private static final double EARTH_RADIUS = 6371; // Earth's radius in kilometers
     private MapView mapView;
     private GoogleMap myMap;
@@ -70,7 +72,7 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
         mapSearch = view.findViewById(R.id.mapSearch);
         MapsInitializer.initialize(getContext(), MapsInitializer.Renderer.LATEST, this);
         mapView.onCreate(savedInstanceState);
-        postalRadius = new HashMap<>();
+        //postalRadius = new HashMap<>();
 
         mapSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             Marker marker;
@@ -125,11 +127,11 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
     @Override
     public void onMapsSdkInitialized(@NonNull MapsInitializer.Renderer renderer) {
         //println(it.name)
-        Log.d("TAG", "onMapsSdkInitialized: ");
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull GoogleMap googleMap) {
                 myMap = googleMap;
+                myMap.setOnMarkerClickListener(MapFragment.this);
 
                 LatLng singapore = new LatLng(1.290270, 103.851959);
                 //myMap.addMarker(new MarkerOptions().position(singapore).title("Singapore"));
@@ -143,6 +145,7 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
                 blueMarkerDrawable.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
                 BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(drawableToBitmap(blueMarkerDrawable), 95, 95, false));
                 markerOptions.icon(markerIcon);
+
                 ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -154,10 +157,11 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
                                 Address address1 = addressList1.get(0);
                                 LatLng latLng = new LatLng(address1.getLatitude(), address1.getLongitude());
                                 markerFixed = myMap.addMarker(markerOptions.position(latLng).title(tuitionCentre.getName()));
+
+                                myMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(LayoutInflater.from(getContext()), tuitionCentre, getContext()));
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
-
                         }
                     }
 
@@ -166,7 +170,6 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
 
                     }
                 });
-
             }
         });
     }
@@ -187,21 +190,27 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
         return bitmap;
     }
 
-    public static double[] calculateBounds(double centerLat, double centerLon, double radius) {
-        double latRadian = Math.toRadians(centerLat);
-
-        // Calculate the latitude boundaries
-        double deltaLat = radius / EARTH_RADIUS;
-        double minLat = Math.toDegrees(latRadian - deltaLat);
-        double maxLat = Math.toDegrees(latRadian + deltaLat);
-
-        // Calculate the longitude boundaries
-        double deltaLon = radius / (EARTH_RADIUS * Math.cos(latRadian));
-        double minLon = Math.toDegrees(centerLon - deltaLon);
-        double maxLon = Math.toDegrees(centerLon + deltaLon);
-
-        return new double[] { minLat, maxLat, minLon, maxLon };
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        marker.showInfoWindow();
+        return true;
     }
+
+    /*private void showCustomInfoWindow(LatLng position, String title) {
+        // Inflate the custom layout for the info window
+        View customInfoWindowView = getLayoutInflater().inflate(R.layout.custom_info_window_layout, null);
+
+        // Customize the contents of the custom info window
+        TextView titleTextView = customInfoWindowView.findViewById(R.id.titleTextView);
+        titleTextView.setText(title);
+
+        // Create a new info window and set the custom view
+        InfoWindow infoWindow = new InfoWindow(customInfoWindowView, position, -47, -10);
+
+        // Show the info window on the map
+        infoWindow.open(googleMap);
+    }*/
+
                     /*double [] bounds = calculateBounds(address.getLatitude(), address.getLongitude(), 5);
                     Log.d("address.getLongitude", String.valueOf(address.getLongitude()));
                     double minLat = bounds[0];
@@ -267,5 +276,20 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
                         public void onCancelled(@NonNull DatabaseError error) {
 
                         }
-                    }); */
+                    });
+        public static double[] calculateBounds(double centerLat, double centerLon, double radius) {
+        double latRadian = Math.toRadians(centerLat);
+
+        // Calculate the latitude boundaries
+        double deltaLat = radius / EARTH_RADIUS;
+        double minLat = Math.toDegrees(latRadian - deltaLat);
+        double maxLat = Math.toDegrees(latRadian + deltaLat);
+
+        // Calculate the longitude boundaries
+        double deltaLon = radius / (EARTH_RADIUS * Math.cos(latRadian));
+        double minLon = Math.toDegrees(centerLon - deltaLon);
+        double maxLon = Math.toDegrees(centerLon + deltaLon);
+
+        return new double[] { minLat, maxLat, minLon, maxLon };
+    }*/
 }
