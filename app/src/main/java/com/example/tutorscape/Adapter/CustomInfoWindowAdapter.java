@@ -34,23 +34,68 @@ import java.util.List;
 
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     private LayoutInflater inflater;
-    private View customInfoWindowView;
+    private View infoWindowView;
     //private TuitionCentre tuitionCentre;
     private Context mContext;
-    private List<Review> reviewsList;
+    //private List<Review> reviewsList = new ArrayList<>();
 
     public CustomInfoWindowAdapter(LayoutInflater inflater, Context mContext){
         this.inflater = inflater;
         //this.tuitionCentre = tuitionCentre;
         this.mContext = mContext;
-        customInfoWindowView = inflater.inflate(R.layout.tuition_centre_item, null);
+    }
+    public interface OnViewsUpdatedListener{
+        void onViewsUpdated();
     }
     @Nullable
     @Override
     public View getInfoContents(@NonNull Marker marker) {
         TuitionCentre tuitionCentre = (TuitionCentre) marker.getTag();
+        String tuitionCentreId = tuitionCentre.getId();
+        List<Review> reviewsList = new ArrayList<>();
+        DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("Reviews");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("onDataChange - CustomInfoWindowAdapter", "called");
+                //reviewsList.clear();
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Review review = snapshot.getValue(Review.class);
+                    if(review.getTCID().equals(tuitionCentreId)){
+                        reviewsList.add(review);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
 
-        View infoWindowView = inflater.inflate(R.layout.tuition_centre_item, null);
+        // Create a boolean flag to track whether views are updated
+        final boolean[] viewsUpdated = {false};
+
+        // Call the updateViews method with the listener
+        updateViews(tuitionCentre, reviewsList, new OnViewsUpdatedListener() {
+            @Override
+            public void onViewsUpdated() {
+                viewsUpdated[0] = true;
+            }
+        });
+
+        // Wait for views to be updated
+        while (!viewsUpdated[0]) {
+            try {
+                Thread.sleep(100); // Wait for 100 milliseconds
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return infoWindowView;
+    }
+    private void updateViews(TuitionCentre tuitionCentre, List<Review> reviewsList, OnViewsUpdatedListener listener){
+        Log.d("reviewsList", reviewsList.toString());
+        infoWindowView = inflater.inflate(R.layout.tuition_centre_item, null);
         infoWindowView.setBackgroundColor(0XFF04FFFF);
         //infoWindowView.setBackgroundResource(R.color.cyan);
 
@@ -86,9 +131,9 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         tuitionContactNo.setText(contact_span);
         tuitionWebsite.setText(website_span);
 
-        reviewsList = new ArrayList<>();
+        //reviewsList = new ArrayList<>();
         //Review views
-        String tuitionCentreId = tuitionCentre.getId();
+        /*String tuitionCentreId = tuitionCentre.getId();
         DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("Reviews");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -100,7 +145,7 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
                     if(review.getTCID().equals(tuitionCentreId)){
                         reviewsList.add(review);
                     }
-                }
+                }*/
                 if(!reviewsList.isEmpty()){
                     int totalReviews = reviewsList.size();
                     int rating5 = 0, rating4 = 0, rating3 = 0, rating2 = 0, rating1 = 0;
@@ -131,16 +176,18 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
                     tuitionRatingBar.setRating(0.0f);
                     tuitionRatingNum.setText("No ratings");
                 }
-            }
+            //}
 
-            @Override
+            /*@Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        });*/
         Picasso.get().load(tuitionCentre.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(tuitionImage);
 
-        return infoWindowView;
+        if(listener != null){
+            listener.onViewsUpdated();
+        }
     }
 
     @Nullable
@@ -148,6 +195,7 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     public View getInfoWindow(@NonNull Marker marker) {
         return null;
     }
+
 
     public String capitalizeAfterSpace(String input) {
         StringBuilder output = new StringBuilder();
