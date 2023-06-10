@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,20 +35,24 @@ import java.util.List;
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     private LayoutInflater inflater;
     private View customInfoWindowView;
-    private TuitionCentre tuitionCentre;
+    //private TuitionCentre tuitionCentre;
     private Context mContext;
     private List<Review> reviewsList;
 
-    public CustomInfoWindowAdapter(LayoutInflater inflater, TuitionCentre tuitionCentre, Context mContext){
+    public CustomInfoWindowAdapter(LayoutInflater inflater, Context mContext){
         this.inflater = inflater;
-        this.tuitionCentre = tuitionCentre;
+        //this.tuitionCentre = tuitionCentre;
         this.mContext = mContext;
         customInfoWindowView = inflater.inflate(R.layout.tuition_centre_item, null);
     }
     @Nullable
     @Override
     public View getInfoContents(@NonNull Marker marker) {
+        TuitionCentre tuitionCentre = (TuitionCentre) marker.getTag();
+
         View infoWindowView = inflater.inflate(R.layout.tuition_centre_item, null);
+        infoWindowView.setBackgroundColor(0XFF04FFFF);
+        //infoWindowView.setBackgroundResource(R.color.cyan);
 
         ImageView tuitionImage = infoWindowView.findViewById(R.id.image_name);
 
@@ -88,35 +93,44 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                reviewsList.clear();
+                Log.d("onDataChange - CustomInfoWindowAdapter", "called");
+                //reviewsList.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Review review = snapshot.getValue(Review.class);
                     if(review.getTCID().equals(tuitionCentreId)){
                         reviewsList.add(review);
                     }
                 }
-                int totalReviews = reviewsList.size();
-                int rating5 = 0, rating4 = 0, rating3 = 0, rating2 = 0, rating1 = 0;
-                for(Review review : reviewsList){
-                    switch (review.getRating_num()) {
-                        case "1" -> rating1++;
-                        case "2" -> rating2++;
-                        case "3" -> rating3++;
-                        case "4" -> rating4++;
-                        case "5" -> rating5++;
-                        default -> {
+                if(!reviewsList.isEmpty()){
+                    int totalReviews = reviewsList.size();
+                    int rating5 = 0, rating4 = 0, rating3 = 0, rating2 = 0, rating1 = 0;
+                    for(Review review : reviewsList){
+                        switch (review.getRating_num()) {
+                            case "1" -> rating1++;
+                            case "2" -> rating2++;
+                            case "3" -> rating3++;
+                            case "4" -> rating4++;
+                            case "5" -> rating5++;
+                            default -> {
+                            }
                         }
                     }
-                }
-                int totalWeighted_rating = (rating5 * 5) + (rating4 * 4) + (rating3 * 3) + (rating2 * 2) + rating1;
-                float rating_float = (float) totalWeighted_rating / totalReviews;
-                DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-                tuitionRatingBar.setRating(Float.parseFloat(decimalFormat.format(rating_float)));
+                    int totalWeighted_rating = (rating5 * 5) + (rating4 * 4) + (rating3 * 3) + (rating2 * 2) + rating1;
+                    float rating_float = (float) totalWeighted_rating / totalReviews;
+                    DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+                    tuitionRatingBar.setRating(Float.parseFloat(decimalFormat.format(rating_float)));
 
-                String rating_msg = mContext.getString(R.string.rating_msg, decimalFormat.format(rating_float));
-                SpannableString rating_span = new SpannableString(rating_msg);
-                rating_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                tuitionRatingNum.setText(rating_span);
+                    Log.d("onDataChange - CustomInfoWindowAdapter", decimalFormat.format(rating_float));
+
+                    String rating_msg = mContext.getString(R.string.rating_msg, decimalFormat.format(rating_float));
+                    SpannableString rating_span = new SpannableString(rating_msg);
+                    rating_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    tuitionRatingNum.setText(rating_span);
+                }
+                else{
+                    tuitionRatingBar.setRating(0.0f);
+                    tuitionRatingNum.setText("No ratings");
+                }
             }
 
             @Override

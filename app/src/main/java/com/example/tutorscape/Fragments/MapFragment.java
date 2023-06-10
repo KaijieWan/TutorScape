@@ -158,7 +158,8 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
                                 LatLng latLng = new LatLng(address1.getLatitude(), address1.getLongitude());
                                 markerFixed = myMap.addMarker(markerOptions.position(latLng).title(tuitionCentre.getName()));
 
-                                myMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(LayoutInflater.from(getContext()), tuitionCentre, getContext()));
+                                markerFixed.setTag(tuitionCentre);
+                                myMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(LayoutInflater.from(getContext()), getContext()));
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
