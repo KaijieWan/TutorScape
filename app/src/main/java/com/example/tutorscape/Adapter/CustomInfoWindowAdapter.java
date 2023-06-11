@@ -31,13 +31,16 @@ import com.squareup.picasso.Picasso;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     private LayoutInflater inflater;
     private View infoWindowView;
     //private TuitionCentre tuitionCentre;
+    private TuitionCentre currentTuitionCentre;
     private Context mContext;
     //private List<Review> reviewsList = new ArrayList<>();
+    private List<Review> currentReviewsList;
 
     public CustomInfoWindowAdapter(LayoutInflater inflater, Context mContext){
         this.inflater = inflater;
@@ -47,16 +50,44 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     public interface OnViewsUpdatedListener{
         void onViewsUpdated();
     }
+    public interface InfoWindowCallback{
+        void onInfoWindowDataReady(View infoWindowView, List<Review> reviewsList);
+    }
     @Nullable
     @Override
     public View getInfoContents(@NonNull Marker marker) {
         TuitionCentre tuitionCentre = (TuitionCentre) marker.getTag();
-        String tuitionCentreId = tuitionCentre.getId();
-        List<Review> reviewsList = new ArrayList<>();
-        DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("Reviews");
-        ref.addValueEventListener(new ValueEventListener() {
+
+        if(infoWindowView == null){
+            infoWindowView = inflater.inflate(R.layout.tuition_centre_item, null);
+            infoWindowView.setBackgroundColor(0XFF04FFFF);
+        }
+
+        if (tuitionCentre.equals(currentTuitionCentre)) {
+            // Same marker clicked again, return the already prepared info window
+            updateViews(infoWindowView, currentTuitionCentre, currentReviewsList);
+            return infoWindowView;
+        } else {
+            // Different marker clicked, fetch new data and prepare info window
+            currentTuitionCentre = tuitionCentre;
+            String tuitionCentreId = currentTuitionCentre.getId();
+            DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                    .getReference().child("Reviews");
+
+            CompletableFuture<List<Review>> fetchReviewsFuture = fetchReviews(ref, tuitionCentreId);
+            fetchReviewsFuture.thenAccept(reviewsList -> {
+                currentReviewsList = reviewsList;
+                updateViews(infoWindowView, currentTuitionCentre, currentReviewsList);
+                marker.showInfoWindow(); // Show the updated info window after data is ready
+            });
+
+            return null; // Return null for now, the info window will be updated asynchronously
+        }
+
+        /*ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                reviewsList.clear();
                 Log.d("onDataChange - CustomInfoWindowAdapter", "called");
                 //reviewsList.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
@@ -65,38 +96,47 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
                         reviewsList.add(review);
                     }
                 }
+                updateViews(tuitionCentre, reviewsList);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
-        });
+        });*/
 
-        // Create a boolean flag to track whether views are updated
-        final boolean[] viewsUpdated = {false};
-
-        // Call the updateViews method with the listener
-        updateViews(tuitionCentre, reviewsList, new OnViewsUpdatedListener() {
-            @Override
-            public void onViewsUpdated() {
-                viewsUpdated[0] = true;
-            }
-        });
-
-        // Wait for views to be updated
-        while (!viewsUpdated[0]) {
-            try {
-                Thread.sleep(100); // Wait for 100 milliseconds
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return infoWindowView;
+        //return infoWindowView;
     }
-    private void updateViews(TuitionCentre tuitionCentre, List<Review> reviewsList, OnViewsUpdatedListener listener){
+
+
+    private CompletableFuture<List<Review>> fetchReviews(DatabaseReference ref, String tuitionCentreId) {
+        CompletableFuture<List<Review>> future = new CompletableFuture<>();
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Review> reviewsList = new ArrayList<>();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Review review = snapshot.getValue(Review.class);
+                    if (review.getTCID().equals(tuitionCentreId)) {
+                        reviewsList.add(review);
+                    }
+                }
+
+                future.complete(reviewsList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                future.completeExceptionally(error.toException());
+            }
+        });
+
+        return future;
+    }
+
+    private void updateViews(View infoWindowView, TuitionCentre tuitionCentre, List<Review> reviewsList /*OnViewsUpdatedListener listener*/){
         Log.d("reviewsList", reviewsList.toString());
-        infoWindowView = inflater.inflate(R.layout.tuition_centre_item, null);
-        infoWindowView.setBackgroundColor(0XFF04FFFF);
+
         //infoWindowView.setBackgroundResource(R.color.cyan);
 
         ImageView tuitionImage = infoWindowView.findViewById(R.id.image_name);
@@ -184,10 +224,6 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             }
         });*/
         Picasso.get().load(tuitionCentre.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(tuitionImage);
-
-        if(listener != null){
-            listener.onViewsUpdated();
-        }
     }
 
     @Nullable
@@ -195,7 +231,6 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     public View getInfoWindow(@NonNull Marker marker) {
         return null;
     }
-
 
     public String capitalizeAfterSpace(String input) {
         StringBuilder output = new StringBuilder();

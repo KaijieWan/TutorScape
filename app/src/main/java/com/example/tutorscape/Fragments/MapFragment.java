@@ -56,8 +56,8 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
     private MapView mapView;
     private GoogleMap myMap;
     private SearchView mapSearch;
-    private Map<String, String> postalRadius;
     private Marker markerFixed;
+    private CustomInfoWindowAdapter customInfoWindowAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,13 +72,12 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
         mapSearch = view.findViewById(R.id.mapSearch);
         MapsInitializer.initialize(getContext(), MapsInitializer.Renderer.LATEST, this);
         mapView.onCreate(savedInstanceState);
-        //postalRadius = new HashMap<>();
+        customInfoWindowAdapter = new CustomInfoWindowAdapter(LayoutInflater.from(getContext()), getContext());
 
         mapSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             Marker marker;
             @Override
             public boolean onQueryTextSubmit(String query) {
-                postalRadius.clear();
                 if(marker!=null){
                     marker.remove();
                 }
@@ -156,10 +155,11 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
                                 addressList1 = geocoder.getFromLocationName(tuitionCentre.getPostal(), 1);
                                 Address address1 = addressList1.get(0);
                                 LatLng latLng = new LatLng(address1.getLatitude(), address1.getLongitude());
-                                markerFixed = myMap.addMarker(markerOptions.position(latLng).title(tuitionCentre.getName()));
+                                markerFixed = myMap.addMarker(markerOptions.position(latLng));
 
                                 markerFixed.setTag(tuitionCentre);
-                                myMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(LayoutInflater.from(getContext()), getContext()));
+                                myMap.setInfoWindowAdapter(customInfoWindowAdapter);
+                                //myMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(LayoutInflater.from(getContext()), getContext()));
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
