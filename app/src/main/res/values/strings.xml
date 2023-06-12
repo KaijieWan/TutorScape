@@ -72,6 +72,14 @@
     <string name="noReviews_placeholder">total number of reviews</string>
     <string name="totalNo_reviews">%s reviews</string>
 
+    <string name="filter_text">Filter</string>
+    <string name="level_option">Level</string>
+    <string name="exam_option">Exam</string>
+    <string name="subject_option">Subject</string>
+    <string name="type_option">Type</string>
+    <string name="apply_button">Apply</string>
+    <string name="reset_button">Reset</string>
+
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="large_text">large text</string>

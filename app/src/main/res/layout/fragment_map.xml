@@ -10,18 +10,117 @@
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:contentDescription="Map"/>
+        android:contentDescription="Map"
+        android:layout_below="@+id/filter_box"/>
 
-    <SearchView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/rounded_cyan_text_background"
+        android:orientation="vertical"
+        android:id="@+id/filter_box"
+        android:padding="5dp"
+        android:layout_margin="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_text"
+            android:textStyle="bold"
+            android:fontFamily="@font/ubuntu"
+            android:textColor="@color/techBlue"
+            android:textSize="16sp"
+            android:layout_gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:id="@+id/filter_1"
+                android:background="@drawable/rounded_text_background"
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp"/>
+
+            <Spinner
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:id="@+id/filter_2"
+                android:background="@drawable/rounded_text_background"
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp"/>
+
+            <Spinner
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:id="@+id/filter_3"
+                android:background="@drawable/rounded_text_background"
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp"/>
+
+            <Spinner
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:id="@+id/filter_4"
+                android:background="@drawable/rounded_text_background"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="5dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:id="@+id/apply_button"
+                android:backgroundTint="@color/green"
+                android:text="@string/apply_button"
+                android:textColor="@color/techBlue"
+                android:textStyle="bold"
+                android:background="@drawable/bg_shadow" />
+
+            <TextView
+                android:layout_width="45dp"
+                android:layout_height="match_parent"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:id="@+id/reset_button"
+                android:backgroundTint="@color/red"
+                android:text="@string/reset_button"
+                android:textColor="@color/techBlue"
+                android:textStyle="bold"
+                android:background="@drawable/bg_shadow"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <SearchView
         android:id="@+id/mapSearch"
-        android:layout_margin="10dp"
-        android:queryHint="Search..."
-        android:iconifiedByDefault="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/filter_box"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/rounded_text_holo_purple"
         android:elevation="5dp"
-        android:background="@drawable/rounded_text_holo_purple"/>
+        android:iconifiedByDefault="false"
+        android:queryHint="Search..."
+        android:theme="@style/AppSearchView"
+        android:searchIcon="@drawable/ic_search_bar_black"/>
 
 </RelativeLayout>
