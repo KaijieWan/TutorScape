@@ -19,12 +19,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.tutorscape.Adapter.CustomInfoWindowAdapter;
+import com.example.tutorscape.Adapter.NothingSelectedSpinnerAdapter;
 import com.example.tutorscape.Model.TuitionCentre;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -60,6 +64,10 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
     private SearchView mapSearch;
     private Marker markerFixed;
     private CustomInfoWindowAdapter customInfoWindowAdapter;
+    private Spinner spinnerLevel;
+    private Spinner spinnerExam;
+    private Spinner spinnerSubject;
+    private Spinner spinnerType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,6 +130,39 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
                 return false;
             }
         });
+
+        spinnerLevel = view.findViewById(R.id.filter_1);
+
+        /*String[] spinnerLevelOptions = new String[options.length+1];
+        spinnerLevelOptions[0] = "Level";
+        System.arraycopy(options, 0 , spinnerLevelOptions,1, options.length);*/
+
+        ArrayAdapter<String> levelAdapter = new ArrayAdapter<String>(getContext(), R.layout.map_filter_items, getResources().getStringArray(R.array.level_selection));
+        spinnerLevel.setPrompt("Level");
+        spinnerLevel.setAdapter(
+                new NothingSelectedSpinnerAdapter(levelAdapter, R.layout.contact_spinner_row_nothing_selected, getContext())
+        );
+        //spinnerLevel.setSelection(0, false);
+
+        spinnerLevel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Handle the selected item
+                String selectedItem = (String) parent.getItemAtPosition(position);
+                if (position != 0) {
+                    // Do something with the selected item
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle the case where nothing is selected
+            }
+        });
+        spinnerExam = view.findViewById(R.id.filter_2);
+        spinnerSubject = view.findViewById(R.id.filter_3);
+        spinnerType = view.findViewById(R.id.filter_4);
+
         return view;
     }
 

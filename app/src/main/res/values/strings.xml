@@ -79,6 +79,15 @@
     <string name="type_option">Type</string>
     <string name="apply_button">Apply</string>
     <string name="reset_button">Reset</string>
+    <string-array name="level_selection">
+        <item>Primary</item>
+        <item>Secondary</item>
+        <item>JC</item>
+        <item>IB</item>
+        <item>IP</item>
+        <item>IGCSE</item>
+        <item>University</item>
+    </string-array>
 
     <string name="next">Next</string>
     <string name="previous">Previous</string>

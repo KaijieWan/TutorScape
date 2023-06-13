@@ -44,6 +44,7 @@
                 android:layout_height="30dp"
                 android:id="@+id/filter_1"
                 android:background="@drawable/rounded_text_background"
+                android:popupBackground="@color/cyan"
                 android:layout_weight="1"
                 android:layout_marginEnd="10dp"/>
 
@@ -79,7 +80,7 @@
             android:gravity="center"
             android:layout_marginTop="5dp">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:id="@+id/apply_button"
@@ -87,13 +88,13 @@
                 android:text="@string/apply_button"
                 android:textColor="@color/techBlue"
                 android:textStyle="bold"
-                android:background="@drawable/bg_shadow" />
+                android:background="@drawable/bg_shadow"/>
 
             <TextView
                 android:layout_width="45dp"
                 android:layout_height="match_parent"/>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:id="@+id/reset_button"
