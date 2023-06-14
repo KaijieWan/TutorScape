@@ -1,6 +1,6 @@
 package com.example.tutorscape.Fragments;
 
-import android.content.res.Resources;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,7 +9,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,15 +20,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.tutorscape.Adapter.CustomInfoWindowAdapter;
 import com.example.tutorscape.Adapter.NothingSelectedSpinnerAdapter;
 import com.example.tutorscape.Model.TuitionCentre;
+import com.example.tutorscape.ResultsActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -46,18 +44,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 //import org.geotools.geometry.DirectPosition2D;
 //import org.geotools.referencing.GeodeticCalculator;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class MapFragment extends Fragment implements OnMapsSdkInitializedCallback, GoogleMap.OnMarkerClickListener {
+public class MapFragment extends Fragment implements OnMapsSdkInitializedCallback, GoogleMap.OnMarkerClickListener
+    ,GoogleMap.OnInfoWindowClickListener{
     private static final double EARTH_RADIUS = 6371; // Earth's radius in kilometers
     private MapView mapView;
     private GoogleMap myMap;
@@ -68,6 +64,10 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
     private Spinner spinnerExam;
     private Spinner spinnerSubject;
     private Spinner spinnerType;
+    private List<Marker> allMarkers;
+    private List<String> filters;
+    private Button applyButton;
+    private Button resetButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,6 +83,9 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
         MapsInitializer.initialize(getContext(), MapsInitializer.Renderer.LATEST, this);
         mapView.onCreate(savedInstanceState);
         customInfoWindowAdapter = new CustomInfoWindowAdapter(LayoutInflater.from(getContext()), getContext());
+
+        applyButton = view.findViewById(R.id.apply_button);
+        resetButton = view.findViewById(R.id.reset_button);
 
         mapSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             Marker marker;
@@ -132,36 +135,52 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
         });
 
         spinnerLevel = view.findViewById(R.id.filter_1);
-
-        /*String[] spinnerLevelOptions = new String[options.length+1];
-        spinnerLevelOptions[0] = "Level";
-        System.arraycopy(options, 0 , spinnerLevelOptions,1, options.length);*/
-
         ArrayAdapter<String> levelAdapter = new ArrayAdapter<String>(getContext(), R.layout.map_filter_items, getResources().getStringArray(R.array.level_selection));
         spinnerLevel.setPrompt("Level");
         spinnerLevel.setAdapter(
-                new NothingSelectedSpinnerAdapter(levelAdapter, R.layout.contact_spinner_row_nothing_selected, getContext())
+                new NothingSelectedSpinnerAdapter(levelAdapter, R.layout.level_spinner_row_nothing_selected, getContext())
         );
-        //spinnerLevel.setSelection(0, false);
 
-        spinnerLevel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerExam = view.findViewById(R.id.filter_2);
+        ArrayAdapter<String> examAdapter = new ArrayAdapter<String>(getContext(), R.layout.map_filter_items, getResources().getStringArray(R.array.exam_selection));
+        spinnerExam.setPrompt("Exam");
+        spinnerExam.setAdapter(
+                new NothingSelectedSpinnerAdapter(examAdapter, R.layout.exam_spinner_row_nothing_selected, getContext())
+        );
+
+        spinnerSubject = view.findViewById(R.id.filter_3);
+        ArrayAdapter<String> subjectAdapter = new ArrayAdapter<String>(getContext(), R.layout.map_filter_items, getResources().getStringArray(R.array.subject_selection));
+        spinnerSubject.setPrompt("Exam");
+        spinnerSubject.setAdapter(
+                new NothingSelectedSpinnerAdapter(subjectAdapter, R.layout.subject_spinner_row_nothing_selected, getContext())
+        );
+
+        spinnerType = view.findViewById(R.id.filter_4);
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(getContext(), R.layout.map_filter_items, getResources().getStringArray(R.array.type_selection));
+        spinnerType.setPrompt("Exam");
+        spinnerType.setAdapter(
+                new NothingSelectedSpinnerAdapter(typeAdapter, R.layout.type_spinner_row_nothing_selected, getContext())
+        );
+
+        applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // Handle the selected item
-                String selectedItem = (String) parent.getItemAtPosition(position);
-                if (position != 0) {
-                    // Do something with the selected item
+            public void onClick(View v) {
+                applyFilters();
+            }
+
+            private void applyFilters() {
+                String selectedLevel = spinnerLevel.getSelectedItem().toString();
+                String selectedExam = spinnerExam.getSelectedItem().toString();
+                String selectedSubject = spinnerSubject.getSelectedItem().toString();
+                String selectedType = spinnerType.getSelectedItem().toString();
+
+                for(Marker marker : allMarkers){
+                    //getTag for each marker for each attribute to be filtered through
                 }
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Handle the case where nothing is selected
-            }
+
         });
-        spinnerExam = view.findViewById(R.id.filter_2);
-        spinnerSubject = view.findViewById(R.id.filter_3);
-        spinnerType = view.findViewById(R.id.filter_4);
 
         return view;
     }
@@ -198,9 +217,10 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
                                 addressList1 = geocoder.getFromLocationName(tuitionCentre.getPostal(), 1);
                                 Address address1 = addressList1.get(0);
                                 LatLng latLng = new LatLng(address1.getLatitude(), address1.getLongitude());
-                                markerFixed = myMap.addMarker(markerOptions.position(latLng));
+                                markerFixed = myMap.addMarker(markerOptions.position(latLng).snippet(tuitionCentre.getId()));
 
                                 markerFixed.setTag(tuitionCentre);
+                                allMarkers.add(markerFixed);
                                 myMap.setInfoWindowAdapter(customInfoWindowAdapter);
                                 //myMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(LayoutInflater.from(getContext()), getContext()));
                             } catch (IOException e) {
@@ -214,6 +234,8 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
 
                     }
                 });
+
+                myMap.setOnInfoWindowClickListener(MapFragment.this);
             }
         });
     }
@@ -237,7 +259,17 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
         marker.showInfoWindow();
+
         return true;
+    }
+
+    @Override
+    public void onInfoWindowClick(@NonNull Marker marker) {
+        String tuitionCentreId = marker.getSnippet();
+        Intent intent = new Intent(getContext(), ResultsActivity.class);
+        intent.putExtra("tuitionCentreId", tuitionCentreId);
+        // Redirect to another page or view based on the selected item
+        getContext().startActivity(intent);
     }
 
     /*private void showCustomInfoWindow(LatLng position, String title) {

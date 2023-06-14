@@ -88,6 +88,48 @@
         <item>IGCSE</item>
         <item>University</item>
     </string-array>
+    <string-array name="exam_selection">
+        <item>PSLE</item>
+        <item>O Level</item>
+        <item>N Level</item>
+        <item>A Level</item>
+        <item>AEIS</item>
+        <item>GRE</item>
+        <item>GMAT</item>
+        <item>SAT</item>
+        <item>IELTS</item>
+    </string-array>
+    <string-array name="subject_selection">
+        <item>English</item>
+        <item>Chinese</item>
+        <item>Malay</item>
+        <item>Tamil</item>
+        <item>Hindi</item>
+        <item>Science</item>
+        <item>GP</item>
+        <item>Physics</item>
+        <item>Chemistry</item>
+        <item>Biology</item>
+        <item>Maths</item>
+        <item>Special Needs</item>
+        <item>History</item>
+        <item>Geography</item>
+        <item>Social Studies</item>
+        <item>Literature</item>
+        <item>POA</item>
+        <item>Economics</item>
+        <item>GEP Preparatory</item>
+        <item>Phonics</item>
+        <item>Creative Writing</item>
+        <item>Higher Chinese</item>
+        <item>Uni Courses</item>
+    </string-array>
+    <string-array name="type_selection">
+        <item>Group</item>
+        <item>Home</item>
+        <item>1-to-1</item>
+        <item>Online</item>
+    </string-array>
 
     <string name="next">Next</string>
     <string name="previous">Previous</string>

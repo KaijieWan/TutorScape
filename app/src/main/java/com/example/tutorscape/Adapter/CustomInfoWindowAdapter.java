@@ -1,8 +1,10 @@
 package com.example.tutorscape.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
@@ -15,10 +17,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.example.tutorscape.Model.Review;
 import com.example.tutorscape.Model.TuitionCentre;
 import com.example.tutorscape.R;
+import com.example.tutorscape.ResultsActivity;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.database.DataSnapshot;
@@ -36,7 +40,6 @@ import java.util.concurrent.CompletableFuture;
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     private LayoutInflater inflater;
     private View infoWindowView;
-    //private TuitionCentre tuitionCentre;
     private TuitionCentre currentTuitionCentre;
     private Context mContext;
     //private List<Review> reviewsList = new ArrayList<>();
@@ -56,54 +59,7 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     @Nullable
     @Override
     public View getInfoContents(@NonNull Marker marker) {
-        TuitionCentre tuitionCentre = (TuitionCentre) marker.getTag();
-
-        if(infoWindowView == null){
-            infoWindowView = inflater.inflate(R.layout.tuition_centre_item, null);
-            infoWindowView.setBackgroundColor(0XFF04FFFF);
-        }
-
-        if (tuitionCentre.equals(currentTuitionCentre)) {
-            // Same marker clicked again, return the already prepared info window
-            updateViews(infoWindowView, currentTuitionCentre, currentReviewsList);
-            return infoWindowView;
-        } else {
-            // Different marker clicked, fetch new data and prepare info window
-            currentTuitionCentre = tuitionCentre;
-            String tuitionCentreId = currentTuitionCentre.getId();
-            DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
-                    .getReference().child("Reviews");
-
-            CompletableFuture<List<Review>> fetchReviewsFuture = fetchReviews(ref, tuitionCentreId);
-            fetchReviewsFuture.thenAccept(reviewsList -> {
-                currentReviewsList = reviewsList;
-                updateViews(infoWindowView, currentTuitionCentre, currentReviewsList);
-                marker.showInfoWindow(); // Show the updated info window after data is ready
-            });
-
-            return null; // Return null for now, the info window will be updated asynchronously
-        }
-
-        /*ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                reviewsList.clear();
-                Log.d("onDataChange - CustomInfoWindowAdapter", "called");
-                //reviewsList.clear();
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Review review = snapshot.getValue(Review.class);
-                    if(review.getTCID().equals(tuitionCentreId)){
-                        reviewsList.add(review);
-                    }
-                }
-                updateViews(tuitionCentre, reviewsList);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });*/
-
-        //return infoWindowView;
+        return null;
     }
 
 
@@ -229,7 +185,36 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     @Nullable
     @Override
     public View getInfoWindow(@NonNull Marker marker) {
-        return null;
+        TuitionCentre tuitionCentre = (TuitionCentre) marker.getTag();
+
+        if(infoWindowView == null){
+            infoWindowView = inflater.inflate(R.layout.tuition_centre_item, null);
+            infoWindowView.setBackgroundColor(0xFF04FFFF);
+        }
+
+        if (tuitionCentre.equals(currentTuitionCentre)) {
+            // Same marker clicked again, return the already prepared info window
+            updateViews(infoWindowView, currentTuitionCentre, currentReviewsList);
+            return infoWindowView;
+        } else {
+            // Different marker clicked, fetch new data and prepare info window
+            currentTuitionCentre = tuitionCentre;
+            String tuitionCentreId = currentTuitionCentre.getId();
+            DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                    .getReference().child("Reviews");
+
+            CompletableFuture<List<Review>> fetchReviewsFuture = fetchReviews(ref, tuitionCentreId);
+            fetchReviewsFuture.thenAccept(reviewsList -> {
+                currentReviewsList = reviewsList;
+                updateViews(infoWindowView, currentTuitionCentre, currentReviewsList);
+                marker.showInfoWindow(); // Show the updated info window after data is ready
+            });
+
+            return null; // Return null for now, the info window will be updated asynchronously
+        }
+
+        //tuitionCentreId = tuitionCentreId;
+
     }
 
     public String capitalizeAfterSpace(String input) {
