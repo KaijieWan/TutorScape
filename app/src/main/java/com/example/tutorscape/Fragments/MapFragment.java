@@ -21,8 +21,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.tutorscape.Adapter.CustomInfoWindowAdapter;
 import com.example.tutorscape.Adapter.NothingSelectedSpinnerAdapter;
@@ -50,6 +52,7 @@ import com.google.firebase.database.ValueEventListener;
 //import org.geotools.referencing.GeodeticCalculator;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapsSdkInitializedCallback, GoogleMap.OnMarkerClickListener
@@ -80,12 +83,23 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
         }
         mapView = view.findViewById(R.id.mapView);
         mapSearch = view.findViewById(R.id.mapSearch);
+        int textColor = getResources().getColor(R.color.black, null);
+
+        int searchEditTextId = mapSearch.getContext().getResources()
+                .getIdentifier("android:id/search_src_text", null, null);
+        EditText searchEditText = mapSearch.findViewById(searchEditTextId);
+
+        if (searchEditText != null) {
+            searchEditText.setTextColor(textColor);
+        }
+
+
         MapsInitializer.initialize(getContext(), MapsInitializer.Renderer.LATEST, this);
         mapView.onCreate(savedInstanceState);
         customInfoWindowAdapter = new CustomInfoWindowAdapter(LayoutInflater.from(getContext()), getContext());
-
         applyButton = view.findViewById(R.id.apply_button);
         resetButton = view.findViewById(R.id.reset_button);
+        allMarkers = new ArrayList<>();
 
         mapSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             Marker marker;
@@ -101,11 +115,31 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
                     Geocoder geocoder = new Geocoder(getContext());
                     try {
                         addressList = geocoder.getFromLocationName(location, 1);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        Address address = addressList.get(0);
+                        String country = address.getCountryName();
+                        String state = address.getAdminArea();
+                        String city = address.getLocality();
+
+                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        marker = myMap.addMarker(new MarkerOptions().position(latLng).title(location));
+
+                        if(city != null && !city.isEmpty()){
+                            myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                        }
+                        else if(state != null && !state.isEmpty()){
+                            myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+                        }
+                        else if(country != null && !country.isEmpty()){
+                            myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                        }
+                        else{
+                            myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+                        }
+                    } catch (IOException | IndexOutOfBoundsException e) {
+                        Toast.makeText(getContext(), "Non-existent location!", Toast.LENGTH_SHORT).show();
                     }
 
-                    Address address = addressList.get(0);
+                    /*Address address = addressList.get(0);
                     String country = address.getCountryName();
                     String state = address.getAdminArea();
                     String city = address.getLocality();
@@ -124,7 +158,7 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
                     }
                     else{
                         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-                    }
+                    }*/
                 }
                 return false;
             }
@@ -169,17 +203,65 @@ public class MapFragment extends Fragment implements OnMapsSdkInitializedCallbac
             }
 
             private void applyFilters() {
-                String selectedLevel = spinnerLevel.getSelectedItem().toString();
-                String selectedExam = spinnerExam.getSelectedItem().toString();
-                String selectedSubject = spinnerSubject.getSelectedItem().toString();
-                String selectedType = spinnerType.getSelectedItem().toString();
+                String selectedLevel;
+                if(spinnerLevel.getSelectedItem() != null){
+                    selectedLevel = spinnerLevel.getSelectedItem().toString().toLowerCase();
+                }
+                else{
+                    selectedLevel = "";
+                }
+                String selectedExam;
+                if(spinnerExam.getSelectedItem() != null){
+                    selectedExam = spinnerExam.getSelectedItem().toString().toLowerCase();
+                }
+                else{
+                    selectedExam = "";
+                }
+                String selectedSubject;
+                if(spinnerSubject.getSelectedItem() != null){
+                    selectedSubject = spinnerSubject.getSelectedItem().toString().toLowerCase();
+                }
+                else{
+                    selectedSubject = "";
+                }
+                String selectedType;
+                if(spinnerType.getSelectedItem() != null){
+                    selectedType = spinnerType.getSelectedItem().toString().toLowerCase() ;
+                }
+                else{
+                    selectedType = "";
+                }
 
                 for(Marker marker : allMarkers){
-                    //getTag for each marker for each attribute to be filtered through
+                    TuitionCentre TC = (TuitionCentre) marker.getTag();
+                    String dataLevel = TC.getLevels();
+                    String dataExam = TC.getExams();
+                    String dataSubject = TC.getSubjects();
+                    String dataType = TC.getType();
+
+                    //compare and set visibility of relevant markers
+                    marker.setVisible(dataLevel.contains(selectedLevel) && dataExam.contains(selectedExam)
+                            && dataSubject.contains(selectedSubject) && dataType.contains(selectedType));
                 }
             }
+        });
 
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetFilters();
+            }
 
+            private void resetFilters() {
+                spinnerLevel.setSelection(0);
+                spinnerExam.setSelection(0);
+                spinnerSubject.setSelection(0);
+                spinnerType.setSelection(0);
+
+                for(Marker marker : allMarkers){
+                    marker.setVisible(true);
+                }
+            }
         });
 
         return view;
