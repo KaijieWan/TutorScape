@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".OptionsActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/cyan">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/cyan"/>
+        android:layout_height="wrap_content" />
 
     <TextView
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/fav_clicakble">
+        android:id="@+id/fav_clickable">
 
         <ImageView
             android:layout_width="60dp"
@@ -70,7 +71,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="1"
         android:id="@+id/settings_clickable">
 
         <ImageView
@@ -92,6 +95,32 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/logout_clickable"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="15dp">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/icons8_open_pane_96"
+            android:layout_marginStart="15dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/logout"
+            android:text="@string/menu_logout"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:fontFamily="@font/ubuntu"
+            android:textColor="@color/techBlue"
+            android:layout_margin="18dp"/>
+
+    </LinearLayout>
 
 
 </LinearLayout>

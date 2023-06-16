@@ -5,10 +5,7 @@ buildscript {
         google()  // Google's Maven repository
 
         mavenCentral()  // Maven Central repository
-        //maven {url "https://repo.osgeo.org/repository/geotools-releases/"}
-        //maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        //maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-        //maven { url "https://jitpack.io" }
+        jcenter()
     }
     dependencies {
         //...

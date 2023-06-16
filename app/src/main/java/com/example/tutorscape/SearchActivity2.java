@@ -8,8 +8,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -20,10 +23,12 @@ public class SearchActivity2 extends AppCompatActivity {
     private NavHostFragment navHostFragment;
     private Toolbar myToolbar;
     private boolean exitApp = false;
+    private ImageView menu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search2);
+        menu = findViewById(R.id.menu_image);
 
         myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -58,6 +63,13 @@ public class SearchActivity2 extends AppCompatActivity {
                     return true;
                 }
                 return false;
+            }
+        });
+
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SearchActivity2.this, OptionsActivity.class));
             }
         });
     }
