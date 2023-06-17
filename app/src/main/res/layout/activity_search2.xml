@@ -7,6 +7,11 @@
     tools:context=".SearchActivity2"
     android:background="@drawable/tutorscape_main">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/container"/>
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -54,7 +59,7 @@
                 app:layout_constraintVertical_bias="0.43"
                 app:srcCompat="@drawable/education_icon_128___" />
 
-            <ImageView
+            <!-- <ImageView
                 android:id="@+id/menu_image"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -65,7 +70,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/toolbar"
                 app:layout_constraintTop_toTopOf="@+id/toolbar"
                 app:layout_constraintVertical_bias="0.43"
-                app:srcCompat="@drawable/icons8_menu_192___" />
+                app:srcCompat="@drawable/icons8_menu_192___" /> -->
 
             <!-- app:popupTheme="@style/AppTheme.PopupOverlay"-->
 
