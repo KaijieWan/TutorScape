@@ -29,6 +29,7 @@ import com.example.tutorscape.Fragments.ReviewFragment;
 import com.example.tutorscape.Fragments.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
@@ -41,7 +42,7 @@ public class SearchActivity2 extends AppCompatActivity implements DrawerAdapter.
     private static final int POS_REVIEWS = 3;
     private static final int POS_SETTINGS = 4;
     private static final int POS_LOGOUT = 6;
-
+    private FirebaseAuth firebaseAuth;
     private String[] screenTitles;
     private Drawable[] screenIcons;
 
@@ -59,9 +60,10 @@ public class SearchActivity2 extends AppCompatActivity implements DrawerAdapter.
         setContentView(R.layout.activity_search2);
         //menu = findViewById(R.id.menu_image);
 
+        firebaseAuth = FirebaseAuth.getInstance();
         myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         slidingRootNav = new SlidingRootNavBuilder(this)
                 .withDragDistance(180)
@@ -198,6 +200,8 @@ public class SearchActivity2 extends AppCompatActivity implements DrawerAdapter.
             transaction.replace(R.id.container, settingsFragment);
         }
         else if(position == POS_LOGOUT){
+            firebaseAuth.signOut();
+            startActivity(new Intent(SearchActivity2.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
             finish();
         }
 
