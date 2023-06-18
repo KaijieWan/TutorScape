@@ -77,4 +77,81 @@
             android:id="@+id/action_NotifFragment_to_UpdatesFragment"
             app:destination="@id/UpdatesFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/DashboardFragment"
+        android:name="com.example.tutorscape.Fragments.DashboardFragment"
+        android:label="DashboardFragment"
+        tools:layout="@layout/dashboard_fragment">
+
+        <action
+            android:id="@+id/action_DashboardFragment_to_FavFragment"
+            app:destination="@id/FavFragment" />
+
+        <action
+            android:id="@+id/action_DashboardFragment_to_ReviewFragment"
+            app:destination="@id/ReviewFragment" />
+
+        <action
+            android:id="@+id/action_DashboardFragment_to_SettingsFragment"
+            app:destination="@id/SettingsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/FavFragment"
+        android:name="com.example.tutorscape.Fragments.FavFragment"
+        android:label="FavouritesFragment"
+        tools:layout="@layout/fav_fragment">
+
+        <action
+            android:id="@+id/action_FavFragment_to_DashboardFragment"
+            app:destination="@id/DashboardFragment" />
+
+        <action
+            android:id="@+id/action_FavFragment_to_ReviewFragment"
+            app:destination="@id/ReviewFragment" />
+
+        <action
+            android:id="@+id/action_FavFragment_to_SettingsFragment"
+            app:destination="@id/SettingsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ReviewFragment"
+        android:name="com.example.tutorscape.Fragments.ReviewFragment"
+        android:label="ReviewFragment"
+        tools:layout="@layout/review_fragment">
+
+        <action
+            android:id="@+id/action_ReviewFragment_to_DashboardFragment"
+            app:destination="@id/DashboardFragment" />
+
+        <action
+            android:id="@+id/action_ReviewFragment_to_FavFragment"
+            app:destination="@id/FavFragment" />
+
+        <action
+            android:id="@+id/action_ReviewFragment_to_SettingsFragment"
+            app:destination="@id/SettingsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/SettingsFragment"
+        android:name="com.example.tutorscape.Fragments.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/settings_fragment">
+
+        <action
+            android:id="@+id/action_SettingsFragment_to_DashboardFragment"
+            app:destination="@id/DashboardFragment" />
+
+        <action
+            android:id="@+id/action_SettingsFragment_to_ReviewFragment"
+            app:destination="@id/ReviewFragment" />
+
+        <action
+            android:id="@+id/action_SettingsFragment_to_FavFragment"
+            app:destination="@id/FavFragment" />
+    </fragment>
+
 </navigation>

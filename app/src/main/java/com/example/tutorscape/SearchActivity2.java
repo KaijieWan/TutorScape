@@ -29,6 +29,7 @@ import com.example.tutorscape.Fragments.ReviewFragment;
 import com.example.tutorscape.Fragments.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
@@ -102,7 +103,6 @@ public class SearchActivity2 extends AppCompatActivity implements DrawerAdapter.
         //navController = Navigation.findNavController(this, R.id.fragment_container);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
 
         // Set click listener for the menu items
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -181,7 +181,7 @@ public class SearchActivity2 extends AppCompatActivity implements DrawerAdapter.
 
     @Override
     public void onItemSelected(int position) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        /*FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         if(position == POS_DASHBOARD){
             DashboardFragment dashboardFragment = new DashboardFragment();
@@ -203,10 +203,29 @@ public class SearchActivity2 extends AppCompatActivity implements DrawerAdapter.
             firebaseAuth.signOut();
             startActivity(new Intent(SearchActivity2.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
             finish();
+        }*/
+        navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        navController = navHostFragment.getNavController();
+        if(position == POS_DASHBOARD){
+            navController.navigate(R.id.DashboardFragment);
+        }
+        else if(position == POS_FAVOURITES){
+            navController.navigate(R.id.FavFragment);
+        }
+        else if(position == POS_REVIEWS){
+            navController.navigate(R.id.ReviewFragment);
+        }
+        else if(position == POS_SETTINGS){
+            navController.navigate(R.id.SettingsFragment);
+        }
+        else if(position == POS_LOGOUT){
+            firebaseAuth.signOut();
+            startActivity(new Intent(SearchActivity2.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            finish();
         }
 
         slidingRootNav.closeMenu();
-        transaction.addToBackStack(null);
-        transaction.commit();
+        //transaction.addToBackStack(null);
+        //transaction.commit();
     }
 }
