@@ -1,7 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/tutorscape_main">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cyan"
+        android:layout_gravity="bottom"
+        app:itemIconTint="@color/selector"
+        app:itemTextColor="@color/nav_icon_text"
+        app:itemTextAppearanceActive="@style/BottomNavigationViewTextAppearanceActive"
+        app:itemTextAppearanceInactive="@style/BottomNavigationViewTextAppearanceInactive"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/top_menu" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_above="@id/bottom_navigation"
+        android:background="@color/techBlue"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_anchor="@id/bottom_navigation"
+        app:layout_anchorGravity="top"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
