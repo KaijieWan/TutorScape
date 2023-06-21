@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PostReviewActivity"
+    android:orientation="vertical"
+    android:background="@drawable/tutorscape_main">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Review"
+        android:textSize="17sp"
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:fontFamily="@font/ubuntu"
+        android:textColor="@color/white"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/TC_info"
+        android:background="@drawable/rounded_cyan_text_background"
+        android:orientation="vertical"
+        android:layout_margin="5dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:id="@+id/image_name"
+            android:src="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_name"
+            android:text="@string/TC_item_name"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_address"
+            android:text="@string/TC_item_address"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_postal"
+            android:text="@string/TC_item_postal"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_contact"
+            android:text="@string/TC_item_contact"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tuition_website"
+            android:text="@string/TC_item_website"
+            android:textColor="@color/black"
+            android:fontFamily="@font/ubuntu"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Rating"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="17dp"
+        android:fontFamily="@font/ubuntu"
+        android:textColor="@color/techBlue"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <LinearLayout
+        android:layout_width="340dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:id="@+id/rating_background"
+        android:background="@drawable/rounded_cyan_text_background"
+        android:orientation="vertical"
+        android:layout_margin="5dp">
+
+        <RatingBar
+            android:id="@+id/rating_bar"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            style="@style/MyRatingBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:layout_gravity="center_horizontal"
+            android:stepSize="1"
+            android:progressTint="@color/yellow"
+            android:contentDescription="Rating: out of no. of stars"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/review_text_background"
+        android:background="@drawable/rounded_cyan_text_background"
+        android:orientation="vertical"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_text_background"
+            android:orientation="vertical"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginTop="14dp"
+            android:padding="10dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Subject enrolled"
+                android:textColor="@color/techBlue"
+                android:textSize="16sp"
+                android:hint="Enter Level and Enrolled Subject (e.g. Primary 1 Math)"
+                android:textColorHint="@color/techBlue"
+                android:id="@+id/review_subject"
+                android:fontFamily="@font/ubuntu"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:ems="10"
+                android:inputType="text"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_text_background"
+            android:orientation="vertical"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginTop="14dp"
+            android:paddingTop="20dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="20dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="User's review"
+                android:textColor="@color/techBlue"
+                android:textSize="16sp"
+                android:hint="Leave a review ..."
+                android:textColorHint="@color/techBlue"
+                android:id="@+id/review_text"
+                android:fontFamily="@font/ubuntu"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:ems="10"
+                android:inputType="text"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:id="@+id/cancel_button"
+                android:backgroundTint="@color/red"
+                android:text="Cancel"
+                android:textColor="@color/techBlue"
+                android:textStyle="bold"
+                android:layout_gravity="start"
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_shadow"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:id="@+id/submit_button"
+                android:backgroundTint="@color/green"
+                android:text="Submit"
+                android:textColor="@color/techBlue"
+                android:textStyle="bold"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_shadow"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

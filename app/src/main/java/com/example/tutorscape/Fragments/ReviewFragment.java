@@ -32,7 +32,6 @@ public class ReviewFragment extends Fragment {
     private List<Review> mReviews;
     private YourReviewsAdapter yourReviewsAdapter;
     private FirebaseAuth firebaseAuth;
-    private String user_name;
     private String userId;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.review_fragment, container, false);
@@ -40,28 +39,14 @@ public class ReviewFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getUid();
 
-        DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
-                .child("Users/" + userId + "/name");
-
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user_name = snapshot.getValue(String.class);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
         recyclerView = root.findViewById(R.id.recycler_view_user_reviews);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mReviews = new ArrayList<>();
-        yourReviewsAdapter = new YourReviewsAdapter(getContext(), mReviews, user_name);
+        yourReviewsAdapter = new YourReviewsAdapter(getContext(), mReviews, userId);
         recyclerView.setAdapter(yourReviewsAdapter);
+
         Log.d("ReviewFragment", "second call");
 
         readReviews();

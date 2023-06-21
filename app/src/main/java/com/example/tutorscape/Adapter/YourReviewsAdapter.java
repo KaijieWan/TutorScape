@@ -2,6 +2,7 @@ package com.example.tutorscape.Adapter;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +26,12 @@ import java.util.List;
 public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.ViewHolder> {
     private Context mContext;
     private List<Review> reviewList;
-    private String user_name;
+    private String userId;
 
-    public YourReviewsAdapter(Context mContext, List<Review> reviewList, String user_name) {
+    public YourReviewsAdapter(Context mContext, List<Review> reviewList, String userId) {
         this.mContext = mContext;
         this.reviewList = reviewList;
-        this.user_name = user_name;
+        this.userId = userId;
     }
 
     @NonNull
@@ -44,8 +45,22 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
     public void onBindViewHolder(@NonNull YourReviewsAdapter.ViewHolder holder, int position) {
         Review review = reviewList.get(position);
 
-        //implement the set text methods here
-        holder.user_name.setText(user_name);
+        DatabaseReference nameRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference("Users/" + userId + "/name");
+
+        nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String user_name = snapshot.getValue(String.class);
+                holder.user_name.setText(user_name);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        //implement the rest of the set text methods here
         holder.review_date.setText(review.getReview_date());
         holder.subjects_enrolled.setText(review.getSubjects_enrolled());
 
@@ -63,8 +78,8 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     TuitionCentre tuitionCentre = dataSnapshot.getValue(TuitionCentre.class);
                     if(tuitionCentre.getId().equals(review.getTCID())){
-                        holder.tc_name.setText(tuitionCentre.getName());
-                        holder.tc_address.setText(tuitionCentre.getAddress());
+                        holder.tc_name.setText(capitalizeAfterSpace(tuitionCentre.getName()));
+                        holder.tc_address.setText(capitalizeAfterSpace(tuitionCentre.getAddress()));
                     }
                 }
             }
@@ -102,5 +117,24 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
 
             tc_address = itemView.findViewById(R.id.tc_address);
         }
+    }
+
+    public String capitalizeAfterSpace(String input) {
+        StringBuilder output = new StringBuilder();
+
+        boolean capitalizeNext = true;
+        for (char c : input.toCharArray()) {
+            if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+                output.append(c);
+            } else {
+                if (capitalizeNext) {
+                    c = Character.toUpperCase(c);
+                    capitalizeNext = false;
+                }
+                output.append(c);
+            }
+        }
+        return output.toString();
     }
 }
