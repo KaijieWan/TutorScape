@@ -1,8 +1,9 @@
 package com.example.tutorscape.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class TuitionCentre {
+public class TuitionCentre implements Serializable {
     private String id;
     private String name;
     private String levels;
