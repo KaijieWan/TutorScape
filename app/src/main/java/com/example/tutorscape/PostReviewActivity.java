@@ -1,5 +1,6 @@
 package com.example.tutorscape;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
@@ -11,6 +12,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -20,7 +22,10 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tutorscape.Adapter.YourReviewsAdapter;
 import com.example.tutorscape.Model.TuitionCentre;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -28,7 +33,11 @@ import com.squareup.picasso.Picasso;
 import com.example.tutorscape.ResultsActivity;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class PostReviewActivity extends AppCompatActivity {
     private TextView tuitionName;
@@ -79,8 +88,8 @@ public class PostReviewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent newIntent = new Intent(PostReviewActivity.this, ResultsActivity.class);
-                intent.putExtra("tuitionCentreId", tuitionCentre.getId());
-                startActivity(intent);
+                newIntent.putExtra("tuitionCentreId", tuitionCentre.getId());
+                startActivity(newIntent);
                 finish();
 
             }
@@ -129,15 +138,51 @@ public class PostReviewActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
+            String reviewId = ref.push().getKey();
+
             HashMap<String, Object> map = new HashMap<>();
             map.put("TCID", tuitionCentre.getId());
             map.put("UID", firebaseAuth.getUid());
-            map.put("id", ref.push().getKey());
+            map.put("id", reviewId);
             map.put("rating_num", ratingNum);
-            //map.put("review_date", /*current date*/);
+            map.put("review_date", getCurrentDateTime());
             map.put("review_text", txt_review_text);
             map.put("subjects_enrolled", txt_subject);
-        }
 
+            ref.child(reviewId).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    progressBar.setVisibility(View.GONE);
+                    progressText.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    if(task.isSuccessful()){
+                        Toast.makeText(PostReviewActivity.this, "Review submitted!", Toast.LENGTH_SHORT).show();
+                        Intent backIntent = new Intent(PostReviewActivity.this, ResultsActivity.class);
+                        backIntent.putExtra("tuitionCentreId", tuitionCentre.getId());
+                        backIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(backIntent);
+                        Log.d("PostReviewActivity", "Starting ResultsActivity");
+                        finish();
+                    }
+                    else{
+                        Log.d("PostReviewActivity", "setValue failed: " + task.getException().getMessage());
+                        Toast.makeText(PostReviewActivity.this, "Submission unsuccessful!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
+    public String getCurrentDateTime() {
+        // Create a SimpleDateFormat object with the desired format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm", Locale.US);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Singapore"));
+
+        // Get the current date and time
+        Date currentDate = new Date();
+
+        // Format the date and time using the SimpleDateFormat object
+        // Now you can use the formattedDateTime string as per your requirements
+        return dateFormat.format(currentDate);
     }
 }

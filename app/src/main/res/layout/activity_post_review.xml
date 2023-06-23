@@ -24,7 +24,8 @@
         android:id="@+id/progressText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/progress_text"
+        android:text="Uploading ..."
+        android:textStyle="bold"
         android:textSize="16sp"
         android:layout_gravity="center"
         android:fontFamily="@font/ubuntu"/>
@@ -163,7 +164,6 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Subject enrolled"
                 android:textColor="@color/techBlue"
                 android:textSize="16sp"
                 android:hint="Enter Level and Enrolled Subject (e.g. Primary 1 Math)"
@@ -193,7 +193,6 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="User's review"
                 android:textColor="@color/techBlue"
                 android:textSize="16sp"
                 android:hint="Leave a review ..."

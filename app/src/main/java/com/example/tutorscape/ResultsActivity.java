@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ public class ResultsActivity extends AppCompatActivity {
     private List<Review> reviewsList;
     private Context context;
     private String tuitionCentreId;
+    private TuitionCentre TC;
     private ImageView tuitionImage;
     private TextView tuitionName;
     private TextView tuitionAddr;
@@ -350,5 +352,28 @@ public class ResultsActivity extends AppCompatActivity {
         }
 
         return stitchedString.deleteCharAt(stitchedString.length()-2).toString().trim();
+    }
+
+    public void onReviewClick(View view) {
+        DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("TuitionCentre");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    TuitionCentre tuitionCentre = dataSnapshot.getValue(TuitionCentre.class);
+                    if(tuitionCentre.getId().equals(tuitionCentreId)){
+                        TC = tuitionCentre;
+                        Intent intent = new Intent(ResultsActivity.this, PostReviewActivity.class);
+                        intent.putExtra("tuitionCentre", TC);
+                        startActivity(intent);
+                        finish();
+                        break;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 }
