@@ -3,9 +3,13 @@ package com.example.tutorscape.Adapter;
 import android.content.Context;
 import android.graphics.Paint;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -89,6 +93,9 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
 
             }
         });
+
+        /*Context wrapper = new ContextThemeWrapper(this, R.style.custom_PopupMenu);
+        PopupMenu popup = new PopupMenu(wrapper, view);*/
     }
 
     @Override
@@ -104,6 +111,8 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
         public TextView review_text;
         public TextView tc_name;
         public TextView tc_address;
+        public ImageView optionsIcon;
+        public FrameLayout optionsAnchor;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -116,6 +125,9 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
             tc_name.setPaintFlags(tc_name.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
             tc_address = itemView.findViewById(R.id.tc_address);
+
+            optionsIcon = itemView.findViewById(R.id.review_options);
+            optionsAnchor = itemView.findViewById(R.id.review_options_anchor);
         }
     }
 

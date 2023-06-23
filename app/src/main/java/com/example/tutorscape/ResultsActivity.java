@@ -217,11 +217,21 @@ public class ResultsActivity extends AppCompatActivity {
                         }
                     }
                 }
-                int progress5 = (rating5 * 100) / totalReviews;
-                int progress4 = (rating4 * 100) / totalReviews;
-                int progress3 = (rating3 * 100) / totalReviews;
-                int progress2 = (rating2 * 100) / totalReviews;
-                int progress1 = (rating1 * 100) / totalReviews;
+
+                int progress5 = 0;
+                int progress4 = 0;
+                int progress3 = 0;
+                int progress2 = 0;
+                int progress1 = 0;
+
+                if(totalReviews != 0){
+                    progress5 = (rating5 * 100) / totalReviews;
+                    progress4 = (rating4 * 100) / totalReviews;
+                    progress3 = (rating3 * 100) / totalReviews;
+                    progress2 = (rating2 * 100) / totalReviews;
+                    progress1 = (rating1 * 100) / totalReviews;
+                }
+
 
                 percentage5.setText(getString(R.string.percentage_placeholder, progress5));
                 percentage4.setText(getString(R.string.percentage_placeholder, progress4));
@@ -236,7 +246,10 @@ public class ResultsActivity extends AppCompatActivity {
                 progressBar1.setProgress(progress1, true);
 
                 int totalWeighted_rating = (rating5 * 5) + (rating4 * 4) + (rating3 * 3) + (rating2 * 2) + rating1;
-                float rating_float = (float) totalWeighted_rating / totalReviews;
+                float rating_float = 0;
+                if(totalReviews != 0){
+                    rating_float = (float) totalWeighted_rating / totalReviews;
+                }
                 DecimalFormat decimalFormat = new DecimalFormat("#0.00");
                 tuitionRatingBar.setRating(Float.parseFloat(decimalFormat.format(rating_float)));
                 String rating_msg = getString(R.string.rating_msg, decimalFormat.format(rating_float));

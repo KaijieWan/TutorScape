@@ -64,6 +64,7 @@ public class ReviewFragment extends Fragment {
         Log.d("ReviewFragment", "second call");
 
         readReviews();
+        applyDateSorting(false);
 
         filterIcon = root.findViewById(R.id.reviews_filter_icon);
         filterAnchor = root.findViewById(R.id.filter_anchor);

@@ -293,6 +293,7 @@
                         android:layout_marginStart="-38dp"
                         android:stepSize="0.01"
                         android:progressTint="@color/yellow"
+                        android:isIndicator="true"
                         android:contentDescription="Rating: out of no. of stars"/>
 
                     <TextView

@@ -29,7 +29,13 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_more" />
+                android:src="@drawable/ic_more"
+                android:id="@+id/review_options"/>
+
+            <FrameLayout
+                android:id="@+id/review_options_anchor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -86,6 +92,7 @@
             android:layout_marginStart="0dp"
             android:stepSize="1"
             android:progressTint="@color/techBlue"
+            android:isIndicator="true"
             android:contentDescription="Rating: out of no. of stars"/>
 
         <LinearLayout

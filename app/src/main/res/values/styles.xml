@@ -25,4 +25,10 @@
         <item name="android:textColorHint">@color/black</item>
     </style>
 
+    <style name="custom.PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textColor">@color/techBlue</item>
+        <item name="android:itemBackground">@color/cyan</item>
+
+    </style>
+
 </resources>

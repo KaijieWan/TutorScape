@@ -183,4 +183,6 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_logout">Log Out</string>
     <string name="your_reviews_title">Your Reviews</string>
+    <string name="edit_review_option">Edit Review</string>
+    <string name="delete_review_option">Delete Review</string>
 </resources>
