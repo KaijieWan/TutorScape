@@ -27,8 +27,9 @@
 
     <style name="custom.PopupMenu" parent="Widget.AppCompat.PopupMenu">
         <item name="android:textColor">@color/techBlue</item>
+        <item name="fontFamily">@font/ubuntu</item>
         <item name="android:itemBackground">@color/cyan</item>
-
+        <item name="android:dividerHeight">1dp</item>
     </style>
 
 </resources>

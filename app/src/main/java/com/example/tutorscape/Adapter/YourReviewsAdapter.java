@@ -2,18 +2,24 @@ package com.example.tutorscape.Adapter;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tutorscape.Model.Review;
@@ -25,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.ViewHolder> {
@@ -94,6 +101,38 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
             }
         });
 
+        holder.optionsIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context wrapper = new ContextThemeWrapper(mContext, R.style.custom_PopupMenu);
+                PopupMenu popupMenu = new PopupMenu(wrapper, holder.optionsAnchor);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    popupMenu.setForceShowIcon(true);
+                }
+                popupMenu.getMenuInflater().inflate(R.menu.review_options_menu, popupMenu.getMenu());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    popupMenu.getMenu().setGroupDividerEnabled(true); // Optional: Show divider between menu items
+                }
+
+                //Drawable background = ContextCompat.getDrawable(mContext, R.drawable.custom_menu_item_background);
+                //popupMenu.getMenu().setBackground(background);
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int itemID = item.getItemId();
+                        if(itemID == R.id.edit_option) {
+                            return true;
+                        }
+                        else if(itemID == R.id.delete_option) {
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
         /*Context wrapper = new ContextThemeWrapper(this, R.style.custom_PopupMenu);
         PopupMenu popup = new PopupMenu(wrapper, view);*/
     }
