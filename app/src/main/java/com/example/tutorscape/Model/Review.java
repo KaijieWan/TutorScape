@@ -1,6 +1,8 @@
 package com.example.tutorscape.Model;
 
-public class Review {
+import java.io.Serializable;
+
+public class Review implements Serializable{
     private String id;
     private String UID;
     private String TCID;
@@ -8,11 +10,12 @@ public class Review {
     private String subjects_enrolled;
     private String review_text;
     private String rating_num;
+    private boolean isEdited;
 
     public Review() {
     }
 
-    public Review(String id, String UID, String TCID, String review_date, String subjects_enrolled, String review_text, String rating_num) {
+    public Review(String id, String UID, String TCID, String review_date, String subjects_enrolled, String review_text, String rating_num, boolean isEdited) {
         this.id = id;
         this.UID = UID;
         this.TCID = TCID;
@@ -20,6 +23,7 @@ public class Review {
         this.subjects_enrolled = subjects_enrolled;
         this.review_text = review_text;
         this.rating_num = rating_num;
+        this.isEdited = isEdited;
     }
 
     public String getId() {
@@ -76,5 +80,13 @@ public class Review {
 
     public void setRating_num(String rating_num) {
         this.rating_num = rating_num;
+    }
+
+    public boolean getEdited() {
+        return isEdited;
+    }
+
+    public void setEdited(Boolean edited) {
+        isEdited = edited;
     }
 }

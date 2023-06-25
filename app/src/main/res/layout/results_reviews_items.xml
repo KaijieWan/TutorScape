@@ -44,12 +44,16 @@
                 android:padding="5dp"
                 android:layout_weight="1"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_more" />
-
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editFlag"
+            android:text="Edited or not"
+            android:paddingLeft="5dp"
+            android:textStyle="italic"
+            android:fontFamily="@font/ubuntu"/>
 
         <RatingBar
             android:id="@+id/rating_bar"

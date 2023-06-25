@@ -1,5 +1,7 @@
 package com.example.tutorscape.Adapter;
 
+import static java.lang.Boolean.TRUE;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +43,6 @@ public class ReviewAdapter extends  RecyclerView.Adapter<ReviewAdapter.ViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         Review review = mReviews.get(position);
 
         //implement the set text methods here
@@ -66,6 +67,15 @@ public class ReviewAdapter extends  RecyclerView.Adapter<ReviewAdapter.ViewHolde
         holder.rating_bar.setRating(rating_float);
 
         holder.review_text.setText(review.getReview_text());
+
+        String edit_txt = "Edited";
+
+        if(review.getEdited()){
+            holder.edited_flag.setText(edit_txt);
+        }
+        else{
+            holder.edited_flag.setVisibility(View.GONE);
+        }
     }
 
 
@@ -81,6 +91,7 @@ public class ReviewAdapter extends  RecyclerView.Adapter<ReviewAdapter.ViewHolde
         public TextView subjects_enrolled;
         public RatingBar rating_bar;
         public TextView review_text;
+        public TextView edited_flag;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -90,6 +101,7 @@ public class ReviewAdapter extends  RecyclerView.Adapter<ReviewAdapter.ViewHolde
             subjects_enrolled = itemView.findViewById(R.id.subjects_enrolled);
             rating_bar = itemView.findViewById(R.id.rating_bar);
             review_text = itemView.findViewById(R.id.user_review);
+            edited_flag = itemView.findViewById(R.id.editFlag);
         }
     }
 }

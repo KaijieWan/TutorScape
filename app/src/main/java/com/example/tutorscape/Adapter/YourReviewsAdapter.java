@@ -1,6 +1,7 @@
 package com.example.tutorscape.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -17,11 +18,13 @@ import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tutorscape.EditReviewActivity;
 import com.example.tutorscape.Model.Review;
 import com.example.tutorscape.Model.TuitionCentre;
 import com.example.tutorscape.R;
@@ -80,6 +83,15 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
 
         holder.review_text.setText(review.getReview_text());
 
+        String edit_txt = "Edited";
+
+        if(review.getEdited()){
+            holder.edited_flag.setText(edit_txt);
+        }
+        else{
+            holder.edited_flag.setVisibility(View.GONE);
+        }
+
         DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
                 .getReference("TuitionCentre");
 
@@ -94,10 +106,8 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
                     }
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
@@ -114,17 +124,20 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
                     popupMenu.getMenu().setGroupDividerEnabled(true); // Optional: Show divider between menu items
                 }
 
-                //Drawable background = ContextCompat.getDrawable(mContext, R.drawable.custom_menu_item_background);
-                //popupMenu.getMenu().setBackground(background);
-
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         int itemID = item.getItemId();
                         if(itemID == R.id.edit_option) {
+                            Intent intent = new Intent(mContext, EditReviewActivity.class);
+                            intent.putExtra("review", review);
+                            intent.putExtra("tuitionCentreId", review.getTCID());
                             return true;
                         }
                         else if(itemID == R.id.delete_option) {
+                            DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Reviews");
+                            ref.child(review.getId()).removeValue();
+                            Toast.makeText(mContext, "Review deleted!", Toast.LENGTH_SHORT).show();
                             return true;
                         }
                         return false;
@@ -152,6 +165,7 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
         public TextView tc_address;
         public ImageView optionsIcon;
         public FrameLayout optionsAnchor;
+        public TextView edited_flag;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -167,6 +181,8 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
 
             optionsIcon = itemView.findViewById(R.id.review_options);
             optionsAnchor = itemView.findViewById(R.id.review_options_anchor);
+
+            edited_flag = itemView.findViewById(R.id.editFlag);
         }
     }
 
