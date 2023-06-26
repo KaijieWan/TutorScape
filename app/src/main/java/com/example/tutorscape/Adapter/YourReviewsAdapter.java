@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tutorscape.EditReviewActivity;
+import com.example.tutorscape.Fragments.ReviewFragment;
 import com.example.tutorscape.Model.Review;
 import com.example.tutorscape.Model.TuitionCentre;
 import com.example.tutorscape.R;
@@ -85,6 +86,8 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
 
         String edit_txt = "Edited";
 
+        Log.d("YourReviewsAdapter", String.valueOf(Boolean.valueOf(review.getEdited())));
+
         if(review.getEdited()){
             holder.edited_flag.setText(edit_txt);
         }
@@ -129,14 +132,18 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
                     public boolean onMenuItemClick(MenuItem item) {
                         int itemID = item.getItemId();
                         if(itemID == R.id.edit_option) {
+                            Log.d("YourReviewsAdapter", "Menu listener edit option");
                             Intent intent = new Intent(mContext, EditReviewActivity.class);
                             intent.putExtra("review", review);
                             intent.putExtra("tuitionCentreId", review.getTCID());
+                            mContext.startActivity(intent);
                             return true;
                         }
                         else if(itemID == R.id.delete_option) {
                             DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Reviews");
                             ref.child(review.getId()).removeValue();
+                            reviewList.remove(review);
+                            notifyDataSetChanged();
                             Toast.makeText(mContext, "Review deleted!", Toast.LENGTH_SHORT).show();
                             return true;
                         }
@@ -204,4 +211,5 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
         }
         return output.toString();
     }
+
 }

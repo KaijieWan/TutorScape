@@ -21,6 +21,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tutorscape.Adapter.YourReviewsAdapter;
 import com.example.tutorscape.Fragments.ReviewFragment;
 import com.example.tutorscape.Model.Review;
 import com.example.tutorscape.Model.TuitionCentre;
@@ -56,13 +57,14 @@ public class EditReviewActivity extends AppCompatActivity {
     private AppCompatButton submitButton;
     private ProgressBar progressBar;
     private TextView progressText;
-    private TuitionCentre tuitionCentre;
     private FirebaseAuth firebaseAuth;
+    private OnTaskCompleteListener onTaskCompleteListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_review);
+        Log.d("EditReviewActivity", "called");
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -74,25 +76,6 @@ public class EditReviewActivity extends AppCompatActivity {
             review = (Review) intent.getSerializableExtra("review");
             tuitionCentreId = intent.getStringExtra("tuitionCentreId");
         }
-
-        DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
-                .getReference("TuitionCentre");
-
-        String finalTuitionCentreId = tuitionCentreId;
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    TuitionCentre TC = dataSnapshot.getValue(TuitionCentre.class);
-                    if(TC.getId().equals(finalTuitionCentreId)){
-                        tuitionCentre = TC;
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
 
         tuitionName = findViewById(R.id.tuition_name);
         tuitionAddress = findViewById(R.id.tuition_address);
@@ -120,41 +103,62 @@ public class EditReviewActivity extends AppCompatActivity {
             }
         });
 
-        ResultsActivity RA = new ResultsActivity();
-        String address_msg = getString(R.string.address_msg, RA.capitalizeAfterSpace(tuitionCentre.getAddress()));
-        String postal_msg = getString(R.string.postal_msg, tuitionCentre.getPostal());
-        String contact_msg = getString(R.string.contact_msg, tuitionCentre.getContactNo());
-        String website_msg = getString(R.string.website_msg, tuitionCentre.getWebsite());
+        DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference("TuitionCentre");
 
-        SpannableString address_span = new SpannableString(address_msg);
-        address_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableString postal_span = new SpannableString(postal_msg);
-        postal_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableString contact_span = new SpannableString(contact_msg);
-        contact_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableString website_span = new SpannableString(website_msg);
-        website_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        String finalTuitionCentreId = tuitionCentreId;
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    TuitionCentre tuitionCentre = dataSnapshot.getValue(TuitionCentre.class);
+                    if(tuitionCentre.getId().equals(finalTuitionCentreId)){
+                        ResultsActivity RA = new ResultsActivity();
+                        String address_msg = getString(R.string.address_msg, RA.capitalizeAfterSpace(tuitionCentre.getAddress()));
+                        String postal_msg = getString(R.string.postal_msg, tuitionCentre.getPostal());
+                        String contact_msg = getString(R.string.contact_msg, tuitionCentre.getContactNo());
+                        String website_msg = getString(R.string.website_msg, tuitionCentre.getWebsite());
 
-        tuitionName.setText(RA.capitalizeAfterSpace(tuitionCentre.getName()));
-        tuitionAddress.setText(address_span);
-        tuitionPostal.setText(postal_span);
-        tuitionContact.setText(contact_span);
-        tuitionWebsite.setText(website_span);
-        Picasso.get().load(tuitionCentre.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(tuitionImage);
+                        SpannableString address_span = new SpannableString(address_msg);
+                        address_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        SpannableString postal_span = new SpannableString(postal_msg);
+                        postal_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        SpannableString contact_span = new SpannableString(contact_msg);
+                        contact_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        SpannableString website_span = new SpannableString(website_msg);
+                        website_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        review_rating.setRating(Float.parseFloat(review.getRating_num()));
-        review_subject.setText(review.getSubjects_enrolled());
-        review_text.setText(review.getReview_text());
+                        tuitionName.setText(RA.capitalizeAfterSpace(tuitionCentre.getName()));
+                        tuitionAddress.setText(address_span);
+                        tuitionPostal.setText(postal_span);
+                        tuitionContact.setText(contact_span);
+                        tuitionWebsite.setText(website_span);
+                        Picasso.get().load(tuitionCentre.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(tuitionImage);
+
+                        review_rating.setRating(Float.parseFloat(review.getRating_num()));
+                        review_subject.setText(review.getSubjects_enrolled());
+                        review_text.setText(review.getReview_text());
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                upload(review_rating.getRating(), review_subject.getText().toString(), review_text.getText().toString(), review.getId());
+                upload(review_rating.getRating(), review_subject.getText().toString(), review_text.getText().toString(), review.getId(), finalTuitionCentreId);
             }
         });
     }
+    public void setOnTaskCompleteListener(OnTaskCompleteListener listener) {
+        this.onTaskCompleteListener = listener;
+    }
 
-    private void upload(float rating, String txt_subject, String txt_review_text, String reviewId) {
+    private void upload(float rating, String txt_subject, String txt_review_text, String reviewId, String TCID) {
         DecimalFormat decimalFormat = new DecimalFormat("#");
         String ratingNum = decimalFormat.format(rating);
 
@@ -163,7 +167,7 @@ public class EditReviewActivity extends AppCompatActivity {
         }
         else{
             DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app/")
-                    .getReference("Reviews" + reviewId);
+                    .getReference("Reviews" + "/" + reviewId);
             progressBar.setVisibility(View.VISIBLE);
             progressText.setVisibility(View.VISIBLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -171,16 +175,16 @@ public class EditReviewActivity extends AppCompatActivity {
 
 
             HashMap<String, Object> updates = new HashMap<>();
-            updates.put("/TCID", tuitionCentre.getId());
-            updates.put("/UID", firebaseAuth.getUid());
-            updates.put("/id", reviewId);
-            updates.put("/rating_num", ratingNum);
-            updates.put("/review_date", getCurrentDateTime());
-            updates.put("/review_text", txt_review_text);
-            updates.put("/subjects_enrolled", txt_subject);
-            updates.put("/isEdited", true);
+            updates.put("TCID", TCID);
+            updates.put("UID", firebaseAuth.getUid());
+            updates.put("id", reviewId);
+            updates.put("rating_num", ratingNum);
+            updates.put("review_date", getCurrentDateTime());
+            updates.put("review_text", txt_review_text);
+            updates.put("subjects_enrolled", txt_subject);
+            updates.put("isEdited", true);
 
-            ref.child(reviewId).updateChildren(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            ref.updateChildren(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     progressBar.setVisibility(View.GONE);
@@ -188,8 +192,9 @@ public class EditReviewActivity extends AppCompatActivity {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     if(task.isSuccessful()){
                         Toast.makeText(EditReviewActivity.this, "Review updated!", Toast.LENGTH_SHORT).show();
-                        Intent backIntent = new Intent(EditReviewActivity.this, ReviewFragment.class);
-                        startActivity(backIntent);
+                        if (onTaskCompleteListener != null) {
+                            onTaskCompleteListener.onTaskComplete();
+                        }
                         Log.d("EditReviewActivity", "Starting ReviewFragment");
                         finish();
                     }
@@ -214,4 +219,9 @@ public class EditReviewActivity extends AppCompatActivity {
         // Now you can use the formattedDateTime string as per your requirements
         return dateFormat.format(currentDate);
     }
+
+    public interface OnTaskCompleteListener {
+        void onTaskComplete();
+    }
+
 }

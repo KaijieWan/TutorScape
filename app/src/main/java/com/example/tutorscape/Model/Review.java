@@ -1,5 +1,7 @@
 package com.example.tutorscape.Model;
 
+import com.google.firebase.database.PropertyName;
+
 import java.io.Serializable;
 
 public class Review implements Serializable{
@@ -82,11 +84,12 @@ public class Review implements Serializable{
         this.rating_num = rating_num;
     }
 
+    @PropertyName("isEdited")
     public boolean getEdited() {
         return isEdited;
     }
 
-    public void setEdited(Boolean edited) {
+    public void setEdited(boolean edited) {
         isEdited = edited;
     }
 }

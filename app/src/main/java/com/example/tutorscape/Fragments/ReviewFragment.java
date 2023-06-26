@@ -65,6 +65,7 @@ public class ReviewFragment extends Fragment {
 
         readReviews();
         applyDateSorting(false);
+        yourReviewsAdapter.notifyDataSetChanged();
 
         filterIcon = root.findViewById(R.id.reviews_filter_icon);
         filterAnchor = root.findViewById(R.id.filter_anchor);
@@ -96,7 +97,7 @@ public class ReviewFragment extends Fragment {
         return root;
     }
 
-    private void readReviews() {
+    public void readReviews() {
         DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("Reviews");
         Log.d("readReviews", "called");
         ref.addValueEventListener(new ValueEventListener() {

@@ -18,6 +18,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import com.example.tutorscape.Adapter.DrawerAdapter;
+import com.example.tutorscape.Adapter.YourReviewsAdapter;
 import com.example.tutorscape.Fragments.DashboardFragment;
 import com.example.tutorscape.Fragments.FavFragment;
 import com.example.tutorscape.Fragments.ReviewFragment;
@@ -29,7 +30,7 @@ import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
 import java.util.Arrays;
 
-public class TransferActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener{
+public class TransferActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener, EditReviewActivity.OnTaskCompleteListener {
     private static final int POS_CLOSE = 0;
     private static final int POS_DASHBOARD = 1;
     private static final int POS_FAVOURITES = 2;
@@ -162,6 +163,15 @@ public class TransferActivity extends AppCompatActivity implements DrawerAdapter
         }
 
         slidingRootNav.closeMenu();
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
+    public void onTaskComplete() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        ReviewFragment reviewFragment = new ReviewFragment();
+        transaction.replace(R.id.container, reviewFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
