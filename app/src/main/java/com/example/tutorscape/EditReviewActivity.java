@@ -58,7 +58,6 @@ public class EditReviewActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TextView progressText;
     private FirebaseAuth firebaseAuth;
-    private OnTaskCompleteListener onTaskCompleteListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,9 +153,6 @@ public class EditReviewActivity extends AppCompatActivity {
             }
         });
     }
-    public void setOnTaskCompleteListener(OnTaskCompleteListener listener) {
-        this.onTaskCompleteListener = listener;
-    }
 
     private void upload(float rating, String txt_subject, String txt_review_text, String reviewId, String TCID) {
         DecimalFormat decimalFormat = new DecimalFormat("#");
@@ -192,10 +188,6 @@ public class EditReviewActivity extends AppCompatActivity {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     if(task.isSuccessful()){
                         Toast.makeText(EditReviewActivity.this, "Review updated!", Toast.LENGTH_SHORT).show();
-                        if (onTaskCompleteListener != null) {
-                            onTaskCompleteListener.onTaskComplete();
-                        }
-                        Log.d("EditReviewActivity", "Starting ReviewFragment");
                         finish();
                     }
                     else{
@@ -218,10 +210,6 @@ public class EditReviewActivity extends AppCompatActivity {
         // Format the date and time using the SimpleDateFormat object
         // Now you can use the formattedDateTime string as per your requirements
         return dateFormat.format(currentDate);
-    }
-
-    public interface OnTaskCompleteListener {
-        void onTaskComplete();
     }
 
 }

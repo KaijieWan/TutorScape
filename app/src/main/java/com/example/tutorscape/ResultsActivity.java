@@ -4,13 +4,16 @@ import static java.security.AccessController.getContext;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -22,10 +25,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tutorscape.Adapter.ReviewAdapter;
+import com.example.tutorscape.Model.Favourite;
 import com.example.tutorscape.Model.Review;
 import com.example.tutorscape.Model.TuitionCentre;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +43,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ResultsActivity extends AppCompatActivity {
@@ -69,6 +78,7 @@ public class ResultsActivity extends AppCompatActivity {
     private ProgressBar progressBar1;
     private TextView percentage1;
     private TextView totalNoReviews;
+    private ImageView fav_icon_empty;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,6 +195,28 @@ public class ResultsActivity extends AppCompatActivity {
 
             }
         });
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String userId = firebaseAuth.getUid();
+        fav_icon_empty = findViewById(R.id.fav_emptyIcon);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference("Favourites/" + userId);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Favourite favourite = dataSnapshot.getValue(Favourite.class);
+                    if(favourite.getTCID().equals(tuitionCentreId)){
+                        fav_icon_empty.setImageResource(R.drawable.icons8_book_and_pencil_96);
+                        break;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     private void filterReviews() {
@@ -269,12 +301,6 @@ public class ResultsActivity extends AppCompatActivity {
                 Log.e("filterReviews", "Database error: " + error.getMessage());
             }
         });
-    }
-
-    public void onFavouritesClick(View view){
-        ImageView fav_icon_empty = findViewById(R.id.fav_emptyIcon);
-        fav_icon_empty.setImageResource(R.drawable.icons8_book_and_pencil_96);
-        //Implement logic for adding to user's favourites
     }
 
     public String capitalizeAfterSpace(String input) {
@@ -388,5 +414,54 @@ public class ResultsActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
+
+    public void onFavouritesClick(View view){
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        @SuppressLint("UseCompatLoadingForDrawables")
+        Drawable favouritedIcon = getResources().getDrawable(R.drawable.icons8_book_and_pencil_96, null);
+        Drawable setIcon = fav_icon_empty.getDrawable();
+        String userId = firebaseAuth.getUid();
+
+        DatabaseReference favRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("Favourites");
+
+        if(setIcon != null && setIcon.equals(favouritedIcon)){
+            favRef.child(userId).child(tuitionCentreId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        fav_icon_empty.setImageResource(R.drawable.icons8_book_reading_100);
+                        Toast.makeText(ResultsActivity.this, "Removed from Favourites!", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Log.d("ResultsActivity", "removeValue of favourites failed: " + task.getException().getMessage());
+                        Toast.makeText(ResultsActivity.this, "Removing unsuccessful!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+        else{
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("TCID", tuitionCentreId);
+            favRef.child(userId).child(tuitionCentreId).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        fav_icon_empty.setImageResource(R.drawable.icons8_book_and_pencil_96);
+                        Toast.makeText(ResultsActivity.this, "Added to Favourites!", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Log.d("ResultsActivity", "setValue of favourites failed: " + task.getException().getMessage());
+                        Toast.makeText(ResultsActivity.this, "Adding unsuccessful!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+
+
+
+
+
     }
 }

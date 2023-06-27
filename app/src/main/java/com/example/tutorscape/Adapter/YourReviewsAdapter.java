@@ -142,8 +142,6 @@ public class YourReviewsAdapter extends RecyclerView.Adapter<YourReviewsAdapter.
                         else if(itemID == R.id.delete_option) {
                             DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Reviews");
                             ref.child(review.getId()).removeValue();
-                            reviewList.remove(review);
-                            notifyDataSetChanged();
                             Toast.makeText(mContext, "Review deleted!", Toast.LENGTH_SHORT).show();
                             return true;
                         }

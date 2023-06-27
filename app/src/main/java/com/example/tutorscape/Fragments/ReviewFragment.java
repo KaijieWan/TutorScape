@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +24,7 @@ import com.example.tutorscape.Model.TuitionCentre;
 import com.example.tutorscape.Model.Updates;
 import com.example.tutorscape.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -103,7 +105,8 @@ public class ReviewFragment extends Fragment {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("onDataChange", "called");
+                mReviews.clear();
+                Log.d("onChildAdded", "called");
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Review review = dataSnapshot.getValue(Review.class);
                     if(review.getUID().equals(userId)){
@@ -127,8 +130,8 @@ public class ReviewFragment extends Fragment {
         Collections.sort(mReviews, new Comparator<Review>() {
             @Override
             public int compare(Review o1, Review o2) {
-                Date date1 = null;
-                Date date2 = null;
+                Date date1;
+                Date date2;
                 try {
                     date1 = dateFormat.parse(o1.getReview_date());
                 } catch (ParseException e) {
