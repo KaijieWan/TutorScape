@@ -208,7 +208,7 @@ public class ResultsActivity extends AppCompatActivity {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Favourite favourite = dataSnapshot.getValue(Favourite.class);
                     if(favourite.getTCID().equals(tuitionCentreId)){
-                        fav_icon_empty.setImageResource(R.drawable.icons8_book_and_pencil_96);
+                        fav_icon_empty.setImageResource(R.drawable.icons8_book_reading_96);
                         break;
                     }
                 }
@@ -419,7 +419,7 @@ public class ResultsActivity extends AppCompatActivity {
     public void onFavouritesClick(View view){
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         @SuppressLint("UseCompatLoadingForDrawables")
-        Drawable favouritedIcon = getResources().getDrawable(R.drawable.icons8_book_and_pencil_96, null);
+        Drawable favouritedIcon = getResources().getDrawable(R.drawable.icons8_book_reading_96, null);
         Drawable setIcon = fav_icon_empty.getDrawable();
         String userId = firebaseAuth.getUid();
         Log.d("onFavouritesClick", fav_icon_empty.getDrawable().toString());
@@ -449,7 +449,7 @@ public class ResultsActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
-                        fav_icon_empty.setImageResource(R.drawable.icons8_book_and_pencil_96);
+                        fav_icon_empty.setImageResource(R.drawable.icons8_book_reading_96);
                         Toast.makeText(ResultsActivity.this, "Added to Favourites!", Toast.LENGTH_SHORT).show();
                     }
                     else{

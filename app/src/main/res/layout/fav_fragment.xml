@@ -1,14 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/tutorscape_main">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Favourites"
-        android:textSize="30sp"
-        android:layout_gravity="center"/>
+        android:id="@+id/title_layout"
+        android:orientation="horizontal">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/title"
+            android:text="@string/favourites_title"
+            android:fontFamily="@font/ubuntu"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_margin="27dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="* Click"
+            android:layout_margin="27dp"
+            android:textSize="16sp"
+            android:textColor="@color/red"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icons8_book_reading_96"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="-20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="to remove from Favourites"
+            android:layout_marginTop="27dp"
+            android:layout_marginLeft="5dp"
+            android:textSize="16sp"
+            android:textColor="@color/red"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recycler_view_fav"
+        android:layout_below="@+id/title_layout"
+        android:layout_margin="5dp"/>
+
+</RelativeLayout>

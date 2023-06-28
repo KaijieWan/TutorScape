@@ -11,18 +11,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tutorscape.Model.Favourite;
 import com.example.tutorscape.Model.Review;
 import com.example.tutorscape.Model.TuitionCentre;
 import com.example.tutorscape.R;
 import com.example.tutorscape.ResultsActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,30 +37,27 @@ import com.squareup.picasso.Picasso;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
-
+public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.ViewHolder>{
     private Context mContext;
-    private  List<TuitionCentre> mTC;
-    private boolean isFragment;
+    private List<TuitionCentre> mTC;
     private List<Review> reviewsList;
+    private List<Favourite> favouriteList;
 
-    public TCAdapter(Context mContext, List<TuitionCentre> mTC, boolean isFragment) {
+    public FavouriteAdapter(Context mContext, List<TuitionCentre> mTC) {
         this.mContext = mContext;
         this.mTC = mTC;
-        this.isFragment = isFragment;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.tuition_centre_item, parent, false);
-        return new TCAdapter.ViewHolder(view);
+    public FavouriteAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.fav_tuition_centre_item, parent, false);
+        return new FavouriteAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FavouriteAdapter.ViewHolder holder, int position) {
         TuitionCentre TC = mTC.get(position);
 
         String address_msg = mContext.getString(R.string.address_msg, capitalizeAfterSpace(TC.getAddress()));
@@ -137,6 +138,42 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
                 mContext.startActivity(intent);
             }
         });
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String userId = firebaseAuth.getUid();
+        DatabaseReference favRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
+                .child("Favourites/" + userId);
+        holder.favourite_click.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                favRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                            Favourite favourite = dataSnapshot.getValue(Favourite.class);
+                            if(favourite.getTCID().equals(tuitionCentreId)){
+                                favRef.child(tuitionCentreId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            Toast.makeText(mContext, "Removed from Favourites!", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            Log.d("ResultsActivity", "removeValue of favourites failed: " + task.getException().getMessage());
+                                            Toast.makeText(mContext, "Removing unsuccessful!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                                break;
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -154,6 +191,7 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
         public TextView tuitionWebsite;
         public TextView tuitionRatingNum;
         public RatingBar tuitionRatingBar;
+        public ImageView favourite_click;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -169,6 +207,7 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
             tuitionWebsite = itemView.findViewById(R.id.tuition_website);
             tuitionRatingNum = itemView.findViewById(R.id.rating_num);
             tuitionRatingBar = itemView.findViewById(R.id.rating_bar);
+            favourite_click = itemView.findViewById(R.id.fav_click);
         }
     }
 
@@ -189,9 +228,5 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
             }
         }
         return output.toString();
-    }
-
-    public interface OnItemClickListener{
-        void onItemClick(String tuitionCentreId);
     }
 }
