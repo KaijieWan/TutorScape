@@ -422,10 +422,12 @@ public class ResultsActivity extends AppCompatActivity {
         Drawable favouritedIcon = getResources().getDrawable(R.drawable.icons8_book_and_pencil_96, null);
         Drawable setIcon = fav_icon_empty.getDrawable();
         String userId = firebaseAuth.getUid();
+        Log.d("onFavouritesClick", fav_icon_empty.getDrawable().toString());
+        Log.d("onFavouritesClick", favouritedIcon.toString());
 
         DatabaseReference favRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("Favourites");
 
-        if(setIcon != null && setIcon.equals(favouritedIcon)){
+        if(setIcon != null && setIcon.getConstantState().equals(favouritedIcon.getConstantState())){
             favRef.child(userId).child(tuitionCentreId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -457,11 +459,5 @@ public class ResultsActivity extends AppCompatActivity {
                 }
             });
         }
-
-
-
-
-
-
     }
 }
