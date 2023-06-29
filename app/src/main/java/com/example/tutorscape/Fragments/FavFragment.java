@@ -55,6 +55,7 @@ public class FavFragment extends Fragment {
     }
 
     private void readFavourites() {
+        Log.d("readFavourites", "called");
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String userId = firebaseAuth.getUid();
         DatabaseReference tcRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
@@ -66,21 +67,20 @@ public class FavFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mTC.clear();
+                Log.d("favRef onDataChange", "called");
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Favourite favourite = dataSnapshot.getValue(Favourite.class);
                     String TCID = favourite.getTCID();
-                    tcRef.addValueEventListener(new ValueEventListener() {
+                    tcRef.child(TCID).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot1) {
-                            for(DataSnapshot dataSnapshot1 : snapshot1.getChildren()){
-                                TuitionCentre tuitionCentre = dataSnapshot1.getValue(TuitionCentre.class);
-                                if(TCID.equals(tuitionCentre.getId())){
-                                    mTC.add(tuitionCentre);
-                                    break;
-                                }
+                            Log.d("tcRef onDataChange", "called");
+                            TuitionCentre tuitionCentre = snapshot1.getValue(TuitionCentre.class);
+                            if(tuitionCentre != null){
+                                mTC.add(tuitionCentre);
                             }
+                            favouriteAdapter.notifyDataSetChanged();
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
                         }
@@ -88,7 +88,6 @@ public class FavFragment extends Fragment {
                 }
                 favouriteAdapter.notifyDataSetChanged();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

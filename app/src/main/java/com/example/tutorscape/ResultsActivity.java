@@ -428,6 +428,7 @@ public class ResultsActivity extends AppCompatActivity {
         DatabaseReference favRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("Favourites");
 
         if(setIcon != null && setIcon.getConstantState().equals(favouritedIcon.getConstantState())){
+            Log.d("onFavouritesClick", "removal");
             favRef.child(userId).child(tuitionCentreId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -443,6 +444,7 @@ public class ResultsActivity extends AppCompatActivity {
             });
         }
         else{
+            Log.d("onFavouritesClick", "adding");
             HashMap<String, Object> map = new HashMap<>();
             map.put("TCID", tuitionCentreId);
             favRef.child(userId).child(tuitionCentreId).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {

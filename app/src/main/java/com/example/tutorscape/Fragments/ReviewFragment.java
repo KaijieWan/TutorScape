@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -17,14 +16,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tutorscape.Adapter.TCAdapter;
 import com.example.tutorscape.Adapter.YourReviewsAdapter;
 import com.example.tutorscape.Model.Review;
-import com.example.tutorscape.Model.TuitionCentre;
-import com.example.tutorscape.Model.Updates;
 import com.example.tutorscape.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -106,7 +101,7 @@ public class ReviewFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mReviews.clear();
-                Log.d("onChildAdded", "called");
+                Log.d("onDataChange", "called");
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Review review = dataSnapshot.getValue(Review.class);
                     if(review.getUID().equals(userId)){

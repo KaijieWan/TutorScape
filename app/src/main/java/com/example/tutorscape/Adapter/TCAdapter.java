@@ -93,28 +93,34 @@ public class TCAdapter extends RecyclerView.Adapter<TCAdapter.ViewHolder>{
                         reviewsList.add(review);
                     }
                 }
-                int totalReviews = reviewsList.size();
-                int rating5 = 0, rating4 = 0, rating3 = 0, rating2 = 0, rating1 = 0;
-                for(Review review : reviewsList){
-                    switch (review.getRating_num()) {
-                        case "1" -> rating1++;
-                        case "2" -> rating2++;
-                        case "3" -> rating3++;
-                        case "4" -> rating4++;
-                        case "5" -> rating5++;
-                        default -> {
+                if(reviewsList.isEmpty()){
+                    holder.tuitionRatingNum.setText("No ratings");
+                    holder.tuitionRatingBar.setRating(0.0f);
+                }
+                else{
+                    int totalReviews = reviewsList.size();
+                    int rating5 = 0, rating4 = 0, rating3 = 0, rating2 = 0, rating1 = 0;
+                    for(Review review : reviewsList){
+                        switch (review.getRating_num()) {
+                            case "1" -> rating1++;
+                            case "2" -> rating2++;
+                            case "3" -> rating3++;
+                            case "4" -> rating4++;
+                            case "5" -> rating5++;
+                            default -> {
+                            }
                         }
                     }
-                }
-                int totalWeighted_rating = (rating5 * 5) + (rating4 * 4) + (rating3 * 3) + (rating2 * 2) + rating1;
-                float rating_float = (float) totalWeighted_rating / totalReviews;
-                DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-                holder.tuitionRatingBar.setRating(Float.parseFloat(decimalFormat.format(rating_float)));
+                    int totalWeighted_rating = (rating5 * 5) + (rating4 * 4) + (rating3 * 3) + (rating2 * 2) + rating1;
+                    float rating_float = (float) totalWeighted_rating / totalReviews;
+                    DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+                    holder.tuitionRatingBar.setRating(Float.parseFloat(decimalFormat.format(rating_float)));
 
-                String rating_msg = mContext.getString(R.string.rating_msg, decimalFormat.format(rating_float));
-                SpannableString rating_span = new SpannableString(rating_msg);
-                rating_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                holder.tuitionRatingNum.setText(rating_span);
+                    String rating_msg = mContext.getString(R.string.rating_msg, decimalFormat.format(rating_float));
+                    SpannableString rating_span = new SpannableString(rating_msg);
+                    rating_span.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    holder.tuitionRatingNum.setText(rating_span);
+                }
             }
 
             @Override

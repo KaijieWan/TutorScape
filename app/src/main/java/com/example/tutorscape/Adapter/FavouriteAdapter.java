@@ -146,7 +146,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.View
         holder.favourite_click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                favRef.addValueEventListener(new ValueEventListener() {
+                favRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for(DataSnapshot dataSnapshot : snapshot.getChildren()){
