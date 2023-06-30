@@ -187,4 +187,8 @@
     <string name="delete_review_option">Delete Review</string>
     <string name="favourites_title">Favourites</string>
     <string name="settings_title">Settings</string>
+
+    <string name="account">Account</string>
+    <string name="notifications">Notifications</string>
+    <string name="security">Security</string>
 </resources>
