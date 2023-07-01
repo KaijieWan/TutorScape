@@ -40,8 +40,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
     implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
-    implementation 'androidx.navigation:navigation-fragment:2.5.3'
-    implementation 'androidx.navigation:navigation-ui:2.5.3'
+    implementation 'androidx.navigation:navigation-fragment:2.6.0'
+    implementation 'androidx.navigation:navigation-ui:2.6.0'
     implementation 'com.google.firebase:firebase-database:20.2.1'
     implementation 'com.google.firebase:firebase-functions:20.2.1'
     testImplementation 'junit:junit:4.13.2'
@@ -58,5 +58,13 @@ dependencies {
     implementation 'com.yarolegovich:sliding-root-nav:1.1.1'
     implementation 'com.google.android.material:material:<version>'
     implementation 'com.github.ismaeldivita:chip-navigation-bar:1.4.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10"
+
+    constraints {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
+            because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
+        }
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0") {
+            because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
+        }
+    }
 }

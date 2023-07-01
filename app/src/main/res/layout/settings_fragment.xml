@@ -21,7 +21,9 @@
             android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:layout_margin="27dp" />
+            android:layout_marginLeft="27dp"
+            android:layout_marginRight="27dp"
+            android:layout_marginTop="27dp" />
 
     </LinearLayout>
 
@@ -30,7 +32,10 @@
         android:layout_height="match_parent"
         android:layout_below="@id/title_layout"
         android:orientation="horizontal"
-        android:layout_margin="15dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/rounded_light_blue_background">
 
         <LinearLayout
@@ -63,12 +68,16 @@
          <LinearLayout
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:layout_margin="10dp"
              android:orientation="vertical">
 
-             <FrameLayout
-                 android:id="@+id/fragment_container"
+             <androidx.fragment.app.FragmentContainerView
+                 android:id="@+id/frame_container"
                  android:layout_width="match_parent"
-                 android:layout_height="match_parent"/>
+                 android:layout_height="match_parent"
+                 android:name="androidx.navigation.fragment.NavHostFragment"
+                 app:navGraph="@navigation/settings_nav_graph"
+                 app:defaultNavHost="true" />
 
          </LinearLayout>
 
