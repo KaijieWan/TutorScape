@@ -79,6 +79,7 @@ public class ResultsActivity extends AppCompatActivity {
     private TextView percentage1;
     private TextView totalNoReviews;
     private ImageView fav_icon_empty;
+    private TextView fav_text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -199,6 +200,7 @@ public class ResultsActivity extends AppCompatActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String userId = firebaseAuth.getUid();
         fav_icon_empty = findViewById(R.id.fav_emptyIcon);
+        fav_text = findViewById(R.id.fav_text);
 
         DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
                 .getReference("Favourites/" + userId);
@@ -209,6 +211,7 @@ public class ResultsActivity extends AppCompatActivity {
                     Favourite favourite = dataSnapshot.getValue(Favourite.class);
                     if(favourite.getTCID().equals(tuitionCentreId)){
                         fav_icon_empty.setImageResource(R.drawable.icons8_book_reading_96);
+                        fav_text.setText("Remove From Favourites");
                         break;
                     }
                 }
@@ -434,6 +437,7 @@ public class ResultsActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
                         fav_icon_empty.setImageResource(R.drawable.icons8_book_reading_100);
+                        fav_text.setText("Add To Favourites");
                         Toast.makeText(ResultsActivity.this, "Removed from Favourites!", Toast.LENGTH_SHORT).show();
                     }
                     else{
@@ -452,6 +456,7 @@ public class ResultsActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
                         fav_icon_empty.setImageResource(R.drawable.icons8_book_reading_96);
+                        fav_text.setText("Remove From Favourites");
                         Toast.makeText(ResultsActivity.this, "Added to Favourites!", Toast.LENGTH_SHORT).show();
                     }
                     else{

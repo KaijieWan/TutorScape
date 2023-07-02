@@ -29,9 +29,6 @@ public class SettingsFragment extends Fragment {
     private NavController navController;
     private NavHostFragment navHostFragment;
     ChipNavigationBar menu;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-    Fragment fragment = null;
     ImageView expandButton;
     RelativeLayout containerMain;
 
@@ -76,12 +73,12 @@ public class SettingsFragment extends Fragment {
                 if(menu.isExpanded()){
                     TransitionManager.beginDelayedTransition(containerMain, changeBounds);
                     menu.collapse();
-                    expandButton.setImageResource(R.drawable.ic_back);
+                    expandButton.setImageResource(R.drawable.ic_forward);
                 }
                 else{
                     TransitionManager.beginDelayedTransition(containerMain, changeBounds);
                     menu.expand();
-                    expandButton.setImageResource(R.drawable.ic_forward);
+                    expandButton.setImageResource(R.drawable.ic_back);
                 }
             }
         });
