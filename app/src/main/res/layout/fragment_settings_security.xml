@@ -4,12 +4,73 @@
     android:layout_height="match_parent"
     android:background="@color/color_security">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/security"
-        android:textSize="40sp"
-        android:textColor="@color/white"
-        android:layout_margin="16dp"/>
+    <EditText
+        android:id="@+id/editEmail"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/rounded_text_background"
+        android:ems="10"
+        android:fontFamily="@font/ubuntu"
+        android:hint="Change Email"
+        android:inputType="textEmailAddress"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColorHint="@color/techBlue"
+        android:textSize="18sp"
+        android:textColor="@color/techBlue" />
 
+    <EditText
+        android:id="@+id/editPassword"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="165dp"
+        android:background="@drawable/rounded_text_background"
+        android:ems="10"
+        android:fontFamily="@font/ubuntu"
+        android:hint="Change Password"
+        android:inputType="textPassword"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColorHint="@color/techBlue"
+        android:textSize="18sp"
+        android:textColor="@color/techBlue" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="100dp"
+        android:layout_alignParentBottom="true">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:id="@+id/apply_button"
+            android:backgroundTint="@color/green"
+            android:text="Done"
+            android:textColor="@color/techBlue"
+            android:textStyle="bold"
+            android:background="@drawable/bg_shadow"/>
+
+        <TextView
+            android:layout_width="45dp"
+            android:layout_height="match_parent"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:id="@+id/reset_button"
+            android:backgroundTint="@color/red"
+            android:text="Cancel"
+            android:textColor="@color/techBlue"
+            android:textStyle="bold"
+            android:background="@drawable/bg_shadow"/>
+
+    </LinearLayout>
 </RelativeLayout>

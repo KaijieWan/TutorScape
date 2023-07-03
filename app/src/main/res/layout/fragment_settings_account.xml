@@ -5,23 +5,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_account">
 
-    <EditText
-        android:id="@+id/editEmail"
-        android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="57dp"
-        android:layout_marginTop="100dp"
-        android:background="@drawable/rounded_text_background"
-        android:ems="10"
-        android:fontFamily="@font/ubuntu"
-        android:hint="Edit Email"
-        android:inputType="textEmailAddress"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:textColorHint="@color/techBlue"
-        android:textSize="18sp"
-        android:textColor="@color/techBlue" />
 
     <EditText
         android:id="@+id/editName"
@@ -29,7 +12,7 @@
         android:layout_height="48dp"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="57dp"
-        android:layout_marginTop="165dp"
+        android:layout_marginTop="100dp"
         android:background="@drawable/rounded_text_background"
         android:ems="10"
         android:fontFamily="@font/ubuntu"
@@ -48,11 +31,11 @@
         android:layout_height="48dp"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="57dp"
-        android:layout_marginTop="230dp"
+        android:layout_marginTop="165dp"
         android:background="@drawable/rounded_text_background"
         android:ems="10"
         android:fontFamily="@font/ubuntu"
-        android:hint="Edit Age"
+        android:hint="Edit Birth Date (DD/MM/YY)"
         android:inputType="textPersonName"
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ  "
         android:paddingStart="10dp"
@@ -66,7 +49,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_toEndOf="@id/editAge"
-        android:layout_marginTop="235dp"
+        android:layout_marginTop="170dp"
         android:layout_marginStart="-40dp"
         app:srcCompat="@drawable/calender_icon" />
 
@@ -76,7 +59,7 @@
         android:layout_height="48dp"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="57dp"
-        android:layout_marginTop="295dp"
+        android:layout_marginTop="230dp"
         android:background="@drawable/rounded_text_background"
         android:ems="10"
         android:fontFamily="@font/ubuntu"
@@ -99,7 +82,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:id="@+id/apply_button"
+            android:id="@+id/submit_button"
             android:backgroundTint="@color/green"
             android:text="Done"
             android:textColor="@color/techBlue"
@@ -113,7 +96,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:id="@+id/reset_button"
+            android:id="@+id/cancel_button"
             android:backgroundTint="@color/red"
             android:text="Cancel"
             android:textColor="@color/techBlue"
