@@ -4,17 +4,50 @@
     android:layout_height="match_parent"
     android:background="@color/color_security">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change Email and/or Password"
+        android:textColor="@color/white"
+        android:layout_margin="14dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/ubuntu"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_red_info" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You must enter current email (or update new email) and current password in the fields below; Only fill in new password when changing password"
+            android:textColor="@color/red"
+            android:fontFamily="@font/ubuntu"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginStart="4dp"/>
+
+    </LinearLayout>
+
     <EditText
-        android:id="@+id/editEmail"
+        android:id="@+id/currentEmail"
         android:layout_width="300dp"
         android:layout_height="48dp"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="57dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="120dp"
         android:background="@drawable/rounded_text_background"
         android:ems="10"
         android:fontFamily="@font/ubuntu"
-        android:hint="Change Email"
+        android:hint="Current Email"
         android:inputType="textEmailAddress"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
@@ -23,16 +56,52 @@
         android:textColor="@color/techBlue" />
 
     <EditText
-        android:id="@+id/editPassword"
+        android:id="@+id/currentPassword"
         android:layout_width="300dp"
         android:layout_height="48dp"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="57dp"
-        android:layout_marginTop="165dp"
+        android:layout_marginTop="185dp"
         android:background="@drawable/rounded_text_background"
         android:ems="10"
         android:fontFamily="@font/ubuntu"
-        android:hint="Change Password"
+        android:hint="Enter Current Password"
+        android:inputType="textPassword"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColorHint="@color/techBlue"
+        android:textSize="18sp"
+        android:textColor="@color/techBlue" />
+
+    <EditText
+        android:id="@+id/newPassword"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="250dp"
+        android:background="@drawable/rounded_text_background"
+        android:ems="10"
+        android:fontFamily="@font/ubuntu"
+        android:hint="Enter New Password"
+        android:inputType="textPassword"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColorHint="@color/techBlue"
+        android:textSize="18sp"
+        android:textColor="@color/techBlue" />
+
+    <EditText
+        android:id="@+id/confirmPassword"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="315dp"
+        android:background="@drawable/rounded_text_background"
+        android:ems="10"
+        android:fontFamily="@font/ubuntu"
+        android:hint="Confirm New Password"
         android:inputType="textPassword"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
@@ -51,7 +120,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:id="@+id/apply_button"
+            android:id="@+id/submit_button"
             android:backgroundTint="@color/green"
             android:text="Done"
             android:textColor="@color/techBlue"
@@ -65,7 +134,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:id="@+id/reset_button"
+            android:id="@+id/cancel_button"
             android:backgroundTint="@color/red"
             android:text="Cancel"
             android:textColor="@color/techBlue"
