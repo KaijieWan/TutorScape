@@ -80,26 +80,30 @@ public class SecurityFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //User does not want to update password
-                AuthCredential credential = EmailAuthProvider.getCredential(curEmail, currentPassword.getText().toString());
-                user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        //User does not want to change password
-                        if(TextUtils.isEmpty(newPassword.getText().toString()) || TextUtils.isEmpty(confirmPassword.getText().toString())){
-                            updateUserEmail();
-                        }
-                        else{ //User wants to change password
-                            if(!newPassword.getText().toString().equals(confirmPassword.getText().toString())){
-                                Toast.makeText(getContext(), "Passwords do not match, please enter again!", Toast.LENGTH_SHORT).show();
+                if(TextUtils.isEmpty(currentPassword.getText().toString())){
+                    Toast.makeText(getContext(), "Current password is required for any form of update!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    AuthCredential credential = EmailAuthProvider.getCredential(curEmail, currentPassword.getText().toString());
+                    user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            //User does not want to change password
+                            if(TextUtils.isEmpty(newPassword.getText().toString()) || TextUtils.isEmpty(confirmPassword.getText().toString())){
+                                updateUserEmail();
                             }
-                            else{
-                                updateUserEmailPass();
-                                Toast.makeText(getContext(), "Email address and password update successful!", Toast.LENGTH_SHORT).show();
+                            else{ //User wants to change password
+                                if(!newPassword.getText().toString().equals(confirmPassword.getText().toString())){
+                                    Toast.makeText(getContext(), "Passwords do not match, please enter again!", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    updateUserEmailPass();
+                                    Toast.makeText(getContext(), "Email address and password update successful!", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
 
@@ -151,6 +155,7 @@ public class SecurityFragment extends Fragment {
 
     private void updateUserEmailPass() {
         FirebaseUser user = firebaseAuth.getCurrentUser();
+        Log.d("updateUserEmailPass", "UID: " + firebaseAuth.getUid());
 
         user.updateEmail(currentEmail.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
