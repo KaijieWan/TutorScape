@@ -2,14 +2,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_notifications">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/notifications"
-        android:textSize="40sp"
+        android:id="@+id/notif_title"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="6dp"
+        android:fontFamily="@font/ubuntu"
+        android:text="Notification Bar"
         android:textColor="@color/white"
-        android:layout_margin="16dp"/>
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/notif_title"
+        app:showText="true"
+        android:textOn="Latest tuition centre updates: On"
+        android:textOff="Latest tuition centre updates: Off"
+        android:textColor="@color/cyan"
+        android:textSize="16sp"
+        app:switchPadding="20dp"
+        app:thumbTint="@color/white"
+        app:trackTint="@color/track_color_selector"
+        android:layout_marginStart="14dp"/>
+
 
 </RelativeLayout>

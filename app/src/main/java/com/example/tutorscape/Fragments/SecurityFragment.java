@@ -20,6 +20,7 @@ import com.example.tutorscape.MainActivity;
 import com.example.tutorscape.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -91,13 +92,14 @@ public class SecurityFragment extends Fragment {
                             //User does not want to change password
                             if(TextUtils.isEmpty(newPassword.getText().toString()) || TextUtils.isEmpty(confirmPassword.getText().toString())){
                                 updateUserEmail();
+                                Toast.makeText(getContext(), "Email address update successful!", Toast.LENGTH_SHORT).show();
                             }
                             else{ //User wants to change password
                                 if(!newPassword.getText().toString().equals(confirmPassword.getText().toString())){
                                     Toast.makeText(getContext(), "Passwords do not match, please enter again!", Toast.LENGTH_SHORT).show();
                                 }
                                 else{
-                                    updateUserEmailPass();
+                                    updateUserEmailPass(user);
                                     Toast.makeText(getContext(), "Email address and password update successful!", Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -153,43 +155,19 @@ public class SecurityFragment extends Fragment {
         return view;
     }
 
-    private void updateUserEmailPass() {
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+    private void updateUserEmailPass(FirebaseUser user) {
         Log.d("updateUserEmailPass", "UID: " + firebaseAuth.getUid());
-
-        user.updateEmail(currentEmail.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Log.d("updateUserEmailPass", "Email update successful");
-                    //Update realtime database as well
-                    String userId = firebaseAuth.getUid();
-                    DatabaseReference emailRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app/")
-                            .getReference("Users/" + userId);
-
-                    HashMap<String, Object> map = new HashMap<>();
-                    map.put("email", currentEmail.getText().toString());
-
-                    emailRef.updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                Log.d("updateUserEmailPass", "update successful");
-                            }
-                            else{
-                                Log.d("updateUserEmailPass", "update failed: " + task.getException().getMessage());
-                            }
-                        }
-                    });
-                }
-            }
-        });
 
         user.updatePassword(confirmPassword.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     Log.d("updateUserEmailPass", "Password update successful");
+                    updateUserEmail();
+                }
+                else{
+                    Exception exception = task.getException();
+                    Log.d("UpdateUserCredentials", "Password update failed: " + exception.getMessage());
                 }
             }
         });
@@ -203,7 +181,6 @@ public class SecurityFragment extends Fragment {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     Log.d("updateUserEmail", "Successful");
-                    Toast.makeText(getContext(), "Email address update successful!", Toast.LENGTH_SHORT).show();
                     //Update realtime database as well
                     String userId = firebaseAuth.getUid();
                     DatabaseReference emailRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app/")
@@ -216,10 +193,10 @@ public class SecurityFragment extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
-                                Log.d("updateUserEmailPass", "update successful");
+                                Log.d("updateUserEmail", "update successful");
                             }
                             else{
-                                Log.d("updateUserEmailPass", "update failed: " + task.getException().getMessage());
+                                Log.d("updateUserEmail", "update failed: " + task.getException().getMessage());
                             }
                         }
                     });
