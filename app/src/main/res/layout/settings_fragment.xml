@@ -61,7 +61,7 @@
                 android:id="@+id/expand_button"
                 android:layout_margin="8dp"
                 android:layout_gravity="end"
-                android:src="@drawable/ic_back"/>
+                android:src="@drawable/ic_forward"/>
 
         </LinearLayout>
 

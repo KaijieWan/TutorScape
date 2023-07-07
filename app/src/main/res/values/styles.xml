@@ -32,4 +32,11 @@
         <item name="android:dividerHeight">1dp</item>
     </style>
 
+    <style name="switchTextAppearance">
+        <item name="android:textColor">@color/techBlue</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/ubuntu</item>
+    </style>
+
 </resources>
