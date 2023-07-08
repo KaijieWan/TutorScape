@@ -106,7 +106,54 @@
             android:paddingStart="8dp"
             tools:ignore="RtlSymmetry" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/setButton"
+            android:backgroundTint="@color/teal_200"
+            android:text="Set"
+            android:textColor="@color/techBlue"
+            android:textStyle="bold"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/bg_shadow"/>
+
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/in_app_notif_title"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="6dp"
+        android:layout_below="@id/fav_timer_layout"
+        android:fontFamily="@font/ubuntu"
+        android:text="In-App Notifications"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fav_items_count_switch"
+        android:layout_below="@id/in_app_notif_title"
+        app:showText="true"
+        android:fontFamily="@font/ubuntu"
+        android:textOn="ON"
+        android:textOff="OFF"
+        android:text="Favourited items count"
+        app:switchTextAppearance="@style/switchTextAppearance"
+        android:textSize="16sp"
+        android:textColor="@color/cyan"
+        app:switchPadding="20dp"
+        android:thumb="@drawable/custom_thumb"
+        app:thumbTint="@color/white"
+        app:thumbTextPadding="4dp"
+        app:track="@drawable/custom_track"
+        app:trackTint="@color/track_color_selector"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="4dp"/>
 
 </RelativeLayout>

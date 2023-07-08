@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
@@ -25,6 +26,8 @@ public class NotificationsFragment extends Fragment {
     static boolean favTouched = false;
     private SwitchCompat updatesSwitch;
     private SwitchCompat favSwitch;
+    private SwitchCompat favItemCountSwitch;
+    private AppCompatButton timerSetButton;
     private EditText favTimer;
     private LinearLayout favTimerLayout;
     @SuppressLint("ClickableViewAccessibility")
@@ -37,9 +40,10 @@ public class NotificationsFragment extends Fragment {
         favSwitch = view.findViewById(R.id.fav_reminder_switch);
         favTimer = view.findViewById(R.id.fav_timer);
         favTimerLayout = view.findViewById(R.id.fav_timer_layout);
+        favItemCountSwitch = view.findViewById(R.id.fav_items_count_switch);
+        timerSetButton = view.findViewById(R.id.setButton);
 
-        favTimerLayout.setVisibility(View.GONE);
-
+        favTimerLayout.setVisibility(View.INVISIBLE);
         updatesSwitch.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
@@ -87,7 +91,7 @@ public class NotificationsFragment extends Fragment {
                         favTimer.setText("1");
                     }
                     else { //if set to Off, do something
-                        favTimerLayout.setVisibility(View.GONE);
+                        favTimerLayout.setVisibility(View.INVISIBLE);
                     }
                 }
             }
