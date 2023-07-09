@@ -44,6 +44,7 @@ public class NotificationsFragment extends Fragment {
         timerSetButton = view.findViewById(R.id.setButton);
 
         favTimerLayout.setVisibility(View.INVISIBLE);
+        timerSetButton.setVisibility(View.INVISIBLE);
         updatesSwitch.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
@@ -89,9 +90,11 @@ public class NotificationsFragment extends Fragment {
                         //if set to On, do something
                         favTimerLayout.setVisibility(View.VISIBLE);
                         favTimer.setText("1");
+                        timerSetButton.setVisibility(View.VISIBLE);
                     }
                     else { //if set to Off, do something
                         favTimerLayout.setVisibility(View.INVISIBLE);
+                        timerSetButton.setVisibility(View.INVISIBLE);
                     }
                 }
             }
