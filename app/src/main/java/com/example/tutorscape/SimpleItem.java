@@ -10,6 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.example.tutorscape.Adapter.DrawerAdapter;
+import com.example.tutorscape.Model.Favourite;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder>{
     private int selectedItemIconTint;
@@ -20,10 +30,12 @@ public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder>{
 
     private Drawable icon;
     private String title;
-
-    public SimpleItem(Drawable icon, String title) {
+    private int position;
+    private int favCount = 0;
+    public SimpleItem(Drawable icon, String title, int position) {
         this.icon = icon;
         this.title = title;
+        this.position = position;
     }
 
     @Override
@@ -37,9 +49,20 @@ public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder>{
     public void bindViewHolder(ViewHolder holder) {
         holder.title.setText(title);
         holder.icon.setImageDrawable(icon);
+        if(position==2){
+            holder.numBanner.setText(String.format(String.valueOf(favCount)));
+            holder.numBanner.setVisibility(View.VISIBLE);
+        }
+        else{
+            holder.numBanner.setVisibility(View.INVISIBLE);
+        }
 
         holder.title.setTextColor(isChecked ? selectedItemTextTint : normalItemTextTint);
         holder.icon.setColorFilter(isChecked ? selectedItemIconTint : normalItemIconTint);
+    }
+
+    public void setFavCount(int count){
+        favCount = count;
     }
 
     public SimpleItem withSelectedIconTint(int selectedItemIconTint){
@@ -65,11 +88,13 @@ public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder>{
     static class ViewHolder extends DrawerAdapter.ViewHolder{
         private ImageView icon;
         private TextView title;
+        private TextView numBanner;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             icon = itemView.findViewById(R.id.icon);
             title = itemView.findViewById(R.id.title);
+            numBanner = itemView.findViewById(R.id.number_banner);
         }
     }
 }

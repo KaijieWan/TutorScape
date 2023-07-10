@@ -106,4 +106,11 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             drawerAdapter.setSelected(getAdapterPosition());
         }
     }
+
+    public DrawerItem getItem(int position) {
+        if (position >= 0 && position < items.size()) {
+            return items.get(position);
+        }
+        return null;
+    }
 }

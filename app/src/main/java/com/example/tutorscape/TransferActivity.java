@@ -2,6 +2,7 @@ package com.example.tutorscape;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -23,12 +24,21 @@ import com.example.tutorscape.Fragments.DashboardFragment;
 import com.example.tutorscape.Fragments.FavFragment;
 import com.example.tutorscape.Fragments.ReviewFragment;
 import com.example.tutorscape.Fragments.SettingsFragment;
+import com.example.tutorscape.Model.Favourite;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.ktx.Firebase;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class TransferActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
     private static final int POS_CLOSE = 0;
@@ -41,7 +51,9 @@ public class TransferActivity extends AppCompatActivity implements DrawerAdapter
     private String[] screenTitles;
     private Drawable[] screenIcons;
     private SlidingRootNav slidingRootNav;
+    private DrawerAdapter adapter;
     private Toolbar toolbar;
+    private int favoritesCount = 0; // Placeholder count for favorites
     private NavHostFragment navHostFragment;
     private NavController navController;
 
@@ -69,7 +81,7 @@ public class TransferActivity extends AppCompatActivity implements DrawerAdapter
         screenIcons = loadScreenIcons();
         screenTitles = loadScreenTitles();
 
-        DrawerAdapter adapter = new DrawerAdapter(Arrays.asList(
+        adapter = new DrawerAdapter(Arrays.asList(
                 createItemFor(POS_CLOSE),
                 createItemFor(POS_DASHBOARD).setChecked(true),
                 createItemFor(POS_FAVOURITES),
@@ -91,10 +103,33 @@ public class TransferActivity extends AppCompatActivity implements DrawerAdapter
         //navController = navHostFragment.getNavController();
 
         //navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        // Retrieve the favorites count from the database initially
+        firebaseAuth = FirebaseAuth.getInstance();
+        String userId = firebaseAuth.getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference().child("Favourites/" + userId);
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                favoritesCount = (int) snapshot.getChildrenCount();
+                // After retrieving the count, update the drawer menu item
+                DrawerItem favoritesItem = adapter.getItem(POS_FAVOURITES);
+                if (favoritesItem instanceof SimpleItem) {
+                    ((SimpleItem) favoritesItem).setFavCount(favoritesCount);
+                    adapter.notifyItemChanged(POS_FAVOURITES);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle cancellation
+            }
+        });
     }
 
     private DrawerItem createItemFor(int position){
-        return new SimpleItem(screenIcons[position], screenTitles[position])
+
+        return new SimpleItem(screenIcons[position], screenTitles[position], position)
                 .withIconTint(color(R.color.techBlue))
                 .withTextTint(color(R.color.black))
                 .withSelectedIconTint(color(R.color.techBlue))
@@ -142,6 +177,29 @@ public class TransferActivity extends AppCompatActivity implements DrawerAdapter
             //navController.navigate(R.id.DashboardFragment);
         }
         else if(position == POS_FAVOURITES){
+            //Define the database reference for the reviews and pass in the count
+            //firebaseAuth = FirebaseAuth.getInstance();
+            String userId = firebaseAuth.getUid();
+            DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                    .getReference().child("Favourites/" + userId);
+
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    int count = (int) snapshot.getChildrenCount();
+                    DrawerItem selectedItem = adapter.getItem(position);
+                    if(selectedItem instanceof SimpleItem){
+                        ((SimpleItem) selectedItem).setFavCount(count);
+                        adapter.notifyItemChanged(position);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
             FavFragment favFragment = new FavFragment();
             transaction.replace(R.id.container, favFragment);
             //navController.navigate(R.id.FavFragment);
