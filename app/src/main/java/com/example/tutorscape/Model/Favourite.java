@@ -2,8 +2,6 @@ package com.example.tutorscape.Model;
 
 public class Favourite {
     private String TCID;
-    private String UID;
-
     public Favourite() {
     }
 

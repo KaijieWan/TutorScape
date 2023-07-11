@@ -2,6 +2,7 @@ package com.example.tutorscape.Fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -12,6 +13,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,16 +22,25 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.tutorscape.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class NotificationsFragment extends Fragment {
     static boolean updatesTouched = false;
     static boolean favTouched = false;
+    static boolean favCountTouched = false;
     private SwitchCompat updatesSwitch;
     private SwitchCompat favSwitch;
     private SwitchCompat favItemCountSwitch;
     private AppCompatButton timerSetButton;
     private EditText favTimer;
     private LinearLayout favTimerLayout;
+    private FirebaseAuth firebaseAuth;
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
@@ -45,6 +56,9 @@ public class NotificationsFragment extends Fragment {
 
         favTimerLayout.setVisibility(View.INVISIBLE);
         timerSetButton.setVisibility(View.INVISIBLE);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        String userId = firebaseAuth.getUid();
         updatesSwitch.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
@@ -95,6 +109,56 @@ public class NotificationsFragment extends Fragment {
                     else { //if set to Off, do something
                         favTimerLayout.setVisibility(View.INVISIBLE);
                         timerSetButton.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+        });
+
+        favItemCountSwitch.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                favCountTouched = true;
+                return false;
+            }
+        });
+
+        favItemCountSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                if (favCountTouched) {
+                    favCountTouched = false;
+                    DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                            .getReference().child("Notifications/" + userId);
+                    HashMap<String, Object> map = new HashMap<>();
+                    if(isChecked) {
+                        //if set to On
+                        map.put("favCount", true);
+
+                        ref.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Log.d("favItemCountSwitch", "onCheckedChanged setValue Successful");
+                                    Toast.makeText(getContext(), "Favourites count set!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                    else { //if set to Off
+                        map.put("favCount", false);
+
+                        ref.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Log.d("favItemCountSwitch", "onCheckedChanged setValue Successful");
+                                    Toast.makeText(getContext(), "Favourites count set!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     }
                 }
             }

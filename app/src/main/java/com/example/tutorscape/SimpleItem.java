@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 
 import com.example.tutorscape.Adapter.DrawerAdapter;
 import com.example.tutorscape.Model.Favourite;
+import com.example.tutorscape.Model.Notification;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,11 +28,12 @@ public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder>{
 
     private int normalItemIconTint;
     private int normalItemTextTint;
-
     private Drawable icon;
     private String title;
     private int position;
     private int favCount = 0;
+    private FirebaseAuth firebaseAuth;
+    private boolean isFavCount;
     public SimpleItem(Drawable icon, String title, int position) {
         this.icon = icon;
         this.title = title;
@@ -50,8 +52,36 @@ public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder>{
         holder.title.setText(title);
         holder.icon.setImageDrawable(icon);
         if(position==2){
-            holder.numBanner.setText(String.format(String.valueOf(favCount)));
-            holder.numBanner.setVisibility(View.VISIBLE);
+            if(favCount==0){
+                holder.numBanner.setVisibility(View.INVISIBLE);
+            }
+            else{
+                firebaseAuth = FirebaseAuth.getInstance();
+                String userId = firebaseAuth.getUid();
+                DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                        .getReference().child("Notifications/" + userId);
+
+                ref.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                            Notification notification = dataSnapshot.getValue(Notification.class);
+                            isFavCount = notification.isFavCount();
+                            break;
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+                if(isFavCount){
+                    holder.numBanner.setText(String.format(String.valueOf(favCount)));
+                    holder.numBanner.setVisibility(View.VISIBLE);
+                }
+                else{
+                    holder.numBanner.setVisibility(View.INVISIBLE);
+                }
+            }
         }
         else{
             holder.numBanner.setVisibility(View.INVISIBLE);
