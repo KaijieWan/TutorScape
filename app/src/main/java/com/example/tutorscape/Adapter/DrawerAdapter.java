@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tutorscape.DrawerItem;
+import com.example.tutorscape.SimpleItem;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,9 +19,9 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private List<DrawerItem> items;
     private Map<Class<? extends DrawerItem>, Integer> viewTypes;
     private SparseArray<DrawerItem> holderFactories;
-
     private OnItemSelectedListener listener;
-    
+    //private int favoritesCount = 0; // Added field for favorites count
+
     public DrawerAdapter(List<DrawerItem> items){
         this.items = items;
         this.viewTypes = new HashMap<>();
@@ -83,6 +84,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             listener.onItemSelected(position);
         }
     }
+
 
     public void setListener(OnItemSelectedListener listener){
         this.listener = listener;

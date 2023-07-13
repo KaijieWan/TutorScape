@@ -8,7 +8,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,22 +16,20 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.tutorscape.Adapter.DrawerAdapter;
-import com.example.tutorscape.Adapter.YourReviewsAdapter;
 import com.example.tutorscape.Fragments.DashboardFragment;
 import com.example.tutorscape.Fragments.FavFragment;
 import com.example.tutorscape.Fragments.ReviewFragment;
 import com.example.tutorscape.Fragments.SettingsFragment;
-import com.example.tutorscape.Model.Favourite;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.tutorscape.Model.Notification;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.ktx.Firebase;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
@@ -99,32 +96,83 @@ public class TransferActivity extends AppCompatActivity implements DrawerAdapter
 
         adapter.setSelected(POS_DASHBOARD);
 
-        //navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        //navController = navHostFragment.getNavController();
-
-        //navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        // Retrieve the favorites count from the database initially
         firebaseAuth = FirebaseAuth.getInstance();
         String userId = firebaseAuth.getUid();
-        DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
-                .getReference().child("Favourites/" + userId);
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference notifRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference().child("Notifications/" + userId);
+
+        notifRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                favoritesCount = (int) snapshot.getChildrenCount();
-                // After retrieving the count, update the drawer menu item
-                DrawerItem favoritesItem = adapter.getItem(POS_FAVOURITES);
-                if (favoritesItem instanceof SimpleItem) {
-                    ((SimpleItem) favoritesItem).setFavCount(favoritesCount);
-                    adapter.notifyItemChanged(POS_FAVOURITES);
+                Notification notification = snapshot.getValue(Notification.class);
+                boolean isFavCountEnabled = notification != null && notification.isFavCount();
+                Log.d("TAG", "Notification settings retrieved. isFavCountEnabled: " + isFavCountEnabled);
+                if(isFavCountEnabled){
+                    // Retrieve the favorites count from the database initially
+                    DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                            .getReference().child("Favourites/" + userId);
+
+                    ref.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            favoritesCount = (int) snapshot.getChildrenCount();
+                            Log.d("TAG", "Favorites count retrieved: " + favoritesCount);
+                            // After retrieving the count, update the drawer menu item
+                            //updateFavoritesCountInDrawer();
+                            updateDrawerMenuItems();
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // Handle cancellation
+                            Log.e("TAG", "Favorites count retrieval cancelled.");
+                        }
+                    });
+                }
+                else{
+                    //Handle the disappearing of the number banner
+                    Log.d("TAG", "Favorites count is not enabled. Handling disappearing of number banner.");
+                    favoritesCount = 0;
+                    //updateFavoritesCountInDrawer();
+                    updateDrawerMenuItems();
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle cancellation
             }
         });
+
+    }
+
+    private void updateFavoritesCountInDrawer() {
+        Log.d("TAG", "Updating favorites count in the drawer: " + favoritesCount);
+        // Update the favorites count in the drawer menu item
+        DrawerItem favoritesItem = adapter.getItem(POS_FAVOURITES);
+        if (favoritesItem instanceof SimpleItem) {
+            ((SimpleItem) favoritesItem).setFavCount(favoritesCount);
+            adapter.notifyItemChanged(POS_FAVOURITES);
+        }
+    }
+
+    private void updateDrawerMenuItems() {
+        // Iterate through all the items in the drawer menu
+        for (int i = 0; i < adapter.getItemCount(); i++) {
+            DrawerItem item = adapter.getItem(i);
+            if (item instanceof SimpleItem simpleItem) {
+                if (i == POS_FAVOURITES) {
+                    // Update the favorites count for the "Favorites" item
+                    simpleItem.setFavCount(favoritesCount);
+                }
+                // Determine the visibility of the number banner based on the item position
+                if (i == POS_FAVOURITES && favoritesCount > 0){
+                    simpleItem.setNumBannerVisible(true);
+                } else {
+                    simpleItem.setNumBannerVisible(false);
+                }
+                // Notify the adapter about the change
+                adapter.notifyItemChanged(i);
+            }
+        }
     }
 
     private DrawerItem createItemFor(int position){

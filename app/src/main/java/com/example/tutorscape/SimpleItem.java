@@ -51,40 +51,11 @@ public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder>{
     public void bindViewHolder(ViewHolder holder) {
         holder.title.setText(title);
         holder.icon.setImageDrawable(icon);
-        if(position==2){
-            if(favCount==0){
-                holder.numBanner.setVisibility(View.INVISIBLE);
-            }
-            else{
-                firebaseAuth = FirebaseAuth.getInstance();
-                String userId = firebaseAuth.getUid();
-                DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
-                        .getReference().child("Notifications/" + userId);
+        holder.numBanner.setVisibility(View.INVISIBLE);
 
-                ref.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                            Notification notification = dataSnapshot.getValue(Notification.class);
-                            isFavCount = notification.isFavCount();
-                            break;
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
-                });
-                if(isFavCount){
-                    holder.numBanner.setText(String.format(String.valueOf(favCount)));
-                    holder.numBanner.setVisibility(View.VISIBLE);
-                }
-                else{
-                    holder.numBanner.setVisibility(View.INVISIBLE);
-                }
-            }
-        }
-        else{
-            holder.numBanner.setVisibility(View.INVISIBLE);
+        if(isFavCount){
+            holder.numBanner.setText(String.format(String.valueOf(favCount)));
+            holder.numBanner.setVisibility(View.VISIBLE);
         }
 
         holder.title.setTextColor(isChecked ? selectedItemTextTint : normalItemTextTint);
@@ -113,6 +84,10 @@ public class SimpleItem extends DrawerItem<SimpleItem.ViewHolder>{
     public SimpleItem withTextTint(int normalItemTextTint){
         this.normalItemTextTint = normalItemTextTint;
         return this;
+    }
+
+    public void setNumBannerVisible(boolean set){
+        isFavCount = set;
     }
 
     static class ViewHolder extends DrawerAdapter.ViewHolder{

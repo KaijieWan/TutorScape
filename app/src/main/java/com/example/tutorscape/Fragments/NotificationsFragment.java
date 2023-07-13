@@ -21,12 +21,16 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.tutorscape.Model.Notification;
 import com.example.tutorscape.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -59,6 +63,23 @@ public class NotificationsFragment extends Fragment {
 
         firebaseAuth = FirebaseAuth.getInstance();
         String userId = firebaseAuth.getUid();
+
+        DatabaseReference notifRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference().child("Notifications/" + userId);
+
+        notifRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Notification notification = snapshot.getValue(Notification.class);
+                if(notification.isFavCount()){
+                    favItemCountSwitch.setChecked(true);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
         updatesSwitch.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
@@ -155,7 +176,7 @@ public class NotificationsFragment extends Fragment {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
                                     Log.d("favItemCountSwitch", "onCheckedChanged setValue Successful");
-                                    Toast.makeText(getContext(), "Favourites count set!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Favourites count removed!", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
