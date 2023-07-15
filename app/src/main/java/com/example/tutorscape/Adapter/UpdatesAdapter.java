@@ -23,7 +23,6 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class UpdatesAdapter extends RecyclerView.Adapter<UpdatesAdapter.ViewHolder>{
-
     private Context mContext;
     private List<Updates> mUpdates;
 
