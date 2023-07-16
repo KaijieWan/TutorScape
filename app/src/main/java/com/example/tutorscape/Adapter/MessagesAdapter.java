@@ -51,6 +51,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         if(message.isRead()){
             holder.unreadIcon.setVisibility(View.INVISIBLE);
         }
+
+        //Set onClickListener for the layout to lead to the full message activity page
     }
 
     @Override
