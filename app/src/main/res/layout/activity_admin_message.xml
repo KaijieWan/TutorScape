@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AdminMessageActivity"
+    android:background="@drawable/tutorscape_main">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:text="Admin Message"
+        android:textSize="18sp"
+        android:layout_margin="15dp"
+        android:textColor="@color/techBlue"
+        android:fontFamily="@font/ubuntu"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkboxes"
+        android:orientation="horizontal"
+        android:layout_below="@id/title"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:background="@drawable/rounded_cyan_text_background">
+
+        <CheckBox
+            android:id="@+id/massCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mass message"
+            android:textSize="16sp"
+            android:fontFamily="@font/ubuntu"
+            android:textColor="@color/techBlue"
+            android:buttonTint="@color/techBlue" />
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"/>
+
+        <CheckBox
+            android:id="@+id/privateCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Private message"
+            android:textSize="16sp"
+            android:fontFamily="@font/ubuntu"
+            android:textColor="@color/techBlue"
+            android:buttonTint="@color/techBlue"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_cyan_text_background"
+        android:layout_below="@id/checkboxes"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
