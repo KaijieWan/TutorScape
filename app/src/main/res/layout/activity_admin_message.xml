@@ -59,23 +59,85 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/inputFields"
         android:background="@drawable/rounded_cyan_text_background"
         android:layout_below="@id/checkboxes"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/message_title"
+            android:textColor="@color/techBlue"
+            android:fontFamily="@font/ubuntu"
+            android:paddingStart="10dp"
+            android:hint="Enter title of message"
+            android:textColorHint="@color/techBlue"
+            tools:ignore="RtlSymmetry" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/message_content"
+            android:textColor="@color/techBlue"
+            android:fontFamily="@font/ubuntu"
+            android:paddingStart="10dp"
+            android:hint="Enter message content"
+            android:textColorHint="@color/techBlue"
+            tools:ignore="RtlSymmetry" />
 
-        <TextView
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/userId"
+            android:textColor="@color/techBlue"
+            android:fontFamily="@font/ubuntu"
+            android:paddingStart="10dp"
+            android:hint="Enter User ID"
+            android:textColorHint="@color/techBlue"
+            tools:ignore="RtlSymmetry" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inputFields"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_height="40dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:id="@+id/cancel_button"
+            android:backgroundTint="@color/red"
+            android:text="Cancel"
+            android:textColor="@color/techBlue"
+            android:textStyle="bold"
+            android:layout_gravity="start"
+            android:layout_marginStart="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_shadow"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:id="@+id/send_button"
+            android:backgroundTint="@color/green"
+            android:text="Send"
+            android:textColor="@color/techBlue"
+            android:textStyle="bold"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_shadow"/>
 
     </LinearLayout>
 
