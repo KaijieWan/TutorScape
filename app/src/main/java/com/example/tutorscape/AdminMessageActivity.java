@@ -7,6 +7,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
@@ -19,7 +20,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class AdminMessageActivity extends AppCompatActivity {
     private CheckBox massCheck;
@@ -103,7 +108,7 @@ public class AdminMessageActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                finish();
             }
         });
 
@@ -122,7 +127,7 @@ public class AdminMessageActivity extends AppCompatActivity {
 
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("UID", "");
-                    //map.put("date", );
+                    map.put("date", getCurrentDateTime());
                     map.put("title", messageTitle.getText().toString());
                     map.put("content", messageContent.getText().toString());
                     map.put("isRead", false);
@@ -131,11 +136,45 @@ public class AdminMessageActivity extends AppCompatActivity {
                     massRef.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            //Do something once completed
+                            Log.d("sendButton", "mass message data send and set");
+                            Toast.makeText(AdminMessageActivity.this, "Mass message sent!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                else if (privateCheck.isChecked()) {
+                    DatabaseReference privateRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
+                            .child("Message");
+
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("UID", userId.getText().toString());
+                    map.put("date", getCurrentDateTime());
+                    map.put("title", messageTitle.getText().toString());
+                    map.put("content", messageContent.getText().toString());
+                    map.put("isRead", false);
+                    map.put("messageID", privateRef.push().getKey());
+
+                    privateRef.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Log.d("sendButton", "private message data send and set");
+                            Toast.makeText(AdminMessageActivity.this, "Private message sent!", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
             }
         });
+    }
+
+    public String getCurrentDateTime() {
+        // Create a SimpleDateFormat object with the desired format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm", Locale.US);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Singapore"));
+
+        // Get the current date and time
+        Date currentDate = new Date();
+
+        // Format the date and time using the SimpleDateFormat object
+        // Now you can use the formattedDateTime string as per your requirements
+        return dateFormat.format(currentDate);
     }
 }

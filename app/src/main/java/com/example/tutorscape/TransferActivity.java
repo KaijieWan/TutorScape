@@ -17,6 +17,8 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.example.tutorscape.Adapter.DrawerAdapter;
 import com.example.tutorscape.Fragments.DashboardFragment;
@@ -51,6 +53,7 @@ public class TransferActivity extends AppCompatActivity implements DrawerAdapter
     private DrawerAdapter adapter;
     private Toolbar toolbar;
     private int favoritesCount = 0; // Placeholder count for favorites
+    private ImageView adminMessage;
     private NavHostFragment navHostFragment;
     private NavController navController;
 
@@ -142,6 +145,14 @@ public class TransferActivity extends AppCompatActivity implements DrawerAdapter
             }
         });
 
+        adminMessage = findViewById(R.id.admin_message);
+        adminMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TransferActivity.this, AdminMessageActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void updateFavoritesCountInDrawer() {
