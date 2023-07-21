@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -37,6 +38,7 @@ public class AdminMessageActivity extends AppCompatActivity {
     private static boolean isMass = false;
     private static boolean massTouched = false;
     private static boolean privateTouched = false;
+    private FirebaseAuth firebaseAuth;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class AdminMessageActivity extends AppCompatActivity {
 
         userId.setVisibility(View.GONE);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        String UID = firebaseAuth.getUid();
         massCheck.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
@@ -71,6 +75,7 @@ public class AdminMessageActivity extends AppCompatActivity {
                         //if checked, do something
                         isMass = true;
                         privateCheck.setChecked(false);
+                        userId.setVisibility(View.GONE);
                     }
                     else { //if unchecked, do something
                         isMass = false;
@@ -123,7 +128,7 @@ public class AdminMessageActivity extends AppCompatActivity {
                 }
                 else if (massCheck.isChecked()) {
                     DatabaseReference massRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
-                            .child("Message");
+                            .child("Message/" + UID);
 
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("UID", "");
@@ -138,12 +143,13 @@ public class AdminMessageActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             Log.d("sendButton", "mass message data send and set");
                             Toast.makeText(AdminMessageActivity.this, "Mass message sent!", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     });
                 }
                 else if (privateCheck.isChecked()) {
                     DatabaseReference privateRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
-                            .child("Message");
+                            .child("Message/" + UID);
 
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("UID", userId.getText().toString());
@@ -158,6 +164,7 @@ public class AdminMessageActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             Log.d("sendButton", "private message data send and set");
                             Toast.makeText(AdminMessageActivity.this, "Private message sent!", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     });
                 }
