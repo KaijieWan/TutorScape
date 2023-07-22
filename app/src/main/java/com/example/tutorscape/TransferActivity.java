@@ -38,6 +38,7 @@ import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class TransferActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
     private static final int POS_CLOSE = 0;
@@ -146,6 +147,9 @@ public class TransferActivity extends AppCompatActivity implements DrawerAdapter
         });
 
         adminMessage = findViewById(R.id.admin_message);
+        if(!Objects.equals(userId, "5NYsrzw2cWQGVLt68iO2obCga432")){
+            adminMessage.setVisibility(View.GONE);
+        }
         adminMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

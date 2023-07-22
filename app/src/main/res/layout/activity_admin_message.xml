@@ -13,7 +13,10 @@
         android:id="@+id/title"
         android:text="Admin Message"
         android:textSize="18sp"
-        android:layout_margin="15dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
         android:textColor="@color/techBlue"
         android:fontFamily="@font/ubuntu"
         android:textStyle="bold"/>

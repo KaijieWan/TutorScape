@@ -6,6 +6,7 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.provider.Contacts;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -128,17 +129,18 @@ public class AdminMessageActivity extends AppCompatActivity {
                 }
                 else if (massCheck.isChecked()) {
                     DatabaseReference massRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
-                            .child("Message/" + UID);
+                            .child("Messages");
 
                     HashMap<String, Object> map = new HashMap<>();
+                    String messageID = massRef.push().getKey();
                     map.put("UID", "");
                     map.put("date", getCurrentDateTime());
                     map.put("title", messageTitle.getText().toString());
                     map.put("content", messageContent.getText().toString());
                     map.put("isRead", false);
-                    map.put("messageID", massRef.push().getKey());
+                    map.put("messageID", messageID);
 
-                    massRef.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    massRef.child(UID).child(messageID).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             Log.d("sendButton", "mass message data send and set");
@@ -149,17 +151,18 @@ public class AdminMessageActivity extends AppCompatActivity {
                 }
                 else if (privateCheck.isChecked()) {
                     DatabaseReference privateRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
-                            .child("Message/" + UID);
+                            .child("Messages");
 
                     HashMap<String, Object> map = new HashMap<>();
+                    String messageID = privateRef.push().getKey();
                     map.put("UID", userId.getText().toString());
                     map.put("date", getCurrentDateTime());
                     map.put("title", messageTitle.getText().toString());
                     map.put("content", messageContent.getText().toString());
                     map.put("isRead", false);
-                    map.put("messageID", privateRef.push().getKey());
+                    map.put("messageID", messageID);
 
-                    privateRef.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    privateRef.child(UID).child(messageID).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             Log.d("sendButton", "private message data send and set");
