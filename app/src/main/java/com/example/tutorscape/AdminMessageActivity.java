@@ -19,8 +19,11 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,7 +60,6 @@ public class AdminMessageActivity extends AppCompatActivity {
         userId.setVisibility(View.GONE);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        String UID = firebaseAuth.getUid();
         massCheck.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
@@ -130,29 +132,45 @@ public class AdminMessageActivity extends AppCompatActivity {
                 else if (massCheck.isChecked()) {
                     DatabaseReference massRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
                             .child("Messages");
-
-                    HashMap<String, Object> map = new HashMap<>();
                     String messageID = massRef.push().getKey();
-                    map.put("UID", "");
-                    map.put("date", getCurrentDateTime());
-                    map.put("title", messageTitle.getText().toString());
-                    map.put("content", messageContent.getText().toString());
-                    map.put("isRead", false);
-                    map.put("messageID", messageID);
+                    DatabaseReference userRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
+                            .child("Users");
 
-                    massRef.child(UID).child(messageID).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    userRef.addValueEventListener(new ValueEventListener() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Log.d("sendButton", "mass message data send and set");
-                            Toast.makeText(AdminMessageActivity.this, "Mass message sent!", Toast.LENGTH_SHORT).show();
-                            finish();
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                String UID = dataSnapshot.getKey();
+                                HashMap<String, Object> map = new HashMap<>();
+                                map.put("UID", "");
+                                map.put("date", getCurrentDateTime());
+                                map.put("title", messageTitle.getText().toString());
+                                map.put("content", messageContent.getText().toString());
+                                map.put("isRead", false);
+                                map.put("messageID", messageID);
+                                massRef.child(UID).child(messageID).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Log.d("sendButton", "mass message data send and set");
+                                        Toast.makeText(AdminMessageActivity.this, "Mass message sent!", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                });
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
                         }
                     });
                 }
                 else if (privateCheck.isChecked()) {
                     DatabaseReference privateRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
                             .child("Messages");
+                    DatabaseReference userRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
+                            .child("Users");
 
+                    //Have to touch up again
                     HashMap<String, Object> map = new HashMap<>();
                     String messageID = privateRef.push().getKey();
                     map.put("UID", userId.getText().toString());
@@ -162,12 +180,23 @@ public class AdminMessageActivity extends AppCompatActivity {
                     map.put("isRead", false);
                     map.put("messageID", messageID);
 
-                    privateRef.child(UID).child(messageID).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    userRef.addValueEventListener(new ValueEventListener() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Log.d("sendButton", "private message data send and set");
-                            Toast.makeText(AdminMessageActivity.this, "Private message sent!", Toast.LENGTH_SHORT).show();
-                            finish();
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                String UID = dataSnapshot.getKey();
+                                privateRef.child(UID).child(messageID).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Log.d("sendButton", "private message data send and set");
+                                        Toast.makeText(AdminMessageActivity.this, "Private message sent!", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                });
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
                         }
                     });
                 }
