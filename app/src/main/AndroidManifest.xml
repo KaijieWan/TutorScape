@@ -17,6 +17,9 @@
         android:theme="@style/Theme.TutorScape"
         tools:targetApi="31">
         <activity
+            android:name=".MessageFullActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdminMessageActivity"
             android:exported="false" />
         <activity
