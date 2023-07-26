@@ -1,4 +1,5 @@
 <resources>
+    <string name="google_maps_api_key">AIzaSyCEu4_Mfes0JEmAJiJ_OToXoj2QkEdun5Y</string>
     <string name="app_name"><u>TutorScape</u></string>
     <string name="bold_app_name"><b><u>TutorScape</u></b></string>
     <string name="login_button">Log In</string>
