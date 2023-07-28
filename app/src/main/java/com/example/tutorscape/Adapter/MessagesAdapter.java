@@ -1,6 +1,7 @@
 package com.example.tutorscape.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -14,8 +15,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tutorscape.MessageFullActivity;
 import com.example.tutorscape.Model.Message;
 import com.example.tutorscape.R;
+import com.example.tutorscape.ResultsActivity;
 
 import java.util.List;
 
@@ -53,6 +56,16 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         }
 
         //Set onClickListener for the layout to lead to the full message activity page
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the item click event
+                Intent intent = new Intent(mContext, MessageFullActivity.class);
+                intent.putExtra("messageID", message.getMessageID());
+                // Redirect to another page or view based on the selected item
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override

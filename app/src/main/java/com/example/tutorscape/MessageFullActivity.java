@@ -4,15 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.tutorscape.Model.Message;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 public class MessageFullActivity extends AppCompatActivity {
     private String messageID;
@@ -50,7 +55,16 @@ public class MessageFullActivity extends AppCompatActivity {
                         messageTitle.setText(message.getTitle());
                         messageDate.setText(message.getDate().substring(0, 8));
                         messageContent.setText(message.getContent());
-                        message.setRead(true);
+
+                        //Setting isRead in database to true
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("isRead", true);
+                        mRef.child(messageID).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.d("mRef update", "isRead set to true");
+                            }
+                        });
                         break;
                     }
                 }
