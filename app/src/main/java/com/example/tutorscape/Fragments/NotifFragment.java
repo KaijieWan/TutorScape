@@ -104,6 +104,7 @@ public class NotifFragment extends Fragment {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                messagesList.clear();
                 Log.d("NotifFragment - readMessages", "onDataChange called");
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Message message = snapshot.getValue(Message.class);

@@ -1,5 +1,7 @@
 package com.example.tutorscape.Model;
 
+import com.google.firebase.database.PropertyName;
+
 public class Message {
     private String UID;
     private String date;
@@ -60,6 +62,7 @@ public class Message {
         this.content = content;
     }
 
+    @PropertyName("isRead")
     public boolean isRead() {
         return isRead;
     }
