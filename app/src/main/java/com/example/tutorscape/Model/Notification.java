@@ -7,15 +7,17 @@ public class Notification {
     private boolean favReminder;
     private String numHours;
     private boolean favCount;
+    private boolean messageCount;
 
     public Notification() {
     }
 
-    public Notification(boolean latestUpdates, boolean favReminder, String numHours, boolean favCount) {
+    public Notification(boolean latestUpdates, boolean favReminder, String numHours, boolean favCount, boolean messageCount) {
         this.latestUpdates = latestUpdates;
         this.favReminder = favReminder;
         this.numHours = numHours;
         this.favCount = favCount;
+        this.messageCount = messageCount;
     }
 
     public boolean isLatestUpdates() {
@@ -49,5 +51,14 @@ public class Notification {
 
     public void setFavCount(boolean favCount) {
         this.favCount = favCount;
+    }
+
+    @PropertyName("messageCount")
+    public boolean isMessageCount() {
+        return messageCount;
+    }
+
+    public void setMessageCount(boolean messageCount) {
+        this.messageCount = messageCount;
     }
 }

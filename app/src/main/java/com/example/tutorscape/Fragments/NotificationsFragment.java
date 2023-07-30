@@ -38,10 +38,12 @@ public class NotificationsFragment extends Fragment {
     static boolean updatesTouched = false;
     static boolean favTouched = false;
     static boolean favCountTouched = false;
+    static boolean messagesTouched = false;
     private SwitchCompat updatesSwitch;
     private SwitchCompat favSwitch;
     private SwitchCompat favItemCountSwitch;
     private AppCompatButton timerSetButton;
+    private SwitchCompat messagesCountSwitch;
     private EditText favTimer;
     private LinearLayout favTimerLayout;
     private FirebaseAuth firebaseAuth;
@@ -57,6 +59,7 @@ public class NotificationsFragment extends Fragment {
         favTimerLayout = view.findViewById(R.id.fav_timer_layout);
         favItemCountSwitch = view.findViewById(R.id.fav_items_count_switch);
         timerSetButton = view.findViewById(R.id.setButton);
+        messagesCountSwitch = view.findViewById(R.id.messages_count);
 
         favTimerLayout.setVisibility(View.INVISIBLE);
         timerSetButton.setVisibility(View.INVISIBLE);
@@ -177,6 +180,56 @@ public class NotificationsFragment extends Fragment {
                                 if(task.isSuccessful()){
                                     Log.d("favItemCountSwitch", "onCheckedChanged setValue Successful");
                                     Toast.makeText(getContext(), "Favourites count removed!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+
+        messagesCountSwitch.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                messagesTouched = true;
+                return false;
+            }
+        });
+
+        messagesCountSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                if (messagesTouched) {
+                    messagesTouched = false;
+                    DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                            .getReference().child("Notifications/" + userId);
+                    HashMap<String, Object> map = new HashMap<>();
+                    if (isChecked) {
+                        //if set to On, do something
+                        map.put("messageCount", true);
+
+                        ref.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Log.d("messagesCountSwitch", "onCheckedChanged setValue Successful");
+                                    Toast.makeText(getContext(), "Messages count set!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                    else { //if set to Off, do something
+                        map.put("messageCount", false);
+
+                        ref.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Log.d("messagesCountSwitch", "onCheckedChanged setValue Successful");
+                                    Toast.makeText(getContext(), "Messages count removed!", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
