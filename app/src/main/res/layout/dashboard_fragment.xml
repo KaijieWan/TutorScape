@@ -26,6 +26,18 @@
         app:labelVisibilityMode="labeled"
         app:menu="@menu/top_menu" />
 
+    <com.example.tutorscape.BottomNavigationViewEx
+        android:id="@+id/bnve"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/cyan"
+        app:itemIconTint="@color/selector"
+        app:itemTextColor="@color/nav_icon_text"
+        app:itemTextAppearanceActive="@style/BottomNavigationViewTextAppearanceActive"
+        app:itemTextAppearanceInactive="@style/BottomNavigationViewTextAppearanceInactive"
+        app:menu="@menu/top_menu"/>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="8dp"
