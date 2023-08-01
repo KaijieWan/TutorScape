@@ -21,10 +21,11 @@ import com.example.tutorscape.SearchActivity2;
 import com.example.tutorscape.TransferActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class DashboardFragment extends Fragment {
     private NavController navController;
-    private BottomNavigationView bottomNavigationView;
+    private BottomNavigationViewEx bottomNavigationViewEx;
     private NavHostFragment navHostFragment;
     private Toolbar myToolbar;
 
@@ -35,12 +36,12 @@ public class DashboardFragment extends Fragment {
         navHostFragment = (NavHostFragment) getChildFragmentManager().findFragmentById(R.id.fragment_container);
         navController = navHostFragment.getNavController();
         //navController = Navigation.findNavController(this, R.id.fragment_container);
-        bottomNavigationView = root.findViewById(R.id.bottom_navigation);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        bottomNavigationViewEx = root.findViewById(R.id.bnve);
+        NavigationUI.setupWithNavController(bottomNavigationViewEx, navController);
         Log.d("DashboardFragment", "Second call");
 
         // Set click listener for the menu items
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        bottomNavigationViewEx.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.nav_map) {
