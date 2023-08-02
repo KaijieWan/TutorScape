@@ -58,7 +58,7 @@ dependencies {
     implementation 'com.yarolegovich:sliding-root-nav:1.1.1'
     implementation 'com.google.android.material:material:<version>'
     implementation 'com.github.ismaeldivita:chip-navigation-bar:1.4.0'
-    implementation 'com.github.ittianyu:BottomNavigationViewEx:2.0.0'
+    implementation 'com.github.ittianyu:BottomNavigationViewEx:2.0.2'
 
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {

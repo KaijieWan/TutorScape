@@ -36,11 +36,19 @@ public class DashboardFragment extends Fragment {
         navHostFragment = (NavHostFragment) getChildFragmentManager().findFragmentById(R.id.fragment_container);
         navController = navHostFragment.getNavController();
         //navController = Navigation.findNavController(this, R.id.fragment_container);
-        bottomNavigationViewEx = root.findViewById(R.id.bnve);
+        bottomNavigationViewEx = (BottomNavigationViewEx) root.findViewById(R.id.bnve);
         NavigationUI.setupWithNavController(bottomNavigationViewEx, navController);
         Log.d("DashboardFragment", "Second call");
 
         // Set click listener for the menu items
+        // Add badge to an item (e.g., the first item):
+        /*BadgeItem badge = new BadgeItem()
+                .setBorderWidth(4)
+                .setBackgroundColorResource(R.color.colorAccent)
+                .setText("3") // Set the number you want to display
+                .setTextColorResource(R.color.colorWhite);*/
+        bottomNavigationViewEx.getOrCreateBadge(R.id.nav_notif);
+
         bottomNavigationViewEx.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
