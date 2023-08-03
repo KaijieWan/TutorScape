@@ -16,11 +16,19 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.tutorscape.MainActivity;
+import com.example.tutorscape.Model.Message;
 import com.example.tutorscape.R;
 import com.example.tutorscape.SearchActivity2;
 import com.example.tutorscape.TransferActivity;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class DashboardFragment extends Fragment {
@@ -28,6 +36,7 @@ public class DashboardFragment extends Fragment {
     private BottomNavigationViewEx bottomNavigationViewEx;
     private NavHostFragment navHostFragment;
     private Toolbar myToolbar;
+    private FirebaseAuth firebaseAuth;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View root = inflater.inflate(R.layout.dashboard_fragment, container, false);
@@ -47,7 +56,30 @@ public class DashboardFragment extends Fragment {
                 .setBackgroundColorResource(R.color.colorAccent)
                 .setText("3") // Set the number you want to display
                 .setTextColorResource(R.color.colorWhite);*/
-        bottomNavigationViewEx.getOrCreateBadge(R.id.nav_notif);
+        firebaseAuth = FirebaseAuth.getInstance();
+        String userId = firebaseAuth.getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
+                .child("Messages/" + userId);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int messageCount = 0;
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Message message = dataSnapshot.getValue(Message.class);
+                    if(!message.isRead()){
+                        messageCount++;
+                    }
+                }
+                if(messageCount>0){
+                    BadgeDrawable badgeNotif =  bottomNavigationViewEx.getOrCreateBadge(R.id.nav_notif);
+                    badgeNotif.setNumber(messageCount);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
 
         bottomNavigationViewEx.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
