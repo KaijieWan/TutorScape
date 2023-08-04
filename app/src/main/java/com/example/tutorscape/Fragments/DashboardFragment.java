@@ -70,9 +70,12 @@ public class DashboardFragment extends Fragment {
                         messageCount++;
                     }
                 }
+                BadgeDrawable badgeNotif =  bottomNavigationViewEx.getOrCreateBadge(R.id.nav_notif);
                 if(messageCount>0){
-                    BadgeDrawable badgeNotif =  bottomNavigationViewEx.getOrCreateBadge(R.id.nav_notif);
                     badgeNotif.setNumber(messageCount);
+                }
+                else{
+                    bottomNavigationViewEx.removeBadge(R.id.nav_notif);
                 }
             }
             @Override
