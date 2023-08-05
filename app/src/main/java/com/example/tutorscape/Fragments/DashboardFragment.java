@@ -71,6 +71,8 @@ public class DashboardFragment extends Fragment {
                     }
                 }
                 BadgeDrawable badgeNotif =  bottomNavigationViewEx.getOrCreateBadge(R.id.nav_notif);
+                badgeNotif.setBadgeTextColor(getResources().getColor(R.color.techBlue, null));
+                badgeNotif.setTextAppearance(R.style.badgeTextAppearance);
                 if(messageCount>0){
                     badgeNotif.setNumber(messageCount);
                 }

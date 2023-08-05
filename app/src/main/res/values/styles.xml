@@ -38,5 +38,10 @@
         <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">@font/ubuntu</item>
     </style>
+    
+    <style name="badgeTextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
 </resources>
