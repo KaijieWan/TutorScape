@@ -83,6 +83,19 @@ public class NotificationsFragment extends Fragment {
             }
         });
 
+        notifRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Notification notification = snapshot.getValue(Notification.class);
+                if(notification.isMessageCount()){
+                    messagesCountSwitch.setChecked(true);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
         updatesSwitch.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
@@ -161,7 +174,7 @@ public class NotificationsFragment extends Fragment {
                         //if set to On
                         map.put("favCount", true);
 
-                        ref.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        ref.updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
@@ -174,7 +187,7 @@ public class NotificationsFragment extends Fragment {
                     else { //if set to Off
                         map.put("favCount", false);
 
-                        ref.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        ref.updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
@@ -211,7 +224,7 @@ public class NotificationsFragment extends Fragment {
                         //if set to On, do something
                         map.put("messageCount", true);
 
-                        ref.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        ref.updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
@@ -224,7 +237,7 @@ public class NotificationsFragment extends Fragment {
                     else { //if set to Off, do something
                         map.put("messageCount", false);
 
-                        ref.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        ref.updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){

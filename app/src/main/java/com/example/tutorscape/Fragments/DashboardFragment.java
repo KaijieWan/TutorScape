@@ -17,6 +17,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.tutorscape.MainActivity;
 import com.example.tutorscape.Model.Message;
+import com.example.tutorscape.Model.Notification;
 import com.example.tutorscape.R;
 import com.example.tutorscape.SearchActivity2;
 import com.example.tutorscape.TransferActivity;
@@ -58,27 +59,41 @@ public class DashboardFragment extends Fragment {
                 .setTextColorResource(R.color.colorWhite);*/
         firebaseAuth = FirebaseAuth.getInstance();
         String userId = firebaseAuth.getUid();
-        DatabaseReference ref = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
+        DatabaseReference notifRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference().child("Notifications/" + userId);
+        DatabaseReference messageRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
                 .child("Messages/" + userId);
-        ref.addValueEventListener(new ValueEventListener() {
+
+        notifRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int messageCount = 0;
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    Message message = dataSnapshot.getValue(Message.class);
-                    if(!message.isRead()){
-                        messageCount++;
+                    Notification notification = snapshot.getValue(Notification.class);
+                    if(notification.isMessageCount()){
+                        messageRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                int messageCount = 0;
+                                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                    Message message = dataSnapshot.getValue(Message.class);
+                                    if(!message.isRead()){
+                                        messageCount++;
+                                    }
+                                }
+                                BadgeDrawable badgeNotif =  bottomNavigationViewEx.getOrCreateBadge(R.id.nav_notif);
+                                badgeNotif.setBadgeTextColor(getResources().getColor(R.color.techBlue, null));
+                                badgeNotif.setTextAppearance(R.style.badgeTextAppearance);
+                                if(messageCount>0){
+                                    badgeNotif.setNumber(messageCount);
+                                }
+                                else{
+                                    bottomNavigationViewEx.removeBadge(R.id.nav_notif);
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
                     }
-                }
-                BadgeDrawable badgeNotif =  bottomNavigationViewEx.getOrCreateBadge(R.id.nav_notif);
-                badgeNotif.setBadgeTextColor(getResources().getColor(R.color.techBlue, null));
-                badgeNotif.setTextAppearance(R.style.badgeTextAppearance);
-                if(messageCount>0){
-                    badgeNotif.setNumber(messageCount);
-                }
-                else{
-                    bottomNavigationViewEx.removeBadge(R.id.nav_notif);
-                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
