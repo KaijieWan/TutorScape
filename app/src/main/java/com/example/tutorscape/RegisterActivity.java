@@ -166,6 +166,20 @@ public class RegisterActivity extends AppCompatActivity {
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         Log.d("RegisterActivity", "setValue onComplete");
                         if(task.isSuccessful()){
+                            DatabaseReference notifRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app")
+                                    .getReference().child("Notifications/" + auth.getCurrentUser().getUid());
+                            HashMap<String, Object> update = new HashMap<>();
+                            update.put("favCount", true);
+                            update.put("messageCount", true);
+                            notifRef.updateChildren(update).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Log.d("RegisterActivity", "Notifications setValue completed");
+                                    }
+                                }
+                            });
+
                             Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegisterActivity.this, SearchActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
