@@ -181,7 +181,7 @@ public class RegisterActivity extends AppCompatActivity {
                             });
 
                             Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(RegisterActivity.this, SearchActivity.class);
+                            Intent intent = new Intent(RegisterActivity.this, TransferActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                             Log.d("RegisterActivity", "Starting SearchActivity");
