@@ -29,9 +29,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -180,6 +183,18 @@ public class RegisterActivity extends AppCompatActivity {
                                 }
                             });
 
+                            DatabaseReference messageRef = FirebaseDatabase.getInstance("https://tutorscape-509ea-default-rtdb.asia-southeast1.firebasedatabase.app").getReference()
+                                    .child("Messages/" + auth.getCurrentUser().getUid());
+                            HashMap<String, Object> newMessage = new HashMap<>();
+                            newMessage.put("UID", auth.getCurrentUser().getUid());
+                            newMessage.put("content", "Welcome to TutorScape, " + name + "! We hope you enjoy using it, as well as find it useful " +
+                                    "in locating tuition centres here in Singapore. We wish everyone involved all the best in their education journey, happy learning!");
+                            newMessage.put("title", "Welcome message");
+                            newMessage.put("date", getCurrentDateTime());
+                            newMessage.put("isRead", false);
+                            newMessage.put("messageID", messageRef.push().getKey());
+
+
                             Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegisterActivity.this, TransferActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -200,5 +215,19 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+    }
+
+    public String getCurrentDateTime() {
+        // Create a SimpleDateFormat object with the desired format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm", Locale.US);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Singapore"));
+
+        // Get the current date and time
+        Date currentDate = new Date();
+
+        // Format the date and time using the SimpleDateFormat object
+        // Now you can use the formattedDateTime string as per your requirements
+        return dateFormat.format(currentDate);
     }
 }
