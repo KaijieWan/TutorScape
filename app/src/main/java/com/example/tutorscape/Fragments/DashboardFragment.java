@@ -68,7 +68,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Notification notification = snapshot.getValue(Notification.class);
-                    if(notification.isMessageCount()){
+                    if(notification != null && notification.isMessageCount()){
                         messageRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {

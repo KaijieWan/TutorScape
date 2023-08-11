@@ -193,7 +193,14 @@ public class RegisterActivity extends AppCompatActivity {
                             newMessage.put("date", getCurrentDateTime());
                             newMessage.put("isRead", false);
                             newMessage.put("messageID", messageRef.push().getKey());
-
+                            messageRef.child(messageRef.push().getKey()).setValue(newMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Log.d("RegisterActivity", "New message setValue completed");
+                                    }
+                                }
+                            });
 
                             Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegisterActivity.this, TransferActivity.class);
